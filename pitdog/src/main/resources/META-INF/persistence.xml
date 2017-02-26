@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	
+	<persistence-unit name="pitdog-unit" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider> 
+		
+		<class>br.com.sysge.infraestrutura.dao.GenericDomain</class>
+		
+		<class>br.com.pitdog.model.conf.Usuario</class>
+		<class>br.com.pitdog.model.conf.PerfilAcesso</class>
+		<class>br.com.pitdog.model.conf.BackupHistorico</class>
+		<class>br.com.pitdog.model.conf.ConfiguracaoBackup</class>
+		
+		<class>br.com.pitdog.model.sys.PanelMenu</class>
+		
+		<class>br.com.pitdog.model.rh.Funcionario</class>
+		
+		<class>br.com.pitdog.model.gestserv.Servico</class>
+		<class>br.com.pitdog.model.gestserv.GarantiaServico</class>
+		<class>br.com.pitdog.model.gestserv.OrdemServico</class>
+		
+		<class>br.com.pitdog.model.global.Cliente</class>
+		
+		<class>br.com.pitdog.model.financ.ResumoCaixa</class>
+		<class>br.com.pitdog.model.estoque.Produto</class>
+		<class>br.com.pitdog.model.gestserv.ServicoOrdemServico</class>
+		<class>br.com.pitdog.model.gestserv.ServicoOrdemServicoId</class>
+		<class>br.com.pitdog.model.financ.ParcelasPagamentoOs</class>
+		<class>br.com.pitdog.model.financ.CondicaoPagamento</class>
+		<class>br.com.pitdog.model.gestserv.ProdutoOrdemServico</class>
+		<class>br.com.pitdog.model.global.Fornecedor</class>
+		
+		<properties>
+		
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/pitdog" />
+			<property name="javax.persistence.jdbc.user" value="root" />
+			<property name="javax.persistence.jdbc.password" value="fmds1701" />
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+			
+			<property name="hibernate.format_sql" value="true" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect" /> 
+			
+			<!-- POOL C3P0 --> 	
+		    <property name="hibernate.connection.provider" value="org.hibernate.connection.C3P0ConnectionProvider" />
+			<property name="hibernate.c3p0.min_size" value="5" />
+			<property name="hibernate.c3p0.max_size" value="100" />
+			<property name="hibernate.c3p0.timeout" value="300" />
+			<property name="hibernate.c3p0.max_statements" value="50" />
+			<property name="hibernate.c3p0.idle_test_period" value="3000" /> 
+			
+		</properties>
+
+	</persistence-unit>
+
+</persistence>
