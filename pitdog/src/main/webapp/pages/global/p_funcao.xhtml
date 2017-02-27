@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</h:head>
+
+<ui:composition template="/template/template.xhtml">
+	<ui:define name="conteudo">
+		<h:form id="formGeralFuncao">
+			<p:panel header="Listagem de Função">
+
+				<h:panelGrid columns="6" id="panelPesquisa">
+					<p:inputText id="txtFuncaoPesquisa" style="width: 300px;"
+						value="#{funcaoController.funcao.funcao}" />
+					<p:selectOneMenu value="#{funcaoController.funcao.situacao}">
+						<f:selectItems var="s" value="#{funcaoController.situacoes}"
+							itemLabel="#{s.situacao}" itemValue="#{s}" />
+					</p:selectOneMenu>
+					<p:commandButton id="btnPesquisarFuncao" value="Pesquisar"
+						icon="ui-icon-search" update="formGeralFuncao :msgGlobal"
+						actionListener="#{funcaoController.pesquisar}" />
+					<p:focus context="panelPesquisa" />
+					<p:blockUI block="tableFuncao" trigger="btnPesquisarFuncao">
+						        Carregando! Aguarde...<br />
+						<p:graphicImage library="img" name="loading.gif" />
+					</p:blockUI>
+				</h:panelGrid>
+
+				<p:dataTable id="tableFuncao" var="f" paginator="true"
+					paginatorPosition="bottom" value="#{funcaoController.funcoes}"
+					emptyMessage="Nenhum registro encontrado!" rows="12"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
+					{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+					<p:column headerText="Código" width="23" style="text-align:center;">
+						<p:outputLabel value="#{f.id}" />
+					</p:column>
+
+					<p:column headerText="Função" width="250">
+						<p:outputLabel value="#{f.funcao}" />
+					</p:column>
+
+					<p:column headerText="Comissão %" width="75" style="text-align:center;">
+						<p:outputLabel value="#{f.comissao}">
+							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+						</p:outputLabel>
+					</p:column>
+					
+					<p:column headerText="Situação" width="50" style="text-align:center;">
+						<p:outputLabel value="#{f.situacao.situacao}" />
+					</p:column>
+
+					<p:column width="15">
+						<p:commandButton id="btnEditar" icon="ui-icon-pencil"
+							oncomplete="PF('dialogEditarFuncao').show()"
+							actionListener="#{funcaoController.setarFuncao(f)}"
+							update=":msgGlobal :formEditarFuncao">
+						</p:commandButton>
+						<p:tooltip value="Cliquei aqui para editar!" for="btnEditar"
+							position="left" />
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton value="Novo Função"
+							actionListener="#{funcaoController.novo}"
+							icon="ui-icon-circle-plus"
+							oncomplete="PF('dialogNovoFuncao').show();"
+							update=":msgGlobal :formNovoFuncao" />
+					</f:facet>
+
+				</p:dataTable>
+			</p:panel>
+
+			<p:blockUI block="tableFuncao" trigger="tableFuncao">
+			        Carregando! Aguarde...<br />
+				<p:graphicImage library="img" name="loading.gif" />
+			</p:blockUI>
+
+		</h:form>
+
+		<!-- Dialog editar função -->
+		<p:dialog id="dialogEditarFuncaoAcesso"
+			widgetVar="dialogEditarFuncao" header="Editar Função" modal="true"
+			appendTo="@(body)" resizable="false" position="top" closable="false">
+			<h:form id="formEditarFuncao">
+				
+				<h:panelGrid columns="1">
+						<p:outputLabel value="Função"/>
+						<p:inputText value="#{funcaoController.funcao.funcao}" style="width: 350px;"/>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Comissão"/>
+						<p:inputNumber value="#{funcaoController.funcao.comissao}" 
+									   symbolPosition="s" symbol=" %" maxValue="100.0" minValue="0.0"
+									    decimalSeparator="," thousandSeparator="."/>
+					</h:panelGrid>
+				
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Situação" />
+						<p:selectOneMenu value="#{funcaoController.funcao.situacao}">
+							<f:selectItems var="s" value="#{funcaoController.situacoes}"
+								itemLabel="#{s.situacao}" itemValue="#{s}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+
+				<h:panelGrid id="panelBotoesEditarFuncao" columns="2">
+					<h:panelGrid columns="2">
+						<p:commandButton id="btnEditarFuncao" value="Salvar"
+							icon="ui-icon-check" actionListener="#{funcaoController.salvar}"
+							update=":msgGlobal :formEditarFuncao :formGeralFuncao:tableFuncao" />
+						<p:commandButton id="btnEditarFuncaoCancelar" value="Cancelar"
+							icon="ui-icon-close"
+							oncomplete="PF('dialogEditarFuncao').hide();"
+							actionListener="#{funcaoController.novo}"
+							update=":formGeralFuncao:tableFuncao" />
+					</h:panelGrid>
+				</h:panelGrid>
+				<p:blockUI block="panelBotoesEditarFuncao"
+					trigger="btnEditarFuncao,btnEditarFuncaoCancelar" />
+			</h:form>
+		</p:dialog>
+
+
+		<!-- Dialog novo função-->
+		<p:dialog widgetVar="dialogNovoFuncao" header="Nova Função"
+			modal="true" appendTo="@(body)" resizable="false" position="top"
+			closable="false">
+			<h:form id="formNovoFuncao">
+				
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Função"/>
+						<p:inputText value="#{funcaoController.funcao.funcao}" style="width: 350px;"/>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Comissão"/>
+						<p:inputNumber value="#{funcaoController.funcao.comissao}" 
+									   symbolPosition="s" symbol=" %" maxValue="100.0" minValue="0.0"
+									    decimalSeparator="," thousandSeparator="."/>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2" id="panelBotoesNovoFuncao">
+						<p:commandButton id="btnSalvarNovoFuncao" value="Salvar"
+							icon="ui-icon-check" actionListener="#{funcaoController.salvar}"
+							update=":msgGlobal :formGeralFuncao:tableFuncao" />
+						<p:commandButton value="Cancelar" icon="ui-icon-close"
+							oncomplete="PF('dialogNovoFuncao').hide();"
+							actionListener="#{funcaoController.novo}"
+							update=":formGeralFuncao:tableFuncao" />
+					</h:panelGrid>
+					
+				<p:blockUI block="panelBotoesNovoFuncao"
+					trigger="btnSalvarNovoFuncao" />
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
+
+</html>

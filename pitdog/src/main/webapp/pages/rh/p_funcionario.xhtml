@@ -21,16 +21,16 @@
 						<f:selectItems var="s" value="#{funcionarioController.situacoes}"
 							itemLabel="#{s.situacao}" itemValue="#{s}" />
 					</p:selectOneMenu>
-					<p:commandButton id="btnPesquisarFun" value="Pesquisar" icon="ui-icon-search"
-						update="tablePerfilfuncionario" actionListener="#{funcionarioController.pesquisar}"/>
-					<p:commandButton value="Imprimir" icon="ui-icon-print" />
+					<p:commandButton id="btnPesquisarFun" value="Pesquisar"
+						icon="ui-icon-search" update="tablePerfilfuncionario"
+						actionListener="#{funcionarioController.pesquisar}" />
 					<p:tooltip
 						value="Digite um funcionário ou informe * para pesquisar todos!"
 						for="txtFuncionarioPesquisa" position="bottom" />
 					<p:focus context="panelPesquisa" />
 					<p:blockUI block="tablePerfilfuncionario" trigger="btnPesquisarFun">
 						        Carregando! Aguarde...<br />
-							<p:graphicImage library="img" name="loading.gif" />
+						<p:graphicImage library="img" name="loading.gif" />
 					</p:blockUI>
 				</h:panelGrid>
 
@@ -49,11 +49,13 @@
 						<p:outputLabel value="#{fun.nome}" />
 					</p:column>
 
-					<p:column headerText="Telefone Celular" width="115" style="text-align:center;">
-						<p:outputLabel value="#{fun.telefoneCelular}" />
+					<p:column headerText="Função" width="115"
+						style="text-align:center;">
+						<p:outputLabel value="#{fun.funcao.funcao}" />
 					</p:column>
 
-					<p:column headerText="Situação" width="50" style="text-align:center;">
+					<p:column headerText="Situação" width="50"
+						style="text-align:center;">
 						<p:outputLabel value="#{fun.situacao.situacao}" />
 					</p:column>
 
@@ -68,7 +70,7 @@
 					</p:column>
 
 					<f:facet name="footer">
-						<p:commandButton value="Novo funcionário"
+						<p:commandButton value="Novo Funcionário"
 							actionListener="#{funcionarioController.novo}"
 							oncomplete="PF('dialogNovoFuncionario').show();"
 							update=":msgGlobal :formNovoFuncionario"
@@ -89,139 +91,31 @@
 		<!-- Dialog novo funcionario -->
 		<p:dialog widgetVar="dialogNovoFuncionario" header="Novo Funcionário"
 			modal="true" appendTo="@(body)" resizable="false" position="top"
-			width="700" closable="false">
+			closable="false">
 			<h:form id="formNovoFuncionario">
 
-				<p:tabView cache="false"
-					activeIndex="#{funcionarioController.currentTab}">
-					<p:tab title="Dados Gerais" id="tab0">
-						<h:panelGrid columns="2">
+				<h:panelGrid columns="2">
 
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Nome do funcionário" />
-								<p:inputText value="#{funcionarioController.funcionario.nome}"
-									style="width: 350px;" />
-							</h:panelGrid>
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Nome do funcionário" />
+						<p:inputText value="#{funcionarioController.funcionario.nome}"
+							style="width: 350px;" />
+					</h:panelGrid>
 
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Data de nascimento" />
-								<p:calendar pattern="dd/MM/yyyy" mask="true"
-									value="#{funcionarioController.funcionario.dataNascimento}" />
-							</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
 
-						</h:panelGrid>
-						<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Função" />
+						<p:selectOneMenu
+							value="#{funcionarioController.funcionario.funcao}" filter="true" 
+								filterMatchMode="startsWith" converter="omnifaces.SelectItemsConverter" >
+							<f:selectItems var="f" value="#{funcionarioController.funcoes}"
+								itemLabel="#{f.funcao}" itemValue="#{f}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
 
-							<h:panelGrid columns="1">
-								<p:outputLabel value="E-mail" />
-								<p:inputText value="#{funcionarioController.funcionario.email}"
-									style="width: 270px;" />
-							</h:panelGrid>
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Cargo" />
-								<p:inputText value="#{funcionarioController.funcionario.funcao}"
-									style="width: 250px;" />
-							</h:panelGrid>
-
-						</h:panelGrid>
-						<h:panelGrid columns="3">
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Telefone fixo" />
-								<p:inputMask mask="(99) 9999-9999"
-									value="#{funcionarioController.funcionario.telefoneFixo}" />
-							</h:panelGrid>
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Telefone celular" />
-								<p:inputMask mask="(99) 99999-9999"
-									value="#{funcionarioController.funcionario.telefoneCelular}" />
-							</h:panelGrid>
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Sexo" />
-								<p:selectOneMenu
-									value="#{funcionarioController.funcionario.sexo}"
-									converter="omnifaces.SelectItemsConverter">
-									<f:selectItems var="s" value="#{funcionarioController.sexos}"
-										itemLabel="#{s.sexo}" itemValue="#{s}" />
-								</p:selectOneMenu>
-							</h:panelGrid>
-
-						</h:panelGrid>
-					</p:tab>
-					<p:tab title="Endereço" id="tabEndereco">
-						<h:panelGrid columns="2">
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Cep" />
-								<p:inputMask mask="99999-999"
-									value="#{funcionarioController.funcionario.cep}" />
-							</h:panelGrid>
-
-							<h:panelGrid columns="1">
-								<h:outputLabel value="." style="color: white;" />
-								<p:commandButton id="button1" icon="ui-icon-circle-zoomout"
-									actionListener="#{funcionarioController.procurarCep}"
-									update=":msgGlobal panelEndereco1 panelEndereco2" />
-								<p:tooltip for="button1"
-									value="Cliquei para consultar o CEP automaticamente nos correios!"
-									position="top" />
-							</h:panelGrid>
-
-						</h:panelGrid>
-						<h:panelGrid columns="2" id="panelEndereco1">
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Endereço" />
-								<p:inputText
-									value="#{funcionarioController.funcionario.endereco}"
-									style="width: 270px;" />
-							</h:panelGrid>
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Bairro" />
-								<p:inputText value="#{funcionarioController.funcionario.bairro}"
-									style="width: 250px;" />
-							</h:panelGrid>
-
-						</h:panelGrid>
-						<h:panelGrid columns="3" id="panelEndereco2">
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Cidade" />
-								<p:inputText value="#{funcionarioController.funcionario.cidade}"
-									style="width: 270px;" />
-							</h:panelGrid>
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="UF" />
-								<p:selectOneMenu value="#{funcionarioController.funcionario.uf}"
-									filter="true" filterMatchMode="startsWith"
-									converter="omnifaces.SelectItemsConverter">
-									<f:selectItems var="uf"
-										value="#{funcionarioController.unidadesFederativa}"
-										itemLabel="#{uf.unidadeFederativa}" itemValue="#{uf}" />
-								</p:selectOneMenu>
-							</h:panelGrid>
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Código IBGE" />
-								<p:inputText
-									value="#{funcionarioController.funcionario.codigoIBGE}"
-									style="width: 100px;" />
-							</h:panelGrid>
-
-						</h:panelGrid>
-
-						<p:blockUI block="tabEndereco" trigger="button1">
-								        Carregando! Aguarde...<br />
-							<p:graphicImage library="img" name="loading.gif" />
-						</p:blockUI>
-
-					</p:tab>
-				</p:tabView>
+				</h:panelGrid>
 				<h:panelGrid id="panelBotoesEditarFuncionario" columns="2">
 					<h:panelGrid columns="2">
 						<p:commandButton id="btnEditarFuncionario" value="Salvar"
@@ -241,146 +135,51 @@
 		<!-- Dialog editar funcionario -->
 		<p:dialog widgetVar="dialogEditarFuncionario"
 			header="Editar Funcionário" modal="true" appendTo="@(body)"
-			resizable="false" position="top" width="700" closable="false">
+			resizable="false" position="top" closable="false">
 			<h:form id="formEditarFuncionario">
+			
+			<h:panelGrid columns="2">
 
-				<p:tabView cache="false"
-					activeIndex="#{funcionarioController.currentTab}">
-					<p:tab title="Dados Gerais" id="tab0">
-						<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Nome do funcionário" />
+						<p:inputText value="#{funcionarioController.funcionario.nome}"
+							style="width: 350px;" />
+					</h:panelGrid>
 
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Nome do funcionário" />
-								<p:inputText value="#{funcionarioController.funcionario.nome}"
-									style="width: 350px;" />
-							</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
 
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Data de nascimento" />
-								<p:calendar pattern="dd/MM/yyyy" mask="true"
-									value="#{funcionarioController.funcionario.dataNascimento}" />
-							</h:panelGrid>
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Função" />
+						<p:selectOneMenu
+							value="#{funcionarioController.funcionario.funcao}" filter="true" 
+								filterMatchMode="startsWith" converter="omnifaces.SelectItemsConverter" >
+							<f:selectItems var="f" value="#{funcionarioController.funcoes}"
+								itemLabel="#{f.funcao}" itemValue="#{f}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
 
-						</h:panelGrid>
-						<h:panelGrid columns="2">
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Situação"/>
+						<p:selectOneMenu value="#{funcionarioController.funcionario.situacao}">
+						<f:selectItems var="s" value="#{funcionarioController.situacoes}"
+							itemLabel="#{s.situacao}" itemValue="#{s}" />
+					</p:selectOneMenu>
+					</h:panelGrid>
+				</h:panelGrid>
 
-							<h:panelGrid columns="1">
-								<p:outputLabel value="E-mail" />
-								<p:inputText value="#{funcionarioController.funcionario.email}"
-									style="width: 270px;" />
-							</h:panelGrid>
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Cargo" />
-								<p:inputText value="#{funcionarioController.funcionario.funcao}"
-									style="width: 250px;" />
-							</h:panelGrid>
-
-						</h:panelGrid>
-						<h:panelGrid columns="3">
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Telefone fixo" />
-								<p:inputMask mask="(99) 9999-9999"
-									value="#{funcionarioController.funcionario.telefoneFixo}" />
-							</h:panelGrid>
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Telefone celular" />
-								<p:inputMask mask="(99) 99999-9999"
-									value="#{funcionarioController.funcionario.telefoneCelular}" />
-							</h:panelGrid>
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Sexo" />
-								<p:selectOneMenu
-									value="#{funcionarioController.funcionario.sexo}"
-									converter="omnifaces.SelectItemsConverter">
-									<f:selectItems var="s" value="#{funcionarioController.sexos}"
-										itemLabel="#{s.sexo}" itemValue="#{s}" />
-								</p:selectOneMenu>
-							</h:panelGrid>
-
-						</h:panelGrid>
-					</p:tab>
-					<p:tab title="Endereço" id="tabEndereco">
-						<h:panelGrid columns="2">
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Cep" />
-								<p:inputMask value="#{funcionarioController.funcionario.cep}" mask="99999-999"/>
-							</h:panelGrid>
-
-							<h:panelGrid columns="1">
-								<h:outputLabel value="." style="color: white;" />
-								<p:commandButton id="button1" icon="ui-icon-circle-zoomout"
-									actionListener="#{funcionarioController.procurarCep}"
-									update=":msgGlobal panelEndereco1 panelEndereco2" />
-								<p:tooltip for="button1"
-									value="Cliquei para consultar o CEP automaticamente nos correios!"
-									position="top" />
-							</h:panelGrid>
-
-						</h:panelGrid>
-						<h:panelGrid columns="2" id="panelEndereco1">
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Endereço" />
-								<p:inputText
-									value="#{funcionarioController.funcionario.endereco}"
-									style="width: 270px;" />
-							</h:panelGrid>
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Bairro" />
-								<p:inputText value="#{funcionarioController.funcionario.bairro}"
-									style="width: 250px;" />
-							</h:panelGrid>
-
-						</h:panelGrid>
-						<h:panelGrid columns="3" id="panelEndereco2">
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Cidade" />
-								<p:inputText value="#{funcionarioController.funcionario.cidade}"
-									style="width: 270px;" />
-							</h:panelGrid>
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="UF" />
-								<p:selectOneMenu value="#{funcionarioController.funcionario.uf}"
-									filter="true" filterMatchMode="startsWith"
-									converter="omnifaces.SelectItemsConverter">
-									<f:selectItems var="uf"
-										value="#{funcionarioController.unidadesFederativa}"
-										itemLabel="#{uf.unidadeFederativa}" itemValue="#{uf}" />
-								</p:selectOneMenu>
-							</h:panelGrid>
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Código IBGE" />
-								<p:inputText
-									value="#{funcionarioController.funcionario.codigoIBGE}"
-									style="width: 100px;" />
-							</h:panelGrid>
-
-						</h:panelGrid>
-						
-						<p:blockUI block="tabEndereco" trigger="button1">
-								        Carregando! Aguarde...<br />
-							<p:graphicImage library="img" name="loading.gif" />
-						</p:blockUI>
-					</p:tab>
-				</p:tabView>
 				<h:panelGrid id="panelBotoesNovoFuncionario" columns="2">
 					<h:panelGrid columns="2">
 						<p:commandButton id="btnNovoFuncionario" value="Salvar"
 							icon="ui-icon-check" action="#{funcionarioController.salvar}"
 							update=":msgGlobal :formGeralFuncionario:tablePerfilfuncionario" />
 						<p:commandButton value="Cancelar" icon="ui-icon-close"
-							oncomplete="PF('dialogEditarFuncionario').hide();" 
+							oncomplete="PF('dialogEditarFuncionario').hide();"
 							actionListener="#{funcionarioController.cancelar}"
-							update=":formGeralFuncionario:tablePerfilfuncionario"/>
+							update=":formGeralFuncionario:tablePerfilfuncionario" />
 					</h:panelGrid>
 				</h:panelGrid>
 				<p:blockUI block="panelBotoesNovoFuncionario"

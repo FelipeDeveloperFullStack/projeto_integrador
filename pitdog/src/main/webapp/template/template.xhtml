@@ -81,19 +81,26 @@
 					<!-- <p:panelMenu style="width:240px" model="#{loginController.menuModel}" /> -->
 					
 					<p:panelMenu style = "width: 240px;">
-						<p:submenu label="Cadastros">
-							<p:submenu label="Estoque">
+						<p:submenu label="Estoque">
+							<p:submenu label="Cadastros">
 								<p:menuitem value="Produto" icon="ui-icon-newwin" outcome="/pages/estoque/p_produto.xhtml?faces-redirect=true"/>
 								<p:menuitem value="Fabricante" icon="ui-icon-newwin" outcome="/pages/estoque/p_fabricante.xhtml?faces-redirect=true"/>
 							</p:submenu>
-							
-							<p:submenu label="RH">
-								<p:menuitem value="Funcionário" icon="ui-icon-newwin"/>
+						</p:submenu>
+						
+						<p:submenu label="RH">
+							<p:submenu label="Cadastros">
+								<p:menuitem value="Funcionário" icon="ui-icon-newwin" outcome="/pages/rh/p_funcionario.xhtml?faces-redirect=true"/>
 							</p:submenu>
-							
-							<p:menuitem value="Distribuidor" icon="ui-icon-newwin"/>
-							<p:menuitem value="Categoria" icon="ui-icon-newwin" outcome="/pages/global/p_categoria.xhtml?faces-redirect=true"/>
-							<p:menuitem value="função" icon="ui-icon-newwin"/>
+						</p:submenu>
+						
+						<p:submenu label="Global">
+							<p:submenu label="Cadastros">
+								<p:menuitem value="Distribuidor" icon="ui-icon-newwin" outcome="/pages/global/p_distribuidor.xhtml?faces-redirect=true"/>
+								<p:menuitem value="Categoria" icon="ui-icon-newwin" outcome="/pages/global/p_categoria.xhtml?faces-redirect=true"/>
+								<p:menuitem value="Função" icon="ui-icon-newwin" outcome="/pages/global/p_funcao.xhtml?faces-redirect=true"/>
+								<p:menuitem value="Usuário" icon="ui-icon-newwin" outcome="/pages/conf/p_usuario.xhtml?faces-redirect=true"/>
+							</p:submenu>
 						</p:submenu>
 						
 						<p:submenu label="Movimentação">

@@ -2,21 +2,18 @@ package br.com.pitdog.controller.rh;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import br.com.pitdog.model.global.Funcao;
 import br.com.pitdog.model.rh.Funcionario;
-import br.com.pitdog.model.type.Sexo;
 import br.com.pitdog.model.type.Situacao;
-import br.com.pitdog.model.type.UnidadeFederativa;
+import br.com.pitdog.service.global.FuncaoService;
 import br.com.pitdog.service.rh.FuncionarioService;
-import br.com.pitdog.service.sys.WebServiceCEPService;
 import br.com.pitdog.util.FacesUtil;
 import br.com.pitdog.util.RequestContextUtil;
 
@@ -28,7 +25,13 @@ public class FuncionarioController implements Serializable{
 	
 	private Funcionario funcionario;
 	
-	protected List<Funcionario> funcionarios;
+	private List<Funcionario> funcionarios;
+	
+	@SuppressWarnings("unused")
+	private List<Funcao> funcoes;
+	
+	@Inject
+	private FuncaoService funcaoService;
 	
 	@Inject
 	private FuncionarioService funcionarioService;
@@ -39,29 +42,13 @@ public class FuncionarioController implements Serializable{
 		novo();
 	}
 	
-	public void procurarCep(){
-		try {
-			Map<Object, Object> mapCep = new HashMap<Object, Object>();
-			mapCep.putAll(WebServiceCEPService.procurarCEP(funcionario.getCep()));
-			this.funcionario.setEndereco(mapCep.get(5).toString() + " " + mapCep.get(1).toString());
-			this.funcionario.setCidade(mapCep.get(2).toString());
-			this.funcionario.setUf(UnidadeFederativa.valueOf(mapCep.get(3).toString()));
-			this.funcionario.setBairro(mapCep.get(4).toString());
-		} catch (Exception e) {
-			FacesUtil.mensagemErro(e.getMessage());
-		}
-	}
-	
-	private int currentTab = 0;
-	
 	public void novo(){
 		this.funcionario = new Funcionario();
-		setCurrentTab(0);
+		this.funcoes = new ArrayList<Funcao>();
 	}
 	
 	public void setarFuncionario(Funcionario funcionario){
 		this.funcionario = funcionario;
-		setCurrentTab(0);
 	}
 	
 	public void salvar(){
@@ -101,14 +88,6 @@ public class FuncionarioController implements Serializable{
 		this.funcionario = funcionario;
 	}
 
-	public int getCurrentTab() {
-		return currentTab;
-	}
-
-	public void setCurrentTab(int currentTab) {
-		this.currentTab = currentTab;
-	}
-
 	public List<Funcionario> getFuncionarios() {
 		return funcionarios;
 	}
@@ -117,16 +96,12 @@ public class FuncionarioController implements Serializable{
 		this.funcionarios = funcionarios;
 	}
 
-	public UnidadeFederativa[] getUnidadesFederativa(){
-		return UnidadeFederativa.values();
-	}
-	
-	public Sexo[] getSexos(){
-		return Sexo.values();
-	}
-	
 	public Situacao[] getSituacoes(){
 		return Situacao.values();
+	}
+
+	public List<Funcao> getFuncoes() {
+		return funcaoService.findBySituation(Situacao.ATIVO);
 	}
 
 }

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</h:head>
+
+<ui:composition template="/template/template.xhtml">
+	<ui:define name="conteudo">
+		<h:form id="formGeralDistribuidor">
+			<p:panel header="Listagem de Distribuidor">
+
+				<h:panelGrid columns="6" id="panelPesquisa">
+					<p:inputText id="txtDistribuidorPesquisa" style="width: 300px;"
+						value="#{distribuidorController.distribuidor.razaoSocial}" />
+					<p:selectOneMenu value="#{distribuidorController.distribuidor.situacao}">
+						<f:selectItems var="s" value="#{distribuidorController.situacoes}"
+							itemLabel="#{s.situacao}" itemValue="#{s}" />
+					</p:selectOneMenu>
+					<p:commandButton id="btnPesquisarDistribuidor" value="Pesquisar"
+						icon="ui-icon-search" update="formGeralDistribuidor :msgGlobal"
+						actionListener="#{distribuidorController.pesquisar}" />
+					<p:focus context="panelPesquisa" />
+					<p:blockUI block="tableDistribuidor" trigger="btnPesquisarDistribuidor">
+						        Carregando! Aguarde...<br />
+						<p:graphicImage library="img" name="loading.gif" />
+					</p:blockUI>
+				</h:panelGrid>
+
+				<p:dataTable id="tableDistribuidor" var="d" paginator="true"
+					paginatorPosition="bottom" value="#{distribuidorController.distribuidores}"
+					emptyMessage="Nenhum registro encontrado!" rows="12"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
+					{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+					<p:column headerText="Código" width="23" style="text-align:center;">
+						<p:outputLabel value="#{d.id}" />
+					</p:column>
+
+					<p:column headerText="Distribuidor" width="250">
+						<p:outputLabel value="#{d.razaoSocial}" />
+					</p:column>
+
+					<p:column headerText="Telefone" width="75" style="text-align:center;">
+						<p:outputLabel value="#{d.telefone}" />
+					</p:column>
+					
+					<p:column headerText="Situação" width="50" style="text-align:center;">
+						<p:outputLabel value="#{d.situacao.situacao}" />
+					</p:column>
+
+					<p:column width="15">
+						<p:commandButton id="btnEditar" icon="ui-icon-pencil"
+							oncomplete="PF('dialogEditarDistribuidor').show()"
+							actionListener="#{distribuidorController.setarDistribuidor(d)}"
+							update=":msgGlobal :formEditarDistribuidor">
+						</p:commandButton>
+						<p:tooltip value="Cliquei aqui para editar!" for="btnEditar"
+							position="left" />
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton value="Novo Distribuidor"
+							actionListener="#{distribuidorController.novo}"
+							icon="ui-icon-circle-plus"
+							oncomplete="PF('dialogNovoDistribuidor').show();"
+							update=":msgGlobal :formNovoDistribuidor" />
+					</f:facet>
+
+				</p:dataTable>
+			</p:panel>
+
+			<p:blockUI block="tableDistribuidor" trigger="tableDistribuidor">
+			        Carregando! Aguarde...<br />
+				<p:graphicImage library="img" name="loading.gif" />
+			</p:blockUI>
+
+		</h:form>
+
+		<!-- Dialog editar distribuidor -->
+		<p:dialog id="dialogEditarDistribuidorAcesso"
+			widgetVar="dialogEditarDistribuidor" header="Editar Distribuidor" modal="true"
+			appendTo="@(body)" resizable="false" position="top" closable="false">
+			<h:form id="formEditarDistribuidor">
+
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Razão Social"/>
+						<p:inputText value="#{distribuidorController.distribuidor.razaoSocial}" style="width: 435px;"/>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2">
+				 	<h:panelGrid columns="1">
+				 		<p:outputLabel value="Endereço"/>
+						<p:inputText value="#{distribuidorController.distribuidor.endereco}" style="width: 256px;"/>
+					</h:panelGrid>
+					
+				 	<h:panelGrid columns="1">
+				 		<p:outputLabel value="Telefone"/>
+						<p:inputMask value="#{distribuidorController.distribuidor.telefone}" mask="(099) 9999-9999"/>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="3">
+				 	<h:panelGrid columns="1">
+				 		<p:outputLabel value="CNPJ"/>
+						<p:inputMask value="#{distribuidorController.distribuidor.cnpj}" mask="99.999.999/9999-99"/>	
+				 	</h:panelGrid>	
+				 	
+				 	<h:panelGrid columns="1">
+				 		<p:outputLabel value="UF"/>
+						<p:selectOneMenu value="#{distribuidorController.distribuidor.uf}">
+							<f:selectItems var="uf" value="#{distribuidorController.unidadeFederativas}" itemLabel="#{uf.unidadeFederativa}" itemValue="#{uf}"/>
+						</p:selectOneMenu>
+				 	</h:panelGrid>	
+				 	
+				 	<h:panelGrid columns="1">
+				 		<p:outputLabel value="Cidade"/>
+						<p:inputText value="#{distribuidorController.distribuidor.cidade}"/>	
+				 	</h:panelGrid>	
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Situação" />
+						<p:selectOneMenu value="#{produtoController.produto.situacao}">
+							<f:selectItems var="s" value="#{produtoController.situacoes}"
+								itemLabel="#{s.situacao}" itemValue="#{s}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+				</h:panelGrid>
+
+				<h:panelGrid id="panelBotoesEditarDistribuidor" columns="2">
+					<h:panelGrid columns="2">
+						<p:commandButton id="btnEditarDistribuidor" value="Salvar"
+							icon="ui-icon-check" actionListener="#{distribuidorController.salvar}"
+							update=":msgGlobal :formEditarDistribuidor :formGeralDistribuidor:tableDistribuidor" />
+						<p:commandButton id="btnEditarDistribuidorCancelar" value="Cancelar"
+							icon="ui-icon-close"
+							oncomplete="PF('dialogEditarDistribuidor').hide();"
+							actionListener="#{distribuidorController.novo}"
+							update=":formGeralDistribuidor:tableDistribuidor" />
+					</h:panelGrid>
+				</h:panelGrid>
+				<p:blockUI block="panelBotoesEditarDistribuidor"
+					trigger="btnEditarDistribuidor,btnEditarDistribuidorCancelar" />
+			</h:form>
+		</p:dialog>
+
+
+		<!-- Dialog novo distribuidor-->
+		<p:dialog widgetVar="dialogNovoDistribuidor" header="Novo Distribuidor"
+			modal="true" appendTo="@(body)" resizable="false" position="top"
+			closable="false">
+			<h:form id="formNovoDistribuidor">
+
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Razão Social"/>
+						<p:inputText value="#{distribuidorController.distribuidor.razaoSocial}" style="width: 435px;"/>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2">
+				 	<h:panelGrid columns="1">
+				 		<p:outputLabel value="Endereço"/>
+						<p:inputText value="#{distribuidorController.distribuidor.endereco}" style="width: 256px;"/>
+					</h:panelGrid>
+					
+				 	<h:panelGrid columns="1">
+				 		<p:outputLabel value="Telefone"/>
+						<p:inputMask value="#{distribuidorController.distribuidor.telefone}" mask="(099) 9999-9999"/>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="3">
+				 	<h:panelGrid columns="1">
+				 		<p:outputLabel value="CNPJ"/>
+						<p:inputMask value="#{distribuidorController.distribuidor.cnpj}" mask="99.999.999/9999-99"/>	
+				 	</h:panelGrid>	
+				 	
+				 	<h:panelGrid columns="1">
+				 		<p:outputLabel value="UF"/>
+						<p:selectOneMenu value="#{distribuidorController.distribuidor.uf}">
+							<f:selectItems var="uf" value="#{distribuidorController.unidadeFederativas}" itemLabel="#{uf.unidadeFederativa}" itemValue="#{uf}"/>
+						</p:selectOneMenu>
+				 	</h:panelGrid>	
+				 	
+				 	<h:panelGrid columns="1">
+				 		<p:outputLabel value="Cidade"/>
+						<p:inputText value="#{distribuidorController.distribuidor.cidade}"/>	
+				 	</h:panelGrid>	
+				</h:panelGrid>
+				
+				<h:panelGrid id="panelBotoesNovoDistribuidor" columns="2">
+					<h:panelGrid columns="2">
+						<p:commandButton id="btnSalvarNovoDistribuidor" value="Salvar"
+							icon="ui-icon-check" actionListener="#{distribuidorController.salvar}"
+							update=":msgGlobal :formGeralDistribuidor:tableDistribuidor" />
+						<p:commandButton value="Cancelar" icon="ui-icon-close"
+							oncomplete="PF('dialogNovoDistribuidor').hide();"
+							actionListener="#{distribuidorController.novo}"
+							update=":formGeralDistribuidor:tableDistribuidor" />
+					</h:panelGrid>
+				</h:panelGrid>
+				<p:blockUI block="panelBotoesNovoDistribuidor"
+					trigger="btnSalvarNovoDistribuidor" />
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
+
+</html>
