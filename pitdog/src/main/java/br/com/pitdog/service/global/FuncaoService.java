@@ -45,5 +45,30 @@ public class FuncaoService extends GenericDaoImpl<Funcao, Long>{
 			throw new RuntimeException(e.getMessage());
 		}
 	}
+	
+	public void verificarSeExisteFuncaoCadastradoComMesmaDescricao(Funcao funcao){
+		List<Funcao> funcoes = super.findAll();
+		for(Funcao f : funcoes){
+			verificarDescricaoIgual(f, funcao);
+		}
+	}
+	
+	private void verificarDescricaoIgual(Funcao f, Funcao funcao){
+		if(funcao.getFuncao().trim().equalsIgnoreCase(f.getFuncao())){
+			if(funcao.getId() == null){
+				mostrarMensagemParaUsuario(f);
+			}else{
+				if(f.getId() != funcao.getId()){
+					mostrarMensagemParaUsuario(f);
+				}
+			}
+		}
+	}
+	
+	private void mostrarMensagemParaUsuario(Funcao f){
+		throw new RuntimeException("Existe a função "+f.getFuncao()+" "
+				+ "de código "+f.getId()+" já está cadastrada, "
+				+ "por favor escolha outra função!");
+	}
 
 }

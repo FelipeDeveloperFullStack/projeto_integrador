@@ -202,6 +202,10 @@ public class LoginController implements Serializable {
 	
 	public String salvarDadosIniciais(){
 		try {
+			
+			funcaoService.verificarSeExisteFuncaoCadastradoComMesmaDescricao(funcao);
+			funcionarioService.verificarSeExisteFuncionarioCadastradoComMesmaDescricao(funcionario);
+			
 			funcao = funcaoService.salvar(funcao);
 			
 			funcionario.setFuncao(funcao);
@@ -214,7 +218,7 @@ public class LoginController implements Serializable {
 		} catch (RuntimeException e) {
 			FacesUtil.mensagemErro(e.getMessage());
 		}
-		return PAGE_LOGIN + FACES_REDIRECT;
+		return null;
 	}
 	
 	public String logarSistema(Usuario usuario){

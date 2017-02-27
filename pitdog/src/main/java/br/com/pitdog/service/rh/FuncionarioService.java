@@ -57,4 +57,29 @@ public class FuncionarioService extends GenericDaoImpl<Funcionario, Long>{
 			return false;
 		}
 	}
+	
+	public void verificarSeExisteFuncionarioCadastradoComMesmaDescricao(Funcionario funcionario){
+		List<Funcionario> funcionarios = super.findAll();
+		for(Funcionario f : funcionarios){
+			verificarDescricaoIgual(f, funcionario);
+		}
+	}
+	
+	private void verificarDescricaoIgual(Funcionario f, Funcionario funcionario){
+		if(funcionario.getNome().trim().equalsIgnoreCase(f.getNome())){
+			if(funcionario.getId() == null){
+				mostrarMensagemParaUsuario(f);
+			}else{
+				if(f.getId() != funcionario.getId()){
+					mostrarMensagemParaUsuario(f);
+				}
+			}
+		}
+	}
+	
+	private void mostrarMensagemParaUsuario(Funcionario f){
+		throw new RuntimeException("Existe o funcionário "+f.getNome()+" "
+				+ "de código "+f.getId()+" já está cadastrado, "
+				+ "por favor escolha outro nome para o funcionário!");
+	}
 }
