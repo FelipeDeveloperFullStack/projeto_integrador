@@ -20,10 +20,14 @@ import org.primefaces.model.menu.MenuModel;
 
 import br.com.pitdog.model.conf.PerfilAcesso;
 import br.com.pitdog.model.conf.Usuario;
+import br.com.pitdog.model.global.Funcao;
+import br.com.pitdog.model.rh.Funcionario;
 import br.com.pitdog.model.sys.PanelMenu;
 import br.com.pitdog.model.type.MenuSistema;
 import br.com.pitdog.model.type.Situacao;
 import br.com.pitdog.service.conf.UsuarioService;
+import br.com.pitdog.service.global.FuncaoService;
+import br.com.pitdog.service.rh.FuncionarioService;
 import br.com.pitdog.service.sys.PanelMenuService;
 import br.com.pitdog.util.DateUtil;
 import br.com.pitdog.util.FacesUtil;
@@ -34,8 +38,14 @@ public class LoginController implements Serializable {
 
 	private static final long serialVersionUID = -6030501658030781045L;
 
+	private Funcionario funcionario;
+	
+	private Funcao funcao;
+	
 	private Usuario usuario;
+	
 	private MenuModel menuModel;
+	
 	private LocalDateTime dataUltimoAcesso = null;
 
 	private DefaultSubMenu menuCompras;
@@ -69,12 +79,19 @@ public class LoginController implements Serializable {
 
 	@Inject
 	private UsuarioService usuarioService;
+	
+	@Inject
+	private FuncionarioService funcionarioService;
+	
+	@Inject
+	private FuncaoService funcaoService;
 
 	// Faces redirect
 	private static final String FACES_REDIRECT = "?faces-redirect=true";
 
 	// Login
 	private static final String PAGE_LOGIN = "/page_seguranca/p_login.xhtml";
+	private static final String PAGE_CADASTRO_INICIAL = "/page_seguranca/p_cadastro_inicial.xhtml";
 
 	// Sistema
 	private static final String PAGE_DASHBOARD = "/pages/sys/p_dashboard.xhtml" + FACES_REDIRECT;
@@ -107,6 +124,8 @@ public class LoginController implements Serializable {
 	@PostConstruct
 	public void init() {
 		this.usuario = new Usuario();
+		this.funcao = new Funcao();
+		this.funcionario = new Funcionario();
 	}
 
 	private void setarNullMenus() {
@@ -142,7 +161,7 @@ public class LoginController implements Serializable {
 			List<Usuario> usuarios = usuarioService.findBySituation(Situacao.ATIVO);
 			if (usuarios.isEmpty()) {
 				FacesUtil.mensagemWarn("Nenhum usuário 'ativo' encontrado!");
-				return PAGE_LOGIN;
+				return PAGE_CADASTRO_INICIAL + FACES_REDIRECT;
 			} else {
 				if (usuario.getNomeUsuario().trim().isEmpty() || usuario.getSenhaUsuario().trim().isEmpty()) {
 					FacesUtil.mensagemWarn("Usuário e senha obrigatórios!");
@@ -156,16 +175,11 @@ public class LoginController implements Serializable {
 		return PAGE_LOGIN;
 	}
 
-	private String procurarUsuarioESenha(List<Usuario> usuarios) {
+	public String procurarUsuarioESenha(List<Usuario> usuarios) {
 		for (Usuario u : usuarios) {
 			if (u.getNomeUsuario().equalsIgnoreCase(usuario.getNomeUsuario())
 					&& u.getSenhaUsuario().equalsIgnoreCase(usuario.getSenhaUsuario())) {
-				if (u.getUltimoAcesso() == null) {
-					ZoneId fusoHorarioSaoPaulo = ZoneId.of("America/Sao_Paulo");
-					dataUltimoAcesso = LocalDateTime.now(fusoHorarioSaoPaulo);
-					u.setUltimoAcesso(DateUtil.asDate(dataUltimoAcesso));
-					usuarioService.salvar(u);
-				}
+				setarDataUltimoAcessoInicialUsuario(u);
 				usuario = u;
 				setarNullMenus();
 				//createPanelMenu(usuario.getPerfilAcesso()); Esse método não será utilizado!
@@ -176,8 +190,40 @@ public class LoginController implements Serializable {
 		FacesUtil.mensagemWarn("Nenhum usuário " + usuario.getNomeUsuario() + " encontrado,verifique e tente novamente! ");
 		return PAGE_LOGIN;
 	}
+	
+	private void setarDataUltimoAcessoInicialUsuario(Usuario u){
+		if (u.getUltimoAcesso() == null) {
+			ZoneId fusoHorarioSaoPaulo = ZoneId.of("America/Sao_Paulo");
+			dataUltimoAcesso = LocalDateTime.now(fusoHorarioSaoPaulo);
+			u.setUltimoAcesso(DateUtil.asDate(dataUltimoAcesso));
+			usuarioService.salvar(u);
+		}
+	}
+	
+	public String salvarDadosIniciais(){
+		try {
+			funcao = funcaoService.salvar(funcao);
+			
+			funcionario.setFuncao(funcao);
+			funcionario = funcionarioService.salvar(funcionario);
+			
+			usuario.setFuncionario(funcionario);
+			usuario = usuarioService.salvar(usuario);
+			
+			return logarSistema(usuario);
+		} catch (RuntimeException e) {
+			FacesUtil.mensagemErro(e.getMessage());
+		}
+		return PAGE_LOGIN + FACES_REDIRECT;
+	}
+	
+	public String logarSistema(Usuario usuario){
+		setarDataUltimoAcessoInicialUsuario(usuario);
+		iniciarSessaoUsuario(usuario);
+		return PAGE_DASHBOARD + FACES_REDIRECT;
+	}
 
-	private void iniciarSessaoUsuario(Usuario usuario) {
+	public void iniciarSessaoUsuario(Usuario usuario) {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 		usuario.setDataInicial(Calendar.getInstance().getTime());
 		usuarioService.salvar(usuario);
@@ -395,6 +441,22 @@ public class LoginController implements Serializable {
 
 	public MenuModel getMenuModel() {
 		return menuModel;
+	}
+
+	public Funcionario getFuncionario() {
+		return funcionario;
+	}
+
+	public void setFuncionario(Funcionario funcionario) {
+		this.funcionario = funcionario;
+	}
+
+	public Funcao getFuncao() {
+		return funcao;
+	}
+
+	public void setFuncao(Funcao funcao) {
+		this.funcao = funcao;
 	}
 
 }

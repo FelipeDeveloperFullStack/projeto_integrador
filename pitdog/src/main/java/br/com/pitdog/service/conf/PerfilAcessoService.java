@@ -56,7 +56,7 @@ public class PerfilAcessoService extends GenericDaoImpl<PerfilAcesso, Long>{
 	}
 	
 	public boolean verificarSeExistePerfilAcesso(long idPerfilAcesso){
-		return usuarioService.verificarSeExistePerfilAcesso(idPerfilAcesso);
+		return false;
 	}
 	
 	public void verificarSeExistePerfilCadastradoComMesmaDescricao(PerfilAcesso perfilAcesso){

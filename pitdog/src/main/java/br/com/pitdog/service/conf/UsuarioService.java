@@ -1,6 +1,5 @@
 package br.com.pitdog.service.conf;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -20,21 +19,23 @@ public class UsuarioService extends GenericDaoImpl<Usuario, Long>{
 	private FuncionarioService funcionarioService;
 	
 	public List<Usuario> pesquisarUsuario(Usuario usuario){
-		if(usuario.getPerfilAcesso() != null){
-			if(usuario.getPerfilAcesso().equals("*")){
+		try {
+			if(usuario.getNomeUsuario().trim().isEmpty()){
 				return super.findBySituation(usuario.getSituacao());
 			}else{
-				return super.findByParametersForSituation(usuario.getPerfilAcesso(), 
-						usuario.getSituacao(), "usuario", "LIKE", "%", "%");
+				return super.findByParametersForSituation(usuario.getNomeUsuario().toUpperCase(), 
+						usuario.getSituacao(), "descricaoProduto", "LIKE", "%", "%"); 
 			}
+		} catch (RuntimeException e) {
+			e.getStackTrace();
+			throw new RuntimeException(e.getMessage());
 		}
-		return new ArrayList<Usuario>();
 	}
 	
 	public Usuario salvar(Usuario usuario){
 		try {
-			if(usuario.getPerfilAcesso() == null){
-				throw new RuntimeException("O perfil é obrigatório para o usuário!");
+			if(usuario.getFuncionario().getFuncao() == null){
+				throw new RuntimeException("A função é obrigatório para o usuário!");
 			}
 			if(usuario.getId() != null){
 				if(usuario.equals(obterSessaoUsuario())){
@@ -116,10 +117,10 @@ public class UsuarioService extends GenericDaoImpl<Usuario, Long>{
 		return super.findByProperty(idPerfilAcesso, "perfilAcesso.id");
 	}
 	
-	public boolean verificarSeExistePerfilAcesso(long idPerfilAcesso){
+	public boolean verificarSeExisteFuncao(long idFuncao){
 		int cont = 0;
 		for(Usuario u : super.findAll()){
-			if(u.getPerfilAcesso().getId() == idPerfilAcesso){
+			if(u.getFuncionario().getFuncao().getId() == idFuncao){
 				cont += 1;
 			}
 		}

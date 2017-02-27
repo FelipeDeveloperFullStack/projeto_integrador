@@ -12,12 +12,9 @@ import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
 import br.com.pitdog.controller.sys.TemplateViewPage;
-import br.com.pitdog.model.conf.PerfilAcesso;
 import br.com.pitdog.model.conf.Usuario;
 import br.com.pitdog.model.rh.Funcionario;
 import br.com.pitdog.model.type.Situacao;
-import br.com.pitdog.model.type.TipoAcesso;
-import br.com.pitdog.service.conf.PerfilAcessoService;
 import br.com.pitdog.service.conf.UsuarioService;
 import br.com.pitdog.service.rh.FuncionarioService;
 import br.com.pitdog.util.FacesUtil;
@@ -34,7 +31,6 @@ public class UsuarioController implements Serializable{
 	
 	protected List<Usuario> usuarios;
 	protected List<Funcionario> funcionarios;
-	protected List<PerfilAcesso> perfisAcesso;
 	
 	private int currentTab = 0;
 	
@@ -45,8 +41,6 @@ public class UsuarioController implements Serializable{
 	private UsuarioService usuarioService;
 	@Inject
 	private FuncionarioService funcionarioService;
-	@Inject
-	private PerfilAcessoService perfilAcessoService;
 	
 	private static final String PAGE_FUNCIONARIO = "/pages_framework/p_funcionario.xhtml";
 	
@@ -54,7 +48,6 @@ public class UsuarioController implements Serializable{
 	public void init(){
 		novaListaUsuario();
 		funcionarios = new ArrayList<Funcionario>();
-		perfisAcesso = new ArrayList<PerfilAcesso>();
 		usuario = new Usuario();
 	}
 	
@@ -102,7 +95,7 @@ public class UsuarioController implements Serializable{
 	
 	public void pesquisar(){
 		novaListaUsuario();
-		usuarios = usuarioService.findByParametersForSituation(usuario.getPerfilAcesso().getPerfilAcesso(), usuario.getSituacao(), "perfilAcesso.perfilAcesso", "=", "", "");
+		usuarios = usuarioService.findByParametersForSituation(usuario.getFuncionario().getFuncao(), usuario.getSituacao(), "funcionario.funcao", "=", "", "");
 		System.out.println(usuarios);
 	}
 	
@@ -153,14 +146,6 @@ public class UsuarioController implements Serializable{
 		this.currentTab = currentTab;
 	}
 
-	public List<PerfilAcesso> getPerfisAcesso() {
-		return perfilAcessoService.findByParametersForSituation
-				(TipoAcesso.NENHUM_MENU_SELECIONADO, Situacao.ATIVO, "tipoAcesso", "<>", "", "");
-	}
-
-	public void setPerfisAcesso(List<PerfilAcesso> perfisAcesso) {
-		this.perfisAcesso = perfisAcesso;
-	}
 	
 	public Situacao[] getSituacoes(){
 		return Situacao.values();

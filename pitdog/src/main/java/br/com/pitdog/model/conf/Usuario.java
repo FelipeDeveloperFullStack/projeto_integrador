@@ -27,10 +27,6 @@ public class Usuario extends GenericDomain{
 	@JoinColumn(name = "usu_funcionario")
 	private Funcionario funcionario;
 	
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "usu_perfil_acesso")
-	private PerfilAcesso perfilAcesso;
-	
 	@Column(name = "usu_email")
 	private String email;
 	
@@ -67,16 +63,6 @@ public class Usuario extends GenericDomain{
 		this.funcionario = funcionario;
 	}
 
-	public PerfilAcesso getPerfilAcesso() {
-		if(perfilAcesso == null){
-			perfilAcesso = new PerfilAcesso();
-		}
-		return perfilAcesso;
-	}
-
-	public void setPerfilAcesso(PerfilAcesso perfilAcesso) {
-		this.perfilAcesso = perfilAcesso;
-	}
 
 	public String getEmail() {
 		return email;
@@ -133,7 +119,5 @@ public class Usuario extends GenericDomain{
 	public void setDataFinal(Date dataFinal) {
 		this.dataFinal = dataFinal;
 	}
-
-	
 	
 }

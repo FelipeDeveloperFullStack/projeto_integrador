@@ -56,7 +56,7 @@
 							actionListener="#{produtoController.setarProduto(p)}"
 							update=":msgGlobal :formEditarProduto">
 						</p:commandButton>
-						<p:commandButton rendered="#{p.tipo != 'INSUMO'}" 
+						<p:commandButton rendered="#{p.tipo != 'INSUMO'}"
 							id="btnComposicao" icon="ui-icon-bookmark"
 							oncomplete="PF('dialogComposicao').show()"
 							actionListener="#{produtoController.setarComposicao(p)}"
@@ -147,28 +147,33 @@
 						</p:column>
 
 						<p:column width="50">
-							<p:commandButton icon="ui-icon-trash" actionListener="#{produtoController.removerComposicao(c)}"
-											 update="tableComposicao">
-											<p:confirm header="Atenção" message="Deseja realmente remover essa composição?" icon="ui-icon-alert" /> 	
-							</p:commandButton>				 
+							<p:commandButton icon="ui-icon-trash"
+								actionListener="#{produtoController.removerComposicao(c)}"
+								update="tableComposicao">
+								<p:confirm header="Atenção"
+									message="Deseja realmente remover essa composição?"
+									icon="ui-icon-alert" />
+							</p:commandButton>
 						</p:column>
-						
-						 <p:confirmDialog global="true" showEffect="none" hideEffect="none">
-					        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-					        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-					    </p:confirmDialog>
+
+						<p:confirmDialog global="true" showEffect="none" hideEffect="none">
+							<p:commandButton value="Sim" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="Não" type="button"
+								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
 
 					</p:dataTable>
 
 					<br></br>
 					<h:panelGrid columns="2">
-						<p:commandButton value="Salvar" icon="ui-icon-disk" 
-										 actionListener="#{produtoController.salvarComposicao}"
-										 update=":msgGlobal :formGeralProduto:tableProduto"/>
-						<p:commandButton value="Cancelar" icon="ui-icon-disk" 
-										 oncomplete="PF('dialogComposicao').hide();"
-										 actionListener="#{produtoController.novaListaProduto}"
-										 update=":formGeralProduto:tableProduto"/>
+						<p:commandButton value="Salvar" icon="ui-icon-disk"
+							actionListener="#{produtoController.salvarComposicao}"
+							update=":msgGlobal :formGeralProduto:tableProduto" />
+						<p:commandButton value="Cancelar" icon="ui-icon-disk"
+							oncomplete="PF('dialogComposicao').hide();"
+							actionListener="#{produtoController.novaListaProduto}"
+							update=":formGeralProduto:tableProduto" />
 					</h:panelGrid>
 				</h:panelGrid>
 			</h:form>

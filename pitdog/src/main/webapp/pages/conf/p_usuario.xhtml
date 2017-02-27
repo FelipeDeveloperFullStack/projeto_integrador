@@ -17,13 +17,13 @@
 
 				<h:panelGrid columns="4">
 					<h:panelGrid columns="1">
-						<p:outputLabel value="Perfil de acesso" />
+						<p:outputLabel value="Funcionário" />
 						<p:selectOneMenu style="width:115px"
 							converter="omnifaces.SelectItemsConverter" filter="true"
 							filterMatchMode="startsWith"
-							value="#{usuarioController.usuario.perfilAcesso}">
-							<f:selectItems var="p" value="#{usuarioController.perfisAcesso}"
-								itemLabel="#{p.perfilAcesso}" itemValue="#{p}" />
+							value="#{usuarioController.usuario.funcionario}">
+							<f:selectItems var="f" value="#{usuarioController.funcionarios}"
+								itemLabel="#{f.nome}" itemValue="#{f}" />
 						</p:selectOneMenu>
 					</h:panelGrid>
 
@@ -161,10 +161,10 @@
 								<p:selectOneMenu style="width:115px"
 									converter="omnifaces.SelectItemsConverter" filter="true"
 									filterMatchMode="startsWith"
-									value="#{usuarioController.usuario.perfilAcesso}">
-									<f:selectItems var="p"
-										value="#{usuarioController.perfisAcesso}"
-										itemLabel="#{p.perfilAcesso}" itemValue="#{p}" />
+									value="#{usuarioController.usuario.funcionario}">
+									<f:selectItems var="f"
+										value="#{usuarioController.funcionarios}"
+										itemLabel="#{f.nome}" itemValue="#{f}" />
 								</p:selectOneMenu>
 							</h:panelGrid>
 							<h:panelGrid columns="1">
@@ -255,14 +255,14 @@
 
 						<h:panelGrid columns="2">
 							<h:panelGrid columns="1">
-								<p:outputLabel value="Perfil de acesso" />
+								<p:outputLabel value="Funcionário" />
 								<p:selectOneMenu style="width:115px"
 									converter="omnifaces.SelectItemsConverter" filter="true"
 									filterMatchMode="startsWith"
-									value="#{usuarioController.usuario.perfilAcesso}">
-									<f:selectItems var="p"
-										value="#{usuarioController.perfisAcesso}"
-										itemLabel="#{p.perfilAcesso}" itemValue="#{p}" />
+									value="#{usuarioController.usuario.funcionario}">
+									<f:selectItems var="f"
+										value="#{usuarioController.funcionarios}"
+										itemLabel="#{f.nome}" itemValue="#{f}" />
 								</p:selectOneMenu>
 							</h:panelGrid>
 						</h:panelGrid>

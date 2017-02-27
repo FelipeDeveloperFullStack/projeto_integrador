@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+
 import br.com.pitdog.model.global.Categoria;
 import br.com.pitdog.model.type.Situacao;
 import br.com.pitdog.model.type.TipoProduto;

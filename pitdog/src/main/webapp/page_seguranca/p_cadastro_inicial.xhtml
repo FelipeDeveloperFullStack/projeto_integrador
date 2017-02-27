@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title></title>
+	<h:outputStylesheet library="css" name="template.css" />
+	<h:outputStylesheet library="css" name="allstyle.css" />
+</h:head>
+<h:body>
+
+	<p:growl id="msgGlobal" life="5000" />
+
+	<p:dialog id="dialogLogin" showEffect="clip" appendTo="@(body)"
+		modal="true" visible="true" closable="false" resizable="false"
+		draggable="false" header="Cadastros iniciais">
+		<h:form id="formDialog">
+		
+			<h:panelGrid columns="1">
+				<p:outputLabel value="Olá! Esse processo é realizado apenas uma vez, pois ainda não existe nenhum usuário" styleClass="texto_negrito"/>
+				<p:outputLabel value="cadastro no sistema." styleClass="texto_negrito"/>
+				<p:outputLabel value="OBS: Para a sua segurança informe uma senha contendo números, letras e caractéres." styleClass="texto_negrito"/>
+			</h:panelGrid>
+
+			<p:wizard nextLabel="Próximo" backLabel="Voltar">
+				<p:tab title="Funcionário">
+					<p:panel header="Dados cadastrais">
+						<p:messages autoUpdate="true" closable="true" />
+						<h:panelGrid columns="2" columnClasses="label, value">
+							<h:panelGrid columns="1">
+								<h:outputText value="Nome completo do funcionário" />
+								<p:inputText required="true" style="width: 300px;" value="#{loginController.funcionario.nome}"/>
+							</h:panelGrid>
+
+							<h:panelGrid columns="1">
+								<h:outputText value="Função" />
+								<p:inputText required="true" style="width: 250px;" value="#{loginController.funcao.funcao}"/>
+							</h:panelGrid>
+
+						</h:panelGrid>
+					</p:panel>
+				</p:tab>
+
+				<p:tab title="Usuário de acesso">
+					<p:panel header="Dados cadastrais">
+						<p:messages />
+						<h:panelGrid columns="2" columnClasses="label, value">
+							<h:panelGrid columns="1">
+								<h:outputText value="Usuário" />
+								<p:inputText required="true" style="width: 270px;" value="#{loginController.usuario.nomeUsuario}"/>
+							</h:panelGrid>
+
+							<h:panelGrid columns="1">
+								<h:outputText value="Senha" />
+								<p:password required="true" feedback="true"
+						                    promptLabel="Informe uma senha segura!" weakLabel="Fraco!"
+						                    goodLabel="Boa!" strongLabel="Segura!" redisplay="true" style="width: 270px;"
+						                    value="#{loginController.usuario.senhaUsuario}"/>
+							</h:panelGrid>
+
+						</h:panelGrid>
+					</p:panel>
+				</p:tab>
+
+				<p:tab id="confirm" title="Confirmação">
+					<p:panel header="Confirmação">
+						<p:commandButton value="Salvar e Entrar no sistema"
+							action="#{loginController.salvarDadosIniciais}"
+							update=":msgGlobal"/>
+					</p:panel>
+				</p:tab>
+			</p:wizard>
+		</h:form>
+	</p:dialog>
+</h:body>
+</html>

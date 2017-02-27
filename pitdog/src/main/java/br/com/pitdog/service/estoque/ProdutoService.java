@@ -16,13 +16,23 @@ public class ProdutoService extends GenericDaoImpl<Produto, Long>{
 			if(produto.getDescricaoProduto().trim().isEmpty()){
 				throw new RuntimeException("A descrição do produto é obrigatório!");
 			}
+			if(produto.getCategoria() == null){
+				throw new RuntimeException("A categoria é obrigatória!");
+			}
 			if(produto.getFabricante() == null){
 				throw new RuntimeException("O fabricante é obrigatório!");
 			}
-			return super.save(consistirProduto(produto));
+			if(produto.getCategoria().getCategoria() != null && produto.getFabricante() != null){
+				return super.save(consistirProduto(produto));
+			}else{
+				if(produto.getCategoria().getCategoria() == null){
+					throw new RuntimeException("A categoria é obrigatória!");
+				}
+			}
 		} catch (RuntimeException e) {
 			throw new RuntimeException(e.getMessage());
 		}
+		return new Produto();
 	}
 	
 	private Produto consistirProduto(Produto produto){
