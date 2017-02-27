@@ -83,9 +83,14 @@ public class ProdutoController implements Serializable{
 	}
 	
 	public void adicionarComposicao(){
-		composicao.setProduto(produto);
-		this.composicoes.add(composicao);
-		this.composicao = new Composicao();
+		if(composicaoService.verificarSeExisteComposicaoNaTabela(composicoes, composicao)){
+			FacesUtil.mensagemWarn("Já existe um insumo '"+this.composicao.getInsumo().getDescricaoProduto() +
+					"' na lista, por favor escolha outro insumo!");
+		}else{
+			composicao.setProduto(produto);
+			this.composicoes.add(composicao);
+			this.composicao = new Composicao();
+		}
 	}
 	
 	public void removerComposicao(Composicao composicao){
@@ -96,7 +101,8 @@ public class ProdutoController implements Serializable{
 				}
 			}
 		}else{
-			
+			composicaoService.remove(composicao.getId());
+			this.composicoes = composicaoService.findByListProperty(composicao.getProduto().getId(), "produto.id");
 		}
 	}
 	
@@ -125,8 +131,8 @@ public class ProdutoController implements Serializable{
 	}
 	
 	public void fecharDialogs(){
-		RequestContextUtil.execute("PF('dialogNovoServico').hide();");
-		RequestContextUtil.execute("PF('dialogEditarServico').hide();");
+		RequestContextUtil.execute("PF('dialogNovoProduto').hide();");
+		RequestContextUtil.execute("PF('dialogEditarProduto').hide();");
 		RequestContextUtil.execute("PF('dialogComposicao').hide();");
 	}
 	

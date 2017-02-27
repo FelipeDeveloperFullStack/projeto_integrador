@@ -11,27 +11,27 @@
 
 <ui:composition template="/template/template.xhtml">
 	<ui:define name="conteudo">
-		<h:form id="formGeralServico">
+		<h:form id="formGeralProduto">
 			<p:panel header="Listagem de Produtos">
 
 				<h:panelGrid columns="6" id="panelPesquisa">
-					<p:inputText id="txtServicoPesquisa" style="width: 300px;"
+					<p:inputText id="txtProdutoPesquisa" style="width: 300px;"
 						value="#{produtoController.produto.descricaoProduto}" />
 					<p:selectOneMenu value="#{produtoController.produto.situacao}">
 						<f:selectItems var="s" value="#{produtoController.situacoes}"
 							itemLabel="#{s.situacao}" itemValue="#{s}" />
 					</p:selectOneMenu>
-					<p:commandButton id="btnPesquisarServico" value="Pesquisar"
-						icon="ui-icon-search" update="formGeralServico"
+					<p:commandButton id="btnPesquisarProduto" value="Pesquisar"
+						icon="ui-icon-search" update="formGeralProduto"
 						actionListener="#{produtoController.pesquisar}" />
 					<p:focus context="panelPesquisa" />
-					<p:blockUI block="tableServico" trigger="btnPesquisarServico">
+					<p:blockUI block="tableProduto" trigger="btnPesquisarProduto">
 						        Carregando! Aguarde...<br />
 						<p:graphicImage library="img" name="loading.gif" />
 					</p:blockUI>
 				</h:panelGrid>
 
-				<p:dataTable id="tableServico" var="p" paginator="true"
+				<p:dataTable id="tableProduto" var="p" paginator="true"
 					paginatorPosition="bottom" value="#{produtoController.produtos}"
 					emptyMessage="Nenhum registro encontrado!" rows="12"
 					paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
@@ -52,9 +52,9 @@
 
 					<p:column width="85">
 						<p:commandButton id="btnEditar" icon="ui-icon-pencil"
-							oncomplete="PF('dialogEditarServico').show()"
+							oncomplete="PF('dialogEditarProduto').show()"
 							actionListener="#{produtoController.setarProduto(p)}"
-							update=":msgGlobal :formEditarServico">
+							update=":msgGlobal :formEditarProduto">
 						</p:commandButton>
 						<p:commandButton rendered="#{p.tipo != 'INSUMO'}" 
 							id="btnComposicao" icon="ui-icon-bookmark"
@@ -72,14 +72,14 @@
 						<p:commandButton value="Novo produto"
 							actionListener="#{produtoController.novo}"
 							icon="ui-icon-circle-plus"
-							oncomplete="PF('dialogNovoServico').show();"
-							update=":msgGlobal :formNovoServico" />
+							oncomplete="PF('dialogNovoProduto').show();"
+							update=":msgGlobal :formNovoProduto" />
 					</f:facet>
 
 				</p:dataTable>
 			</p:panel>
 
-			<p:blockUI block="tableServico" trigger="tableServico">
+			<p:blockUI block="tableProduto" trigger="tableProduto">
 			        Carregando! Aguarde...<br />
 				<p:graphicImage library="img" name="loading.gif" />
 			</p:blockUI>
@@ -148,8 +148,15 @@
 
 						<p:column width="50">
 							<p:commandButton icon="ui-icon-trash" actionListener="#{produtoController.removerComposicao(c)}"
-											 update="tableComposicao"/>
+											 update="tableComposicao">
+											<p:confirm header="Atenção" message="Deseja realmente remover essa composição?" icon="ui-icon-alert" /> 	
+							</p:commandButton>				 
 						</p:column>
+						
+						 <p:confirmDialog global="true" showEffect="none" hideEffect="none">
+					        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+					    </p:confirmDialog>
 
 					</p:dataTable>
 
@@ -157,21 +164,21 @@
 					<h:panelGrid columns="2">
 						<p:commandButton value="Salvar" icon="ui-icon-disk" 
 										 actionListener="#{produtoController.salvarComposicao}"
-										 update=":msgGlobal :formGeralServico:tableServico"/>
+										 update=":msgGlobal :formGeralProduto:tableProduto"/>
 						<p:commandButton value="Cancelar" icon="ui-icon-disk" 
 										 oncomplete="PF('dialogComposicao').hide();"
 										 actionListener="#{produtoController.novaListaProduto}"
-										 update=":formGeralServico:tableServico"/>
+										 update=":formGeralProduto:tableProduto"/>
 					</h:panelGrid>
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>
 
 		<!-- Dialog editar produto -->
-		<p:dialog id="dialogEditarServicoAcesso"
-			widgetVar="dialogEditarServico" header="Editar Produto" modal="true"
+		<p:dialog id="dialogEditarProdutoAcesso"
+			widgetVar="dialogEditarProduto" header="Editar Produto" modal="true"
 			appendTo="@(body)" resizable="false" position="top" closable="false">
-			<h:form id="formEditarServico">
+			<h:form id="formEditarProduto">
 
 				<h:panelGrid columns="2" id="panel_editar_produto_1">
 					<h:panelGrid columns="1">
@@ -232,29 +239,29 @@
 
 				</h:panelGrid>
 
-				<h:panelGrid id="panelBotoesEditarServico" columns="2">
+				<h:panelGrid id="panelBotoesEditarProduto" columns="2">
 					<h:panelGrid columns="2">
-						<p:commandButton id="btnEditarServico" value="Salvar"
+						<p:commandButton id="btnEditarProduto" value="Salvar"
 							icon="ui-icon-check" actionListener="#{produtoController.salvar}"
-							update=":msgGlobal :formEditarServico :formGeralServico:tableServico" />
-						<p:commandButton id="btnEditarServicoCancelar" value="Cancelar"
+							update=":msgGlobal :formEditarProduto :formGeralProduto:tableProduto" />
+						<p:commandButton id="btnEditarProdutoCancelar" value="Cancelar"
 							icon="ui-icon-close"
-							oncomplete="PF('dialogEditarServico').hide();"
+							oncomplete="PF('dialogEditarProduto').hide();"
 							actionListener="#{produtoController.novaListaProduto}"
-							update=":formGeralServico:tableServico" />
+							update=":formGeralProduto:tableProduto" />
 					</h:panelGrid>
 				</h:panelGrid>
-				<p:blockUI block="panelBotoesEditarServico"
-					trigger="btnEditarServico,btnEditarServicoCancelar" />
+				<p:blockUI block="panelBotoesEditarProduto"
+					trigger="btnEditarProduto,btnEditarProdutoCancelar" />
 			</h:form>
 		</p:dialog>
 
 
 		<!-- Dialog novo produto-->
-		<p:dialog widgetVar="dialogNovoServico" header="Novo Produto"
+		<p:dialog widgetVar="dialogNovoProduto" header="Novo Produto"
 			modal="true" appendTo="@(body)" resizable="false" position="top"
 			closable="false">
-			<h:form id="formNovoServico">
+			<h:form id="formNovoProduto">
 
 				<h:panelGrid columns="2" id="panel_editar_produto_2">
 					<h:panelGrid columns="1">
@@ -303,19 +310,19 @@
 					</h:panelGrid>
 				</h:panelGrid>
 
-				<h:panelGrid id="panelBotoesNovoServico" columns="2">
+				<h:panelGrid id="panelBotoesNovoProduto" columns="2">
 					<h:panelGrid columns="2">
-						<p:commandButton id="btnSalvarNovoServico" value="Salvar"
+						<p:commandButton id="btnSalvarNovoProduto" value="Salvar"
 							icon="ui-icon-check" actionListener="#{produtoController.salvar}"
-							update=":msgGlobal :formGeralServico:tableServico" />
+							update=":msgGlobal :formGeralProduto:tableProduto" />
 						<p:commandButton value="Cancelar" icon="ui-icon-close"
-							oncomplete="PF('dialogNovoServico').hide();"
+							oncomplete="PF('dialogNovoProduto').hide();"
 							actionListener="#{produtoController.novaListaProduto}"
-							update=":formGeralServico:tableServico" />
+							update=":formGeralProduto:tableProduto" />
 					</h:panelGrid>
 				</h:panelGrid>
-				<p:blockUI block="panelBotoesNovoServico"
-					trigger="btnSalvarNovoServico" />
+				<p:blockUI block="panelBotoesNovoProduto"
+					trigger="btnSalvarNovoProduto" />
 			</h:form>
 		</p:dialog>
 
