@@ -12,7 +12,7 @@
 <ui:composition template="/template/template.xhtml">
 	<ui:define name="conteudo">
 		<h:form id="formGeralServico">
-			<p:panel header="Listagem de produtos">
+			<p:panel header="Listagem de Produtos">
 
 				<h:panelGrid columns="6" id="panelPesquisa">
 					<p:inputText id="txtServicoPesquisa" style="width: 300px;"
@@ -24,7 +24,6 @@
 					<p:commandButton id="btnPesquisarServico" value="Pesquisar"
 						icon="ui-icon-search" update="formGeralServico"
 						actionListener="#{produtoController.pesquisar}" />
-					<p:commandButton value="Imprimir" icon="ui-icon-print" />
 					<p:focus context="panelPesquisa" />
 					<p:blockUI block="tableServico" trigger="btnPesquisarServico">
 						        Carregando! Aguarde...<br />
@@ -36,34 +35,14 @@
 					paginatorPosition="bottom" value="#{produtoController.produtos}"
 					emptyMessage="Nenhum registro encontrado!" rows="12"
 					paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
-					{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-					rowStyleClass="#{p.quantidadeEstoque le p.quantidadeEstoqueMinimo ? 'cor_vemelho' : null}">
-
-					<p:column headerText="ID" width="30" style="text-align:center;">
-						<p:outputLabel value="#{p.id}" />
-					</p:column>
+					{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
 
 					<p:column headerText="Descrição">
 						<p:outputLabel value="#{p.descricaoProduto}" />
 					</p:column>
 
-					<p:column headerText="R$ Custo" width="75"
-						style="text-align:center;">
-						<p:outputLabel value="#{p.valorCusto}" style="color: blue;">
-							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
-						</p:outputLabel>
-					</p:column>
-
-					<p:column headerText="R$ Venda" width="75"
-						style="text-align:center;">
-						<p:outputLabel value="#{p.valorVenda}" style="color: blue;">
-							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
-						</p:outputLabel>
-					</p:column>
-
-					<p:column headerText="Estoque" width="48"
-						style="text-align:center;" styleClass="texto_negrito">
-						<p:outputLabel value="#{p.quantidadeEstoque}" />
+					<p:column headerText="Categoria" width="250">
+						<p:outputLabel value="#{p.categoria.categoria}" />
 					</p:column>
 
 					<p:column headerText="Situação" width="50"
@@ -71,14 +50,22 @@
 						<p:outputLabel value="#{p.situacao.situacao}" />
 					</p:column>
 
-					<p:column width="40">
+					<p:column width="85">
 						<p:commandButton id="btnEditar" icon="ui-icon-pencil"
 							oncomplete="PF('dialogEditarServico').show()"
 							actionListener="#{produtoController.setarProduto(p)}"
 							update=":msgGlobal :formEditarServico">
 						</p:commandButton>
+						<p:commandButton rendered="#{p.tipo != 'INSUMO'}" 
+							id="btnComposicao" icon="ui-icon-bookmark"
+							oncomplete="PF('dialogComposicao').show()"
+							actionListener="#{produtoController.setarComposicao(p)}"
+							update=":msgGlobal :formComposicao">
+						</p:commandButton>
 						<p:tooltip value="Cliquei aqui para editar!" for="btnEditar"
 							position="left" />
+						<p:tooltip value="Cliquei aqui para adicionar uma composição!"
+							for="btnComposicao" position="left" />
 					</p:column>
 
 					<f:facet name="footer">
@@ -99,59 +86,137 @@
 
 		</h:form>
 
+		<p:dialog widgetVar="dialogComposicao" modal="true" appendTo="@(body)"
+			resizable="false" closable="false" header="Composição" width="800"
+			position="top">
+			<h:form id="formComposicao">
+
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Produto" />
+						<p:inputText value="#{produtoController.produto.descricaoProduto}"
+							readonly="true" style="width: 765px; color: blue;"
+							styleClass="texto_negrito" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="3">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Insumos" />
+						<p:selectOneMenu id="tipo_produto"
+							value="#{produtoController.composicao.insumo}"
+							converter="omnifaces.SelectItemsConverter">
+							<f:selectItems var="p" value="#{produtoController.insumos}"
+								itemLabel="#{p.descricaoProduto}" itemValue="#{p}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Quantidade" />
+						<p:spinner min="1"
+							value="#{produtoController.composicao.quantidade}" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1">
+						<p:outputLabel style="color: white;" value="." />
+						<p:commandButton icon="ui-icon-arrowthickstop-1-s"
+							value="Adicionar"
+							actionListener="#{produtoController.adicionarComposicao}"
+							update="tableComposicao :msgGlobal" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:dataTable id="tableComposicao" var="c" paginator="true"
+						paginatorPosition="bottom"
+						value="#{produtoController.composicoes}"
+						emptyMessage="Nenhum registro encontrado!" rows="6"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
+							{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+						<p:column headerText="Insumo">
+							<p:outputLabel value="#{c.insumo.descricaoProduto}" />
+						</p:column>
+
+						<p:column headerText="Qtde" width="50" style="text-align:center;">
+							<p:outputLabel value="#{c.quantidade}" />
+						</p:column>
+
+						<p:column headerText="Fabricante">
+							<p:outputLabel value="#{c.produto.fabricante.razaoSocial}" />
+						</p:column>
+
+						<p:column width="50">
+							<p:commandButton icon="ui-icon-trash" actionListener="#{produtoController.removerComposicao(c)}"
+											 update="tableComposicao"/>
+						</p:column>
+
+					</p:dataTable>
+
+					<br></br>
+					<h:panelGrid columns="2">
+						<p:commandButton value="Salvar" icon="ui-icon-disk" 
+										 actionListener="#{produtoController.salvarComposicao}"
+										 update=":msgGlobal :formGeralServico:tableServico"/>
+						<p:commandButton value="Cancelar" icon="ui-icon-disk" 
+										 oncomplete="PF('dialogComposicao').hide();"
+										 actionListener="#{produtoController.novaListaProduto}"
+										 update=":formGeralServico:tableServico"/>
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
 		<!-- Dialog editar produto -->
 		<p:dialog id="dialogEditarServicoAcesso"
 			widgetVar="dialogEditarServico" header="Editar Produto" modal="true"
 			appendTo="@(body)" resizable="false" position="top" closable="false">
 			<h:form id="formEditarServico">
 
-				<h:panelGrid columns="2">
+				<h:panelGrid columns="2" id="panel_editar_produto_1">
 					<h:panelGrid columns="1">
+
+						<p:outputLabel value="Tipo" />
+						<p:selectOneMenu id="tipo_produto"
+							value="#{produtoController.produto.tipo}">
+							<f:selectItems var="s" value="#{produtoController.tipoProdutos}"
+								itemLabel="#{s.tipo}" itemValue="#{s}" />
+							<p:ajax event="change" update="panel_editar_produto_1"
+								process="tipo_produto" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+					<h:panelGrid columns="1"
+						rendered="#{produtoController.produto.tipo == 'PRODUTO'}">
 						<p:outputLabel value="Código do produto" />
 						<p:inputText value="#{produtoController.produto.codigoProduto}" />
 					</h:panelGrid>
-
-					<h:panelGrid columns="1">
-						<p:outputLabel value="Descrição do produto" />
-						<p:inputText style="width: 385px;"
-							value="#{produtoController.produto.descricaoProduto}" />
-					</h:panelGrid>
 				</h:panelGrid>
 
-				<h:panelGrid columns="3">
-					<h:panelGrid columns="1">
-						<p:outputLabel value="Valor de venda" />
-						<p:inputNumber value="#{produtoController.produto.valorVenda}"
-							symbol="R$ " decimalSeparator="," thousandSeparator="." />
-					</h:panelGrid>
-
-					<h:panelGrid columns="1">
-						<p:outputLabel value="Estoque" />
-						<p:spinner min="0"
-							value="#{produtoController.produto.quantidadeEstoque}" />
-					</h:panelGrid>
-
-					<h:panelGrid columns="1">
-						<p:outputLabel value="Estoque mínimo" />
-						<p:spinner min="0"
-							value="#{produtoController.produto.quantidadeEstoqueMinimo}" />
-					</h:panelGrid>
+				<h:panelGrid columns="1">
+					<p:outputLabel value="Descrição do produto" />
+					<p:inputText style="width: 535px;"
+						value="#{produtoController.produto.descricaoProduto}" />
 				</h:panelGrid>
 
 				<h:panelGrid columns="2">
 					<h:panelGrid columns="1">
-						<p:outputLabel value="Valor de custo" />
-						<p:inputNumber value="#{produtoController.produto.valorCusto}"
-							symbol="R$ " decimalSeparator="," thousandSeparator="." />
+						<p:outputLabel value="Categoria" />
+						<p:selectOneMenu value="#{produtoController.produto.categoria}"
+							filter="true" filterMatchMode="startsWith"
+							converter="omnifaces.SelectItemsConverter" style="width: 230px;">
+							<f:selectItems var="c" value="#{produtoController.categorias}"
+								itemLabel="#{c.categoria}" itemValue="#{c}" />
+						</p:selectOneMenu>
 					</h:panelGrid>
 
 					<h:panelGrid columns="1">
-						<p:outputLabel value="Fornecedor" />
-						<p:selectOneMenu value="#{produtoController.produto.fornecedor}"
-							converter="omnifaces.SelectItemsConverter" filter="true"
-							filterMatchMode="startsWith">
-							<f:selectItems var="f" value="#{produtoController.fornecedores}"
-								itemLabel="#{f.nomeFantasia}" itemValue="#{f}" />
+						<p:outputLabel value="Fabricante" />
+						<p:selectOneMenu value="#{produtoController.produto.fabricante}"
+							filter="true" filterMatchMode="startsWith"
+							converter="omnifaces.SelectItemsConverter" style="width: 230px;">
+							<f:selectItems var="r" value="#{produtoController.fabricantes}"
+								itemLabel="#{r.razaoSocial}" itemValue="#{r}" />
 						</p:selectOneMenu>
 					</h:panelGrid>
 				</h:panelGrid>
@@ -163,14 +228,6 @@
 							<f:selectItems var="s" value="#{produtoController.situacoes}"
 								itemLabel="#{s.situacao}" itemValue="#{s}" />
 						</p:selectOneMenu>
-					</h:panelGrid>
-					
-					<h:panelGrid columns="1">
-						<p:outputLabel value="." style="color: white;"/>
-						<h:panelGrid columns="2">
-							<p:selectBooleanCheckbox value="#{produtoController.produto.mostrarEstoqueMinimoTelaInicial}"/>
-							<h:outputText value="Mostrar o estoque mínimo na tela inicial ?"/>
-						</h:panelGrid>
 					</h:panelGrid>
 
 				</h:panelGrid>
@@ -199,60 +256,51 @@
 			closable="false">
 			<h:form id="formNovoServico">
 
-				<h:panelGrid columns="2">
+				<h:panelGrid columns="2" id="panel_editar_produto_2">
 					<h:panelGrid columns="1">
+						<p:outputLabel value="Tipo" />
+						<p:selectOneMenu id="tipo_produto"
+							value="#{produtoController.produto.tipo}">
+							<f:selectItem itemLabel="Selecione" />
+							<f:selectItems var="s" value="#{produtoController.tipoProdutos}"
+								itemLabel="#{s.tipo}" itemValue="#{s}" />
+							<p:ajax event="change" update="panel_editar_produto_2"
+								process="tipo_produto" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+					<h:panelGrid columns="1"
+						rendered="#{produtoController.produto.tipo == 'PRODUTO'}">
 						<p:outputLabel value="Código do produto" />
 						<p:inputText value="#{produtoController.produto.codigoProduto}" />
 					</h:panelGrid>
-
-					<h:panelGrid columns="1">
-						<p:outputLabel value="Descrição do produto" />
-						<p:inputText style="width: 385px;"
-							value="#{produtoController.produto.descricaoProduto}" />
-					</h:panelGrid>
 				</h:panelGrid>
 
-				<h:panelGrid columns="3">
-					<h:panelGrid columns="1">
-						<p:outputLabel value="Valor de venda" />
-						<p:inputNumber value="#{produtoController.produto.valorVenda}"
-							symbol="R$ " decimalSeparator="," thousandSeparator="." />
-					</h:panelGrid>
-
-					<h:panelGrid columns="1">
-						<p:outputLabel value="Estoque" />
-						<p:spinner min="0"
-							value="#{produtoController.produto.quantidadeEstoque}" />
-					</h:panelGrid>
-
-					<h:panelGrid columns="1">
-						<p:outputLabel value="Estoque mínimo" />
-						<p:spinner min="0"
-							value="#{produtoController.produto.quantidadeEstoqueMinimo}" />
-					</h:panelGrid>
+				<h:panelGrid columns="1">
+					<p:outputLabel value="Descrição do produto" />
+					<p:inputText style="width: 535px;"
+						value="#{produtoController.produto.descricaoProduto}" />
 				</h:panelGrid>
 
 				<h:panelGrid columns="2">
 					<h:panelGrid columns="1">
-						<p:outputLabel value="Valor de custo" />
-						<p:inputNumber value="#{produtoController.produto.valorCusto}"
-							symbol="R$ " decimalSeparator="," thousandSeparator="." />
-					</h:panelGrid>
-
-					<h:panelGrid columns="1">
-						<p:outputLabel value="Fornecedor" />
-						<p:selectOneMenu value="#{produtoController.produto.fornecedor}"
-							converter="omnifaces.SelectItemsConverter" filter="true"
-							filterMatchMode="startsWith">
-							<f:selectItems var="f" value="#{produtoController.fornecedores}"
-								itemLabel="#{f.nomeFantasia}" itemValue="#{f}" />
+						<p:outputLabel value="Categoria" />
+						<p:selectOneMenu value="#{produtoController.produto.categoria}"
+							style="width: 230px;" filter="true" filterMatchMode="startsWith"
+							converter="omnifaces.SelectItemsConverter">
+							<f:selectItems var="c" value="#{produtoController.categorias}"
+								itemLabel="#{c.categoria}" itemValue="#{c}" />
 						</p:selectOneMenu>
 					</h:panelGrid>
-				</h:panelGrid>
 
-				<h:panelGrid columns="2">
-					<p:selectBooleanCheckbox value="#{produtoController.produto.mostrarEstoqueMinimoTelaInicial}"/>
-					<h:outputText value="Mostrar o estoque mínimo na tela inicial ?" />
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Fabricante" />
+						<p:selectOneMenu value="#{produtoController.produto.fabricante}"
+							style="width: 230px;" filter="true" filterMatchMode="startsWith"
+							converter="omnifaces.SelectItemsConverter">
+							<f:selectItems var="r" value="#{produtoController.fabricantes}"
+								itemLabel="#{r.razaoSocial}" itemValue="#{r}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
 				</h:panelGrid>
 
 				<h:panelGrid id="panelBotoesNovoServico" columns="2">

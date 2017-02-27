@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</h:head>
+
+<ui:composition template="/template/template.xhtml">
+	<ui:define name="conteudo">
+		<h:form id="formGeralCategoria">
+			<p:panel header="Listagem de Categoria">
+
+				<h:panelGrid columns="6" id="panelPesquisa">
+					<p:inputText id="txtCategoriaPesquisa" style="width: 300px;"
+						value="#{categoriaController.categoria.categoria}" />
+					<p:selectOneMenu value="#{categoriaController.categoria.situacao}">
+						<f:selectItems var="s" value="#{categoriaController.situacoes}"
+							itemLabel="#{s.situacao}" itemValue="#{s}" />
+					</p:selectOneMenu>
+					<p:commandButton id="btnPesquisarCategoria" value="Pesquisar"
+						icon="ui-icon-search" update="formGeralCategoria"
+						actionListener="#{categoriaController.pesquisar}" />
+					<p:focus context="panelPesquisa" />
+					<p:blockUI block="tableCategoria" trigger="btnPesquisarCategoria">
+						        Carregando! Aguarde...<br />
+						<p:graphicImage library="img" name="loading.gif" />
+					</p:blockUI>
+				</h:panelGrid>
+
+				<p:dataTable id="tableCategoria" var="c" paginator="true"
+					paginatorPosition="bottom"
+					value="#{categoriaController.categorias}"
+					emptyMessage="Nenhum registro encontrado!" rows="12"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
+					{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+					<p:column headerText="Código" width="40" style="text-align:center;">
+						<p:outputLabel value="#{c.id}" />
+					</p:column>
+
+					<p:column headerText="Categoria">
+						<p:outputLabel value="#{c.categoria}" />
+					</p:column>
+
+					<p:column headerText="Sigla" width="160" style="text-align:center;">
+						<p:outputLabel value="#{c.sigla}" style="color: blue;" />
+					</p:column>
+
+					<p:column headerText="Situação" width="50"
+						style="text-align:center;">
+						<p:outputLabel value="#{c.situacao.situacao}" />
+					</p:column>
+
+					<p:column width="40">
+						<p:commandButton id="btnEditar" icon="ui-icon-pencil"
+							oncomplete="PF('dialogEditarCategoria').show()"
+							actionListener="#{categoriaController.setarCategoria(c)}"
+							update=":msgGlobal :formEditarCategoria">
+						</p:commandButton>
+						<p:tooltip value="Cliquei aqui para editar!" for="btnEditar"
+							position="left" />
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton value="Nova Categoria"
+							actionListener="#{categoriaController.novo}"
+							icon="ui-icon-circle-plus"
+							oncomplete="PF('dialogNovaCategoria').show();"
+							update=":msgGlobal :formNovaCategoria" />
+					</f:facet>
+
+				</p:dataTable>
+			</p:panel>
+
+			<p:blockUI block="tableCategoria" trigger="tableCategoria">
+			        Carregando! Aguarde...<br />
+				<p:graphicImage library="img" name="loading.gif" />
+			</p:blockUI>
+
+		</h:form>
+
+		<!-- Dialog editar categoria -->
+		<p:dialog id="dialogEditarCategoria" widgetVar="dialogEditarCategoria"
+			header="Editar Categoria" modal="true" appendTo="@(body)"
+			resizable="false" position="top" closable="false">
+			<h:form id="formEditarCategoria">
+
+				<h:panelGrid columns="1">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Categoria" />
+						<p:inputText style="width: 385px;"
+							value="#{categoriaController.categoria.categoria}" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Sigla" />
+						<p:inputText value="#{categoriaController.categoria.sigla}" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Situação" />
+						<p:selectOneMenu value="#{categoriaController.categoria.situacao}">
+							<f:selectItems var="s" value="#{categoriaController.situacoes}"
+								itemLabel="#{s.situacao}" itemValue="#{s}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+				</h:panelGrid>
+
+				<h:panelGrid id="panelBotoesEditarCategoria" columns="2">
+					<h:panelGrid columns="2">
+						<p:commandButton id="btnEditarCategoria" value="Salvar"
+							icon="ui-icon-check"
+							actionListener="#{categoriaController.salvar}"
+							update=":msgGlobal :formEditarCategoria :formGeralCategoria:tableCategoria" />
+						<p:commandButton id="btnEditarCategoriaCancelar" value="Cancelar"
+							icon="ui-icon-close"
+							oncomplete="PF('dialogEditarCategoria').hide();"
+							actionListener="#{categoriaController.novaListaCategoria}"
+							update=":formGeralCategoria:tableCategoria" />
+					</h:panelGrid>
+				</h:panelGrid>
+				<p:blockUI block="panelBotoesEditarCategoria"
+					trigger="btnEditarCategoria,btnEditarCategoriaCancelar" />
+			</h:form>
+		</p:dialog>
+
+
+		<!-- Dialog nova categoria-->
+		<p:dialog widgetVar="dialogNovaCategoria" header="Nova Categoria"
+			modal="true" appendTo="@(body)" resizable="false" position="top"
+			closable="false">
+			<h:form id="formNovaCategoria">
+
+				<h:panelGrid columns="1">
+
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Categoria" />
+						<p:inputText style="width: 385px;"
+							value="#{categoriaController.categoria.categoria}" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Sigla" />
+						<p:inputText value="#{categoriaController.categoria.sigla}" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid id="panelBotoesNovaCategoria" columns="2">
+					<h:panelGrid columns="2">
+						<p:commandButton id="btnSalvarNovaCategoria" value="Salvar"
+							icon="ui-icon-check"
+							actionListener="#{categoriaController.salvar}"
+							update=":msgGlobal :formGeralCategoria:tableCategoria" />
+						<p:commandButton value="Cancelar" icon="ui-icon-close"
+							oncomplete="PF('dialogNovaCategoria').hide();"
+							actionListener="#{categoriaController.novaListaCategoria}"
+							update=":formGeralCategoria:tableCategoria" />
+					</h:panelGrid>
+				</h:panelGrid>
+				<p:blockUI block="panelBotoesNovaCategoria"
+					trigger="btnSalvarNovaCategoria" />
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
+
+</html>

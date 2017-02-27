@@ -9,8 +9,9 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import br.com.pitdog.model.global.Fornecedor;
+import br.com.pitdog.model.global.Categoria;
 import br.com.pitdog.model.type.Situacao;
+import br.com.pitdog.model.type.TipoProduto;
 import br.com.sysge.infraestrutura.dao.GenericDomain;
 
 @Entity
@@ -32,10 +33,16 @@ public class Produto extends GenericDomain{
 	private long quantidadeEstoqueMinimo = 0L;
 	
 	@OneToOne(fetch = FetchType.EAGER)
-	private Fornecedor fornecedor;
+	private Categoria categoria;
+	
+	@OneToOne(fetch = FetchType.EAGER)
+	private Fabricante fabricante;
 	
 	@Enumerated(EnumType.STRING)
 	private Situacao situacao;
+	
+	@Enumerated(EnumType.STRING)
+	private TipoProduto tipo;
 	
 	private boolean mostrarEstoqueMinimoTelaInicial;
 
@@ -87,15 +94,15 @@ public class Produto extends GenericDomain{
 		this.quantidadeEstoqueMinimo = quantidadeEstoqueMinimo;
 	}
 
-	public Fornecedor getFornecedor() {
-		if(fornecedor == null){
-			fornecedor = new Fornecedor();
+	public Categoria getCategoria() {
+		if(categoria == null){
+			categoria = new Categoria();
 		}
-		return fornecedor;
+		return categoria;
 	}
 
-	public void setFornecedor(Fornecedor fornecedor) {
-		this.fornecedor = fornecedor;
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
 
 	public Situacao getSituacao() {
@@ -112,6 +119,22 @@ public class Produto extends GenericDomain{
 
 	public void setMostrarEstoqueMinimoTelaInicial(boolean mostrarEstoqueMinimoTelaInicial) {
 		this.mostrarEstoqueMinimoTelaInicial = mostrarEstoqueMinimoTelaInicial;
+	}
+
+	public Fabricante getFabricante() {
+		return fabricante;
+	}
+
+	public void setFabricante(Fabricante fabricante) {
+		this.fabricante = fabricante;
+	}
+
+	public TipoProduto getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(TipoProduto tipo) {
+		this.tipo = tipo;
 	}
 	
 	

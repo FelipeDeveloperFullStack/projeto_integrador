@@ -78,8 +78,36 @@
 
 					<p:spacer width="5" />
 
-					<p:panelMenu style="width:240px"
-						model="#{loginController.menuModel}" />
+					<!-- <p:panelMenu style="width:240px" model="#{loginController.menuModel}" /> -->
+					
+					<p:panelMenu style = "width: 240px;">
+						<p:submenu label="Cadastros">
+							<p:submenu label="Estoque">
+								<p:menuitem value="Produto" icon="ui-icon-newwin" outcome="/pages/estoque/p_produto.xhtml?faces-redirect=true"/>
+								<p:menuitem value="Fabricante" icon="ui-icon-newwin" outcome="/pages/estoque/p_fabricante.xhtml?faces-redirect=true"/>
+							</p:submenu>
+							
+							<p:submenu label="RH">
+								<p:menuitem value="Funcionário" icon="ui-icon-newwin"/>
+							</p:submenu>
+							
+							<p:menuitem value="Distribuidor" icon="ui-icon-newwin"/>
+							<p:menuitem value="Categoria" icon="ui-icon-newwin" outcome="/pages/global/p_categoria.xhtml?faces-redirect=true"/>
+							<p:menuitem value="função" icon="ui-icon-newwin"/>
+						</p:submenu>
+						
+						<p:submenu label="Movimentação">
+							<p:menuitem value="Venda" icon="ui-icon-newwin"/>	
+							<p:menuitem value="Pedido" icon="ui-icon-newwin"/>	
+							<p:menuitem value="Entrada" icon="ui-icon-newwin"/>	
+						</p:submenu>
+						
+						<p:submenu label="Relatórios">
+							<p:menuitem value="Relatório de vendas" icon="ui-icon-newwin"/>	
+							<p:menuitem value="Relatório de estoque" icon="ui-icon-newwin"/>	
+						</p:submenu>
+						
+					</p:panelMenu>
 				</h:form>
 
 			</p:layoutUnit>

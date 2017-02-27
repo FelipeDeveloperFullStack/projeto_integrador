@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</h:head>
+
+<ui:composition template="/template/template.xhtml">
+	<ui:define name="conteudo">
+		<h:form id="formGeralFabricante">
+			<p:panel header="Listagem de Fabricantes">
+
+				<h:panelGrid columns="6" id="panelPesquisa">
+					<p:inputText id="txtFabricantePesquisa" style="width: 300px;"
+						value="#{fabricanteController.fabricante.razaoSocial}" />
+					<p:selectOneMenu value="#{fabricanteController.fabricante.situacao}">
+						<f:selectItems var="s" value="#{fabricanteController.situacoes}"
+							itemLabel="#{s.situacao}" itemValue="#{s}" />
+					</p:selectOneMenu>
+					<p:commandButton id="btnPesquisarFabricante" value="Pesquisar"
+						icon="ui-icon-search" update="formGeralFabricante"
+						actionListener="#{fabricanteController.pesquisar}" />
+					<p:focus context="panelPesquisa" />
+					<p:blockUI block="tableFabricante" trigger="btnPesquisarFabricante">
+						        Carregando! Aguarde...<br />
+						<p:graphicImage library="img" name="loading.gif" />
+					</p:blockUI>
+				</h:panelGrid>
+
+				<p:dataTable id="tableFabricante" var="f" paginator="true"
+					paginatorPosition="bottom" value="#{fabricanteController.fabricantes}"
+					emptyMessage="Nenhum registro encontrado!" rows="12"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
+					{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+					<p:column headerText="Código" width="40" style="text-align:center;">
+						<p:outputLabel value="#{f.id}" />
+					</p:column>
+
+					<p:column headerText="Razão Social">
+						<p:outputLabel value="#{f.razaoSocial}" />
+					</p:column>
+
+					<p:column headerText="CNPJ" width="160" style="text-align:center;">
+						<p:outputLabel value="#{f.cnpj}" style="color: blue;"/>
+					</p:column>
+
+					<p:column headerText="Situação" width="50"
+						style="text-align:center;">
+						<p:outputLabel value="#{f.situacao.situacao}" />
+					</p:column>
+
+					<p:column width="40">
+						<p:commandButton id="btnEditar" icon="ui-icon-pencil"
+							oncomplete="PF('dialogEditarFabricante').show()"
+							actionListener="#{fabricanteController.setarFabricante(f)}"
+							update=":msgGlobal :formEditarFabricante">
+						</p:commandButton>
+						<p:tooltip value="Cliquei aqui para editar!" for="btnEditar"
+							position="left" />
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton value="Novo Fabricante"
+							actionListener="#{fabricanteController.novo}"
+							icon="ui-icon-circle-plus"
+							oncomplete="PF('dialogNovoFabricante').show();"
+							update=":msgGlobal :formNovoFabricante" />
+					</f:facet>
+
+				</p:dataTable>
+			</p:panel>
+
+			<p:blockUI block="tableFabricante" trigger="tableFabricante">
+			        Carregando! Aguarde...<br />
+				<p:graphicImage library="img" name="loading.gif" />
+			</p:blockUI>
+
+		</h:form>
+
+		<!-- Dialog editar fabricante -->
+		<p:dialog id="dialogEditarFabricante"
+			widgetVar="dialogEditarFabricante" header="Editar Fabricante" modal="true"
+			appendTo="@(body)" resizable="false" position="top" closable="false">
+			<h:form id="formEditarFabricante">
+
+				<h:panelGrid columns="1">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Razão Social" />
+						<p:inputText style="width: 385px;"
+							value="#{fabricanteController.fabricante.razaoSocial}" />
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1">
+						<p:outputLabel value="CNPJ" />
+						<p:inputMask value="#{fabricanteController.fabricante.cnpj}" mask="99.999.999/9999-99"/>
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Situação" />
+						<p:selectOneMenu value="#{fabricanteController.fabricante.situacao}">
+							<f:selectItems var="s" value="#{fabricanteController.situacoes}"
+								itemLabel="#{s.situacao}" itemValue="#{s}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+				</h:panelGrid>
+
+				<h:panelGrid id="panelBotoesEditarFabricante" columns="2">
+					<h:panelGrid columns="2">
+						<p:commandButton id="btnEditarFabricante" value="Salvar"
+							icon="ui-icon-check" actionListener="#{fabricanteController.salvar}"
+							update=":msgGlobal :formEditarFabricante :formGeralFabricante:tableFabricante" />
+						<p:commandButton id="btnEditarFabricanteCancelar" value="Cancelar"
+							icon="ui-icon-close"
+							oncomplete="PF('dialogEditarFabricante').hide();"
+							actionListener="#{fabricanteController.novaListaFabricante}"
+							update=":formGeralFabricante:tableFabricante" />
+					</h:panelGrid>
+				</h:panelGrid>
+				<p:blockUI block="panelBotoesEditarFabricante"
+					trigger="btnEditarFabricante,btnEditarFabricanteCancelar" />
+			</h:form>
+		</p:dialog>
+
+
+		<!-- Dialog novo fabricante-->
+		<p:dialog widgetVar="dialogNovoFabricante" header="Novo Fabricante"
+			modal="true" appendTo="@(body)" resizable="false" position="top"
+			closable="false">
+			<h:form id="formNovoFabricante">
+
+				<h:panelGrid columns="1">
+
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Razão Social" />
+						<p:inputText style="width: 385px;"
+							value="#{fabricanteController.fabricante.razaoSocial}" />
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1">
+						<p:outputLabel value="CNPJ" />
+						<p:inputMask value="#{fabricanteController.fabricante.cnpj}" mask="99.999.999/9999-99"/>
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid id="panelBotoesNovoFabricante" columns="2">
+					<h:panelGrid columns="2">
+						<p:commandButton id="btnSalvarNovoFabricante" value="Salvar"
+							icon="ui-icon-check" actionListener="#{fabricanteController.salvar}"
+							update=":msgGlobal :formGeralFabricante:tableFabricante" />
+						<p:commandButton value="Cancelar" icon="ui-icon-close"
+							oncomplete="PF('dialogNovoFabricante').hide();"
+							actionListener="#{fabricanteController.novaListaFabricante}"
+							update=":formGeralFabricante:tableFabricante" />
+					</h:panelGrid>
+				</h:panelGrid>
+				<p:blockUI block="panelBotoesNovoFabricante"
+					trigger="btnSalvarNovoFabricante" />
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
+
+</html>

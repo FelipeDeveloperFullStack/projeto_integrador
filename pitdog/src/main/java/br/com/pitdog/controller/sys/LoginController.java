@@ -168,13 +168,12 @@ public class LoginController implements Serializable {
 				}
 				usuario = u;
 				setarNullMenus();
-				createPanelMenu(usuario.getPerfilAcesso());
+				//createPanelMenu(usuario.getPerfilAcesso()); Esse método não será utilizado!
 				iniciarSessaoUsuario(usuario);
 				return PAGE_DASHBOARD + FACES_REDIRECT;
 			}
 		}
-		FacesUtil.mensagemWarn(
-				"Nenhum usuário " + usuario.getNomeUsuario() + " encontrado,verifique e tente novamente! ");
+		FacesUtil.mensagemWarn("Nenhum usuário " + usuario.getNomeUsuario() + " encontrado,verifique e tente novamente! ");
 		return PAGE_LOGIN;
 	}
 
@@ -204,6 +203,7 @@ public class LoginController implements Serializable {
 		return PAGE_LOGIN + FACES_REDIRECT;
 	}
 
+	@SuppressWarnings("unused")
 	private void createPanelMenu(PerfilAcesso perfilAcesso) {
 		menuModel = new DefaultMenuModel();
 		consistirMenu(perfilAcesso);
