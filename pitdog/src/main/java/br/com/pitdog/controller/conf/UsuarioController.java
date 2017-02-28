@@ -13,9 +13,11 @@ import org.primefaces.event.SelectEvent;
 
 import br.com.pitdog.controller.sys.TemplateViewPage;
 import br.com.pitdog.model.conf.Usuario;
+import br.com.pitdog.model.global.Funcao;
 import br.com.pitdog.model.rh.Funcionario;
 import br.com.pitdog.model.type.Situacao;
 import br.com.pitdog.service.conf.UsuarioService;
+import br.com.pitdog.service.global.FuncaoService;
 import br.com.pitdog.service.rh.FuncionarioService;
 import br.com.pitdog.util.FacesUtil;
 import br.com.pitdog.util.RequestContextUtil;
@@ -29,8 +31,16 @@ public class UsuarioController implements Serializable{
 	private Usuario usuario;
 	private boolean botaoDisable = false;
 	
-	protected List<Usuario> usuarios;
-	protected List<Funcionario> funcionarios;
+	private List<Usuario> usuarios;
+	
+	@SuppressWarnings("unused")
+	private List<Usuario> usuariosPesquisa;
+	
+	@SuppressWarnings("unused")
+	private List<Funcao> funcoes;
+	
+	@SuppressWarnings("unused")
+	private List<Funcionario> funcionarios;
 	
 	private int currentTab = 0;
 	
@@ -39,6 +49,10 @@ public class UsuarioController implements Serializable{
 	
 	@Inject
 	private UsuarioService usuarioService;
+	
+	@Inject
+	private FuncaoService funcaoService;
+	
 	@Inject
 	private FuncionarioService funcionarioService;
 	
@@ -48,6 +62,7 @@ public class UsuarioController implements Serializable{
 	public void init(){
 		novaListaUsuario();
 		funcionarios = new ArrayList<Funcionario>();
+		funcoes = new ArrayList<Funcao>();
 		usuario = new Usuario();
 	}
 	
@@ -95,7 +110,7 @@ public class UsuarioController implements Serializable{
 	
 	public void pesquisar(){
 		novaListaUsuario();
-		usuarios = usuarioService.findByParametersForSituation(usuario.getFuncionario().getFuncao(), usuario.getSituacao(), "funcionario.funcao", "=", "", "");
+		usuarios = usuarioService.findByParametersForSituation(usuario.getFuncionario().getFuncao().getFuncao(), usuario.getSituacao(), "funcionario.funcao.funcao", "=", "", "");
 		System.out.println(usuarios);
 	}
 	
@@ -127,7 +142,7 @@ public class UsuarioController implements Serializable{
 	}
 
 	public List<Funcionario> getFuncionarios() {
-		return funcionarioService.findAll();
+		return funcionarioService.findBySituation(Situacao.ATIVO);
 	}
 
 	public void setFuncionarios(List<Funcionario> funcionarios) {
@@ -157,6 +172,22 @@ public class UsuarioController implements Serializable{
 
 	public void setBotaoDisable(boolean botaoDisable) {
 		this.botaoDisable = botaoDisable;
+	}
+
+	public List<Funcao> getFuncoes() {
+		return funcaoService.findBySituation(Situacao.ATIVO);
+	}
+
+	public void setFuncoes(List<Funcao> funcoes) {
+		this.funcoes = funcoes;
+	}
+
+	public List<Usuario> getUsuariosPesquisa() {
+		return usuarioService.findBySituation(Situacao.ATIVO);
+	}
+
+	public void setUsuariosPesquisa(List<Usuario> usuariosPesquisa) {
+		this.usuariosPesquisa = usuariosPesquisa;
 	}
 
 }

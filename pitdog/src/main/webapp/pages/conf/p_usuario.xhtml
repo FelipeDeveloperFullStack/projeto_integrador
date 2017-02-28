@@ -17,13 +17,13 @@
 
 				<h:panelGrid columns="4">
 					<h:panelGrid columns="1">
-						<p:outputLabel value="Funcionário" />
+						<p:outputLabel value="Função" />
 						<p:selectOneMenu style="width:115px"
 							converter="omnifaces.SelectItemsConverter" filter="true"
 							filterMatchMode="startsWith"
-							value="#{usuarioController.usuario.funcionario}">
-							<f:selectItems var="f" value="#{usuarioController.funcionarios}"
-								itemLabel="#{f.nome}" itemValue="#{f}" />
+							value="#{usuarioController.usuario.funcionario.funcao}">
+							<f:selectItems var="f" value="#{usuarioController.funcoes}"
+								itemLabel="#{f.funcao}" itemValue="#{f}" />
 						</p:selectOneMenu>
 					</h:panelGrid>
 
@@ -63,8 +63,8 @@
 						<p:outputLabel value="#{usuario.funcionario.nome}" />
 					</p:column>
 
-					<p:column headerText="Perfil de acesso" style="text-align:center;">
-						<p:outputLabel value="#{usuario.perfilAcesso.perfilAcesso}" />
+					<p:column headerText="Função" style="text-align:center;">
+						<p:outputLabel value="#{usuario.funcionario.funcao.funcao}" />
 					</p:column>
 
 					<p:column headerText="Nome de usuário" style="text-align:center;">
@@ -108,65 +108,44 @@
 
 				<p:tabView id="tabViewEditarUsuario">
 					<p:tab title="Dados Gerais" id="tabEditarUsuario">
-						<h:panelGrid columns="2">
-
-							<h:panelGrid columns="1" id="panelNovoFuncionario">
-								<p:outputLabel value="Funcionário" />
-								<p:inputText id="txtFuncionario"
-									readonly="#{facesContext.currentPhaseId.name eq 'RENDER_RESPONSE'}"
-									value="#{usuarioController.usuario.funcionario.nome}"
-									style="width: 315px;" />
-							</h:panelGrid>
-
-							<h:panelGrid columns="1">
-								<h:outputLabel value="." style="color: white;" />
-								<p:commandButton id="btnFuncionario"
-									icon="ui-icon-circle-zoomout"
-									actionListener="#{usuarioController.obterPageFuncionario}"
-									process="@this" update="@none">
-									<p:ajax event="dialogReturn"
-										listener="#{usuarioController.funcionarioSelecionado}"
-										process="@this" update="txtFuncionario" />
-								</p:commandButton>
-								<p:tooltip for="btnFuncionario"
-									value="Cliquei aqui para cadastrar um novo funcionário!"
-									position="top" />
-							</h:panelGrid>
-
-						</h:panelGrid>
-
-						<p:blockUI block="tabViewEditarUsuario" trigger="btnFuncionario">
-								        Carregando! Aguarde...<br />
-							<p:graphicImage library="img" name="loading.gif" />
-						</p:blockUI>
 
 						<h:panelGrid columns="2">
 
 							<h:panelGrid columns="1">
 								<p:outputLabel value="Nome de usuário" />
-								<p:inputText value="#{usuarioController.usuario.nomeUsuario}" />
+								<p:inputText value="#{usuarioController.usuario.nomeUsuario}" style="width:190px"/>
 							</h:panelGrid>
 
 							<h:panelGrid columns="1">
 								<p:outputLabel value="Senha de acesso" />
 								<p:password value="#{usuarioController.usuario.senhaUsuario}"
-									redisplay="true" />
+									redisplay="true" style="width:190px"/>
 							</h:panelGrid>
 
 						</h:panelGrid>
-
+						
 						<h:panelGrid columns="2">
 							<h:panelGrid columns="1">
-								<p:outputLabel value="Perfil de acesso" />
-								<p:selectOneMenu style="width:115px"
+								<p:outputLabel value="Funcionário" />
+								<p:selectOneMenu style="width:320px"
 									converter="omnifaces.SelectItemsConverter" filter="true"
 									filterMatchMode="startsWith"
 									value="#{usuarioController.usuario.funcionario}">
 									<f:selectItems var="f"
 										value="#{usuarioController.funcionarios}"
-										itemLabel="#{f.nome}" itemValue="#{f}" />
+										itemLabel="#{f.nome} - #{f.funcao.funcao}" itemValue="#{f}" />
 								</p:selectOneMenu>
 							</h:panelGrid>
+						</h:panelGrid>
+						
+						<h:panelGrid columns="2">
+							<h:panelGrid columns="1">
+								<p:outputLabel value="E-mail"/>
+								<p:inputText value="#{usuarioController.usuario.email}" style="width:390px"/>
+							</h:panelGrid>
+						</h:panelGrid>
+
+						<h:panelGrid columns="2">
 							<h:panelGrid columns="1">
 								<p:outputLabel value="Situação" />
 								<p:selectOneMenu style="width:115px"
@@ -207,48 +186,17 @@
 
 				<p:tabView id="tabViewNovoUsuario">
 					<p:tab title="Dados Gerais" id="tabNovoUsuario">
-						<h:panelGrid columns="2">
-
-							<h:panelGrid columns="1" id="panelNovoFuncionario">
-								<p:outputLabel value="Funcionário" />
-								<p:inputText id="txtFuncionario"
-									readonly="#{facesContext.currentPhaseId.name eq 'RENDER_RESPONSE'}"
-									value="#{usuarioController.usuario.funcionario.nome}"
-									style="width: 315px;" />
-							</h:panelGrid>
-
-							<h:panelGrid columns="1">
-								<h:outputLabel value="." style="color: white;" />
-								<p:commandButton id="btnFuncionario2"
-									icon="ui-icon-circle-zoomout"
-									actionListener="#{usuarioController.obterPageFuncionario}"
-									process="@this" update="@none">
-									<p:ajax event="dialogReturn"
-										listener="#{usuarioController.funcionarioSelecionado}"
-										process="@this" update="txtFuncionario"></p:ajax>
-								</p:commandButton>
-								<p:tooltip for="btnFuncionario2"
-									value="Cliquei aqui para cadastrar um novo funcionário!"
-									position="top" />
-							</h:panelGrid>
-
-						</h:panelGrid>
-
-						<p:blockUI block="tabViewNovoUsuario" trigger="btnFuncionario2">
-								        Carregando! Aguarde...<br />
-							<p:graphicImage library="img" name="loading.gif" />
-						</p:blockUI>
 
 						<h:panelGrid columns="2">
 
 							<h:panelGrid columns="1">
 								<p:outputLabel value="Nome de usuário" />
-								<p:inputText value="#{usuarioController.usuario.nomeUsuario}" />
+								<p:inputText value="#{usuarioController.usuario.nomeUsuario}" style="width:190px"/>
 							</h:panelGrid>
 
 							<h:panelGrid columns="1">
 								<p:outputLabel value="Senha de acesso" />
-								<p:password value="#{usuarioController.usuario.senhaUsuario}" />
+								<p:password value="#{usuarioController.usuario.senhaUsuario}" style="width:190px"/>
 							</h:panelGrid>
 
 						</h:panelGrid>
@@ -256,14 +204,21 @@
 						<h:panelGrid columns="2">
 							<h:panelGrid columns="1">
 								<p:outputLabel value="Funcionário" />
-								<p:selectOneMenu style="width:115px"
+								<p:selectOneMenu style="width:320px"
 									converter="omnifaces.SelectItemsConverter" filter="true"
 									filterMatchMode="startsWith"
 									value="#{usuarioController.usuario.funcionario}">
 									<f:selectItems var="f"
 										value="#{usuarioController.funcionarios}"
-										itemLabel="#{f.nome}" itemValue="#{f}" />
+										itemLabel="#{f.nome} - #{f.funcao.funcao}" itemValue="#{f}" />
 								</p:selectOneMenu>
+							</h:panelGrid>
+						</h:panelGrid>
+						
+						<h:panelGrid columns="2">
+							<h:panelGrid columns="1">
+								<p:outputLabel value="E-mail"/>
+								<p:inputText value="#{usuarioController.usuario.email}" style="width:390px"/>
 							</h:panelGrid>
 						</h:panelGrid>
 
