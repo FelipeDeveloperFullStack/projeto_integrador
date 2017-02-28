@@ -13,6 +13,9 @@ public class ProdutoService extends GenericDaoImpl<Produto, Long>{
 
 	public Produto salvar(Produto produto){
 		try {
+			if(produto.getTipo() == null){
+				throw new RuntimeException("É obrigatório escolher o tipo 'Produto' ou 'Insumo'.");
+			}
 			if(produto.getDescricaoProduto().trim().isEmpty()){
 				throw new RuntimeException("A descrição do produto é obrigatório!");
 			}

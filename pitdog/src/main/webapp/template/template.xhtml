@@ -21,7 +21,7 @@
 					<f:facet name="right">
 						<h:form>
 							<p:outputLabel
-								value="#{loginController.usuario.funcionario.nome}"
+								value="Olá! #{loginController.usuario.funcionario.nome}"
 								styleClass="facet-outputLabel-menubar" />
 							<p:commandButton value="Sair do sistema" icon="ui-icon-extlink"
 								action="#{loginController.logoutSistema}">
@@ -105,7 +105,7 @@
 						
 						<p:submenu label="Movimentação">
 							<p:menuitem value="Venda" icon="ui-icon-newwin"/>	
-							<p:menuitem value="Pedido" icon="ui-icon-newwin"/>	
+							<p:menuitem value="Pedido" icon="ui-icon-newwin" outcome="/pages/mov/p_pedido.xhtml?faces-redirect=true"/>	
 							<p:menuitem value="Entrada" icon="ui-icon-newwin"/>	
 						</p:submenu>
 						

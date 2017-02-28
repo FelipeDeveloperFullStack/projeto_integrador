@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="charset=UTF-8" />
+</h:head>
+<ui:composition template="/template/template.xhtml">
+	<ui:define name="conteudo">
+		<h:form id="formGeralPedido">
+			<p:panel header="Listagem de Pedido">
+
+				<h:panelGrid columns="5" id="panelPesquisa">
+					<p:inputText style="width: 300px;" id="txtPedidoPesquisa"
+						value="#{pedidoController.pedido.descricaoPedido}" />
+					<p:selectOneMenu value="#{pedidoController.pedido.situacao}">
+						<f:selectItems var="s" value="#{pedidoController.situacoes}"
+							itemLabel="#{s.situacao}" itemValue="#{s}" />
+					</p:selectOneMenu>
+					<p:commandButton id="btnPesquisarFun" value="Pesquisar"
+						icon="ui-icon-search" update="tablePerfilPedido"
+						actionListener="#{pedidoController.pesquisar}" />
+					<p:commandButton value="Imprimir" icon="ui-icon-print"/>	
+					<p:focus context="panelPesquisa" />
+					<p:blockUI block="tablePerfilPedido" trigger="btnPesquisarFun">
+						        Carregando! Aguarde...<br />
+						<p:graphicImage library="img" name="loading.gif" />
+					</p:blockUI>
+				</h:panelGrid>
+
+				<p:dataTable id="tablePerfilPedido" var="p" paginator="true"
+					paginatorPosition="bottom" value="#{pedidoController.pedidos}"
+					emptyMessage="Nenhum registro encontrado!" rows="8"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
+					{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+					<p:column headerText="Cód" width="30" style="text-align:center;">
+						<p:outputLabel value="#{p.id}" />
+					</p:column>
+
+					<p:column headerText="Produto/Insumo">
+						<p:outputLabel
+							value="#{p.produto.descricaoProduto} - #{p.produto.tipo.tipo}" />
+					</p:column>
+
+					<p:column headerText="Qtde" width="30" style="text-align:center;">
+						<p:outputLabel value="#{p.quantidade}" />
+					</p:column>
+
+					<p:column headerText="Preço" width="75" style="text-align:center;">
+						<p:outputLabel value="#{p.preco}">
+							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+						</p:outputLabel>
+					</p:column>
+
+					<p:column headerText="Desconto" width="75"
+						style="text-align:center;">
+						<p:outputLabel value="#{p.desconto}">
+							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+						</p:outputLabel>
+					</p:column>
+
+					<p:column width="70">
+						<p:commandButton id="btnEditar" icon="ui-icon-pencil"
+							actionListener="#{pedidoController.setarPedido(p)}"
+							oncomplete="PF('dialogEditarPedido').show();"
+							update=":msgGlobal :formEditarPedido">
+						</p:commandButton>
+						<p:commandButton id="btnEnviarEmail" icon="ui-icon-mail-closed"/>
+						<p:tooltip value="Cliquei aqui para editar!" for="btnEditar"
+							position="left" />
+						<p:tooltip value="Cliquei aqui enviar o pedido por email" for="btnEnviarEmail"
+							position="left" />
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton value="Novo Pedido"
+							actionListener="#{funcionarioController.novo}"
+							oncomplete="PF('dialogNovoPedido').show();"
+							update=":msgGlobal :formNovoPedido" icon="ui-icon-circle-plus" />
+					</f:facet>
+
+				</p:dataTable>
+			</p:panel>
+
+			<p:blockUI block="tablePerfilPedido" trigger="tablePerfilPedido">
+			        Carregando! Aguarde...<br />
+				<p:graphicImage library="img" name="loading.gif" />
+			</p:blockUI>
+
+		</h:form>
+
+		<!-- Dialog novo pedido -->
+		<p:dialog widgetVar="dialogNovoPedido" header="Novo Pedido"
+			modal="true" appendTo="@(body)" resizable="false" position="top"
+			closable="false">
+			<h:form id="formNovoPedido">
+
+				<h:panelGrid columns="2">
+
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Descrição do pedido" />
+						<p:inputText value="#{pedidoController.pedido.descricaoPedido}"
+							style="width: 350px;" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Data do pedido" />
+						<p:calendar value="#{pedidoController.pedido.dataPedido}"
+							pattern="dd/MM/yyyy" mask="true" />
+					</h:panelGrid>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Distribuidor" />
+						<p:selectOneMenu value="#{pedidoController.pedido.distribuidor}"
+							filter="true" filterMatchMode="startsWith" style="width: 500px;"
+							converter="omnifaces.SelectItemsConverter">
+							<f:selectItems var="d" value="#{pedidoController.distribuidores}"
+								itemLabel="#{d.razaoSocial}" itemValue="#{d}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Produto / Insumo" />
+						<p:selectOneMenu value="#{pedidoController.pedido.produto}"
+							filter="true" filterMatchMode="startsWith" style="width: 500px;"
+							converter="omnifaces.SelectItemsConverter">
+							<f:selectItems var="p" value="#{pedidoController.produtos}"
+								itemLabel="#{p.descricaoProduto} - #{p.tipo.tipo}"
+								itemValue="#{p}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="3">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Qtde" />
+						<p:spinner value="#{pedidoController.pedido.quantidade}" min="1" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Preço" />
+						<p:inputNumber value="#{pedidoController.pedido.preco}"
+							symbol="R$ " decimalSeparator="," thousandSeparator="." />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Desconto" />
+						<p:inputNumber value="#{pedidoController.pedido.desconto}"
+							symbol=" %" decimalSeparator="," thousandSeparator="."
+							symbolPosition="s" minValue="0.00" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid id="panelBotoesEditarPedido" columns="2">
+					<h:panelGrid columns="2">
+						<p:commandButton id="btnEditarPedido" value="Salvar"
+							icon="ui-icon-check" actionListener="#{pedidoController.salvar}"
+							update=":msgGlobal :formGeralPedido:tablePerfilPedido" />
+						<p:commandButton value="Cancelar" icon="ui-icon-close"
+							oncomplete="PF('dialogNovoPedido').hide();" />
+					</h:panelGrid>
+				</h:panelGrid>
+				<p:blockUI block="panelBotoesEditarPedido" trigger="btnEditarPedido" />
+			</h:form>
+		</p:dialog>
+
+
+		<!-- Dialog editar pedido -->
+		<p:dialog widgetVar="dialogEditarPedido" header="Editar Pedido"
+			modal="true" appendTo="@(body)" resizable="false" position="top"
+			closable="false">
+			<h:form id="formEditarPedido">
+
+				<h:panelGrid columns="2">
+
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Descrição do pedido" />
+						<p:inputText value="#{pedidoController.pedido.descricaoPedido}"
+							style="width: 350px;" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Data do pedido" />
+						<p:calendar value="#{pedidoController.pedido.dataPedido}"
+							pattern="dd/MM/yyyy" mask="true" />
+					</h:panelGrid>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Distribuidor" />
+						<p:selectOneMenu value="#{pedidoController.pedido.distribuidor}"
+							filter="true" filterMatchMode="startsWith" style="width: 500px;"
+							converter="omnifaces.SelectItemsConverter">
+							<f:selectItems var="d" value="#{pedidoController.distribuidores}"
+								itemLabel="#{d.razaoSocial}" itemValue="#{d}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Produto / Insumo" />
+						<p:selectOneMenu value="#{pedidoController.pedido.produto}"
+							filter="true" filterMatchMode="startsWith" style="width: 500px;"
+							converter="omnifaces.SelectItemsConverter">
+							<f:selectItems var="p" value="#{pedidoController.produtos}"
+								itemLabel="#{p.descricaoProduto} - #{p.tipo.tipo}"
+								itemValue="#{p}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="3">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Qtde" />
+						<p:spinner value="#{pedidoController.pedido.quantidade}" min="1" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Preço" />
+						<p:inputNumber value="#{pedidoController.pedido.preco}"
+							symbol="R$ " decimalSeparator="," thousandSeparator="." />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Desconto" />
+						<p:inputNumber value="#{pedidoController.pedido.desconto}"
+							symbol=" %" decimalSeparator="," thousandSeparator="."
+							symbolPosition="s" minValue="0.00" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Situação" />
+						<p:selectOneMenu value="#{pedidoController.pedido.situacao}">
+							<f:selectItems var="s" value="#{pedidoController.situacoes}"
+								itemLabel="#{s.situacao}" itemValue="#{s}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid id="panelBotoesNovoPedido" columns="2">
+					<h:panelGrid columns="2">
+						<p:commandButton id="btnNovoPedido" value="Salvar"
+							icon="ui-icon-check" action="#{pedidoController.salvar}"
+							update=":msgGlobal :formGeralPedido:tablePerfilPedido" />
+						<p:commandButton value="Cancelar" icon="ui-icon-close"
+							oncomplete="PF('dialogEditarPedido').hide();"
+							actionListener="#{pedidoController.novo}"
+							update=":formGeralPedido:tablePerfilPedido" />
+					</h:panelGrid>
+				</h:panelGrid>
+				<p:blockUI block="panelBotoesNovoPedido" trigger="btnNovoPedido" />
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
+</html>

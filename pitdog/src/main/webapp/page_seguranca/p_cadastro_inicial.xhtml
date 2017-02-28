@@ -67,9 +67,29 @@
 
 				<p:tab id="confirm" title="Confirmação">
 					<p:panel header="Confirmação">
+					
+						<h:panelGrid columns="2">
+							<h:panelGrid columns="1">
+								<p:outputLabel value="Funcionário" styleClass="texto_negrito"/>
+								<p:outputLabel value="#{loginController.funcionario.nome}"/>
+							</h:panelGrid>
+							
+							<h:panelGrid columns="1">
+								<p:outputLabel value="Função" styleClass="texto_negrito"/>
+								<p:outputLabel value="#{loginController.funcao.funcao}"/>
+							</h:panelGrid>
+						</h:panelGrid>	
+						
+						<h:panelGrid columns="2">
+							<h:panelGrid columns="1">
+								<p:outputLabel value="Usuário" styleClass="texto_negrito"/>
+								<p:outputLabel value="#{loginController.usuario.nomeUsuario}"/>
+							</h:panelGrid>
+						</h:panelGrid>
+						
 						<p:commandButton value="Salvar e Entrar no sistema"
 							action="#{loginController.salvarDadosIniciais}"
-							update=":msgGlobal"/>
+							update=":msgGlobal" icon="ui-icon-check"/>
 					</p:panel>
 				</p:tab>
 			</p:wizard>

@@ -13,23 +13,10 @@
 		<class>br.com.pitdog.model.conf.BackupHistorico</class>
 		<class>br.com.pitdog.model.conf.ConfiguracaoBackup</class>
 		
-		<class>br.com.pitdog.model.sys.PanelMenu</class>
-		
 		<class>br.com.pitdog.model.rh.Funcionario</class>
 		
-		<class>br.com.pitdog.model.gestserv.Servico</class>
-		<class>br.com.pitdog.model.gestserv.GarantiaServico</class>
-		<class>br.com.pitdog.model.gestserv.OrdemServico</class>
-		
 		<class>br.com.pitdog.model.global.Cliente</class>
-		
-		<class>br.com.pitdog.model.financ.ResumoCaixa</class>
 		<class>br.com.pitdog.model.estoque.Produto</class>
-		<class>br.com.pitdog.model.gestserv.ServicoOrdemServico</class>
-		<class>br.com.pitdog.model.gestserv.ServicoOrdemServicoId</class>
-		<class>br.com.pitdog.model.financ.ParcelasPagamentoOs</class>
-		<class>br.com.pitdog.model.financ.CondicaoPagamento</class>
-		<class>br.com.pitdog.model.gestserv.ProdutoOrdemServico</class>
 		<class>br.com.pitdog.model.global.Fornecedor</class>
 		
 		<properties>
