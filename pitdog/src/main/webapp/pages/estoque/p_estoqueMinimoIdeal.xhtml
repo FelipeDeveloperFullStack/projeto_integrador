@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</h:head>
+
+<ui:composition template="/template/template.xhtml">
+	<ui:define name="conteudo">
+		<h:form id="formGeralEstoqueIdeal">
+			<p:panel header="Listagem de Estoque Mínimo Ideal">
+
+				<h:panelGrid columns="6" id="panelPesquisa">
+					<p:calendar id="txtEstoqueIdealPesquisa" style="width: 300px;"
+						value="#{estoqueMinimoIdealController.diaSemana}" showOn="button"
+						locale="pt"/>
+					<p:selectOneMenu value="#{estoqueMinimoIdealController.estoqueMinimoIdeal.estoqueIdeal.situacao}">
+						<f:selectItems var="s" value="#{estoqueMinimoIdealController.situacoes}"
+							itemLabel="#{s.situacao}" itemValue="#{s}" />
+					</p:selectOneMenu>
+					<p:commandButton id="btnPesquisarEstoqueIdeal" value="Pesquisar"
+						icon="ui-icon-search" update="formGeralEstoqueIdeal"
+						actionListener="#{estoqueMinimoIdealController.pesquisar}" />
+					<p:focus context="panelPesquisa" />
+					<p:blockUI block="tableEstoqueIdeal" trigger="btnPesquisarEstoqueIdeal">
+						        Carregando! Aguarde...<br />
+						<p:graphicImage library="img" name="loading.gif" />
+					</p:blockUI>
+				</h:panelGrid>
+
+				<p:dataTable id="tableEstoqueIdeal" var="e" paginator="true"
+					paginatorPosition="bottom" value="#{estoqueMinimoIdealController.listaEstoqueMinimoIdealPrincipal}"
+					emptyMessage="Nenhum registro encontrado!" rows="12"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
+					{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+					<p:column headerText="Cód" width="25" style="text-align:center;">
+						<p:outputLabel value="#{e.id}" />
+					</p:column>
+
+					<p:column headerText="Dia da semana">
+						<p:outputLabel value="#{e.diaSemana}" />
+					</p:column>
+
+					<p:column headerText="Situação" width="50"
+						style="text-align:center;">
+						<p:outputLabel value="#{e.situacao.situacao}" />
+					</p:column>
+
+					<p:column width="40">
+						<p:commandButton id="btnEditar" icon="ui-icon-pencil"
+							oncomplete="PF('dialogEditarEstoqueIdeal').show()"
+							actionListener="#{estoqueMinimoIdealController.setarEstoqueIdeal(e)}"
+							update=":msgGlobal :formEditarEstoqueIdeal">
+						</p:commandButton>
+						<p:tooltip value="Cliquei aqui para editar!" for="btnEditar"
+							position="left" />
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton value="Novo Estoque Mínimo"
+							actionListener="#{estoqueMinimoIdealController.novo}"
+							icon="ui-icon-circle-plus"
+							oncomplete="PF('dialogNovoEstoqueIdeal').show();"
+							update=":msgGlobal :formNovoEstoqueIdeal" />
+					</f:facet>
+
+				</p:dataTable>
+			</p:panel>
+
+			<p:blockUI block="tableEstoqueIdeal" trigger="tableEstoqueIdeal">
+			        Carregando! Aguarde...<br />
+				<p:graphicImage library="img" name="loading.gif" />
+			</p:blockUI>
+
+		</h:form>
+
+		<!-- Dialog editar estoque Ideal -->
+		<p:dialog id="dialogEditarEstoqueIdeal"
+			widgetVar="dialogEditarEstoqueIdeal" header="Editar Estoque Ideal" modal="true"
+			appendTo="@(body)" resizable="false" position="top" closable="false">
+			<h:form id="formEditarEstoqueIdeal">
+
+
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Dia da semana" />
+						<p:selectOneMenu value="#{estoqueMinimoIdealController.estoqueMinimoIdeal.estoqueIdeal.diaSemana}">
+							<f:selectItems var="ds" value="#{estoqueMinimoIdealController.diasSemana}" itemLabel="#{ds}" itemValue="#{ds}"/>
+						</p:selectOneMenu>
+					</h:panelGrid>
+					
+					<!-- <h:panelGrid columns="1">
+						<p:outputLabel value="." style="color: white;"/>
+						<p:commandButton icon="ui-icon-locked"/>
+					</h:panelGrid> -->
+				</h:panelGrid>
+				
+				<h:panelGrid columns="3">	
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Descrição do produto" />
+						<p:selectOneMenu value="#{estoqueMinimoIdealController.estoqueMinimoIdeal.produto}" converter="omnifaces.SelectItemsConverter" filter="true" filterMatchMode="startsWith">
+							<f:selectItems var="p" value="#{estoqueMinimoIdealController.produtos}" itemLabel="#{p.descricaoProduto}" itemValue="#{p}"/>
+						</p:selectOneMenu>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Quantidade" />
+						<p:spinner value="#{estoqueMinimoIdealController.estoqueMinimoIdeal.quantidade}" min="1"/>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1">
+						<p:outputLabel value="." style="color: white;"/>
+						<p:commandButton value="Adicionar" icon="ui-icon-plusthick" actionListener="#{estoqueMinimoIdealController.adicionarEstoque}"
+						   update=":msgGlobal tableEstoqueIdealNovo"/>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2">
+					<p:dataTable id="tableEstoqueIdealNovo" var="e" paginator="true"
+					paginatorPosition="bottom" value="#{estoqueMinimoIdealController.listaEstoqueMinimo}"
+					emptyMessage="Nenhum registro encontrado!" rows="12">
+					
+						<p:column headerText="Produto">
+							<p:outputLabel value="#{e.produto.descricaoProduto}" />
+						</p:column>
+						
+						<p:column headerText="Fabricante">
+							<p:outputLabel value="#{e.produto.fabricante.razaoSocial}" />
+						</p:column>
+						
+						<p:column headerText="Qtde" width="50" style="text-align:center;">
+							<p:outputLabel value="#{e.quantidade}" />
+						</p:column>
+						
+						<p:column width="40" style="text-align:center;">
+							<p:commandButton icon="ui-icon-trash" actionListener="#{estoqueMinimoIdealController.removerEstoqueIdeal(e)}" update="tableEstoqueIdealNovo"/>
+						</p:column>
+						
+					</p:dataTable>
+				</h:panelGrid>	
+					
+				<h:panelGrid id="panelBotoesEditarFabricante" columns="2">
+					<h:panelGrid columns="2">
+						<p:commandButton id="btnEditarFabricante" value="Salvar"
+							icon="ui-icon-check" actionListener="#{estoqueMinimoIdealController.salvar}"
+							update=":msgGlobal :formEditarEstoqueIdeal :formGeralEstoqueIdeal:tableEstoqueIdeal" />
+						<p:commandButton id="btnEditarFabricanteCancelar" value="Cancelar"
+							icon="ui-icon-close"
+							oncomplete="PF('dialogEditarEstoqueIdeal').hide();"
+							actionListener="#{estoqueMinimoIdealController.novo}"
+							update=":formGeralEstoqueIdeal:tableEstoqueIdeal" />
+					</h:panelGrid>
+				</h:panelGrid>
+				<p:blockUI block="panelBotoesEditarFabricante"
+					trigger="btnEditarFabricante,btnEditarFabricanteCancelar" />
+			</h:form>
+		</p:dialog>
+
+
+		<!-- Dialog novo estoque ideal-->
+		<p:dialog widgetVar="dialogNovoEstoqueIdeal" header="Novo Estoque Ideal"
+			modal="true" appendTo="@(body)" resizable="false" position="top"
+			closable="false">
+			<h:form id="formNovoEstoqueIdeal">
+
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Dia da semana" />
+						<p:selectOneMenu value="#{estoqueMinimoIdealController.estoqueMinimoIdeal.estoqueIdeal.diaSemana}">
+							<f:selectItems var="ds" value="#{estoqueMinimoIdealController.diasSemana}" itemLabel="#{ds}" itemValue="#{ds}"/>
+						</p:selectOneMenu>
+					</h:panelGrid>
+					
+					<!-- <h:panelGrid columns="1">
+						<p:outputLabel value="." style="color: white;"/>
+						<p:commandButton icon="ui-icon-locked"/>
+					</h:panelGrid> -->
+				</h:panelGrid>
+				
+				<h:panelGrid columns="3">	
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Descrição do produto" />
+						<p:selectOneMenu value="#{estoqueMinimoIdealController.estoqueMinimoIdeal.produto}" converter="omnifaces.SelectItemsConverter" filter="true" filterMatchMode="startsWith">
+							<f:selectItems var="p" value="#{estoqueMinimoIdealController.produtos}" itemLabel="#{p.descricaoProduto}" itemValue="#{p}"/>
+						</p:selectOneMenu>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Quantidade" />
+						<p:spinner value="#{estoqueMinimoIdealController.estoqueMinimoIdeal.quantidade}" min="1"/>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1">
+						<p:outputLabel value="." style="color: white;"/>
+						<p:commandButton value="Adicionar" icon="ui-icon-plusthick" actionListener="#{estoqueMinimoIdealController.adicionarEstoque}"
+						   update=":msgGlobal tableEstoqueIdealNovo"/>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2">
+					<p:dataTable id="tableEstoqueIdealNovo" var="e" paginator="true"
+					paginatorPosition="bottom" value="#{estoqueMinimoIdealController.listaEstoqueMinimo}"
+					emptyMessage="Nenhum registro encontrado!" rows="12">
+					
+						<p:column headerText="Produto">
+							<p:outputLabel value="#{e.produto.descricaoProduto}" />
+						</p:column>
+						
+						<p:column headerText="Fabricante">
+							<p:outputLabel value="#{e.produto.fabricante.razaoSocial}" />
+						</p:column>
+						
+						<p:column headerText="Qtde" width="50" style="text-align:center;">
+							<p:outputLabel value="#{e.quantidade}" />
+						</p:column>
+						
+						<p:column width="40" style="text-align:center;">
+							<p:commandButton icon="ui-icon-trash" actionListener="#{estoqueMinimoIdealController.removerEstoqueIdeal(e)}" update="tableEstoqueIdealNovo"/>
+						</p:column>
+						
+					</p:dataTable>
+				</h:panelGrid>
+
+				<h:panelGrid id="panelBotoesNovoEstoqueIdeal" columns="2">
+					<h:panelGrid columns="2">
+						<p:commandButton id="btnSalvarNovoEstoqueIdeal" value="Salvar"
+							icon="ui-icon-check" actionListener="#{estoqueMinimoIdealController.salvar}"
+							update=":msgGlobal :formGeralEstoqueIdeal:tableEstoqueIdeal" />
+						<p:commandButton value="Cancelar" icon="ui-icon-close"
+							oncomplete="PF('dialogNovoEstoqueIdeal').hide();"
+							actionListener="#{estoqueMinimoIdealController.novo}"
+							update=":formGeralEstoqueIdeal:tableEstoqueIdeal" />
+					</h:panelGrid>
+				</h:panelGrid>
+				<p:blockUI block="panelBotoesNovoEstoqueIdeal"
+					trigger="btnSalvarNovoEstoqueIdeal" />
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
+
+</html>

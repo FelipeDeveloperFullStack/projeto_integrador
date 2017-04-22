@@ -18,6 +18,7 @@
 		<class>br.com.pitdog.model.global.Cliente</class>
 		<class>br.com.pitdog.model.estoque.Produto</class>
 		<class>br.com.pitdog.model.global.Fornecedor</class>
+		<class>br.com.pitdog.model.estoque.EstoqueMinimoIdeal</class>
 		
 		<properties>
 		

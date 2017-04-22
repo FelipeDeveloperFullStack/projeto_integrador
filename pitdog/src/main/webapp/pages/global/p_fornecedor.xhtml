@@ -11,7 +11,7 @@
 
 <ui:composition template="/template/template.xhtml">
 	<ui:define name="conteudo">
-		<h:form id="formGeralCliente">
+		<h:form id="formGeralFornecedor">
 			<p:panel header="Listagem de fornecedores">
 
 				<h:panelGrid columns="10" id="panelPesquisa">
@@ -40,13 +40,13 @@
 
 					<h:panelGrid columns="1">
 						<p:outputLabel value="." style="color: white;" />
-						<p:commandButton icon="ui-icon-search" update="tableCliente"
+						<p:commandButton icon="ui-icon-search" update="tableFornecedor"
 							actionListener="#{fornecedorController.pesquisar}"
 							value="Pesquisar" />
 					</h:panelGrid>
 				</h:panelGrid>
 
-				<p:dataTable id="tableCliente" var="c" paginator="true"
+				<p:dataTable id="tableFornecedor" var="c" paginator="true"
 					paginatorPosition="bottom"
 					value="#{fornecedorController.fornecedores}"
 					emptyMessage="Nenhum registro encontrado!" rows="8"
@@ -56,7 +56,7 @@
 					<f:facet name="{Exporters}">
 						<h:commandLink>
 							<p:graphicImage library="img" name="Excel-icon32.png" width="24" />
-							<p:dataExporter type="xls" target="tableCliente"
+							<p:dataExporter type="xls" target="tableFornecedor"
 								fileName="Fornecedores" />
 						</h:commandLink>
 					</f:facet>
@@ -81,8 +81,8 @@
 
 					<p:column width="40">
 						<p:commandButton id="btnEditar" icon="ui-icon-pencil"
-							oncomplete="PF('dialogEditarCliente').show()"
-							update=":msgGlobal tableCliente :formEditarCliente"
+							oncomplete="PF('dialogEditarFornecedor').show()"
+							update=":msgGlobal tableFornecedor :formEditarFornecedor"
 							actionListener="#{fornecedorController.setarFornecedor(c)}">
 						</p:commandButton>
 						<p:tooltip value="Cliquei aqui para editar!" for="btnEditar"
@@ -93,14 +93,14 @@
 						<p:commandButton value="Novo fornecedor"
 							actionListener="#{fornecedorController.novoFornecedor}"
 							icon="ui-icon-circle-plus"
-							oncomplete="PF('dialogNovoCliente').show();"
-							update=":msgGlobal :formNovoCliente" />
+							oncomplete="PF('dialogNovoFornecedor').show();"
+							update=":msgGlobal :formNovoFornecedor" />
 					</f:facet>
 
 				</p:dataTable>
 			</p:panel>
 
-			<p:blockUI block="tableCliente" trigger="tableCliente">
+			<p:blockUI block="tableFornecedor" trigger="tableFornecedor">
 			        Carregando! Aguarde...<br />
 				<p:graphicImage library="img" name="loading.gif" />
 			</p:blockUI>
@@ -108,10 +108,10 @@
 		</h:form>
 
 		<!-- Dialog editar fornecedor -->
-		<p:dialog id="dialogEditarCliente" widgetVar="dialogEditarCliente"
+		<p:dialog id="dialogEditarFornecedor" widgetVar="dialogEditarFornecedor"
 			header="Editar fornecedor" modal="true" appendTo="@(body)"
 			resizable="false" position="top" width="600" closable="false">
-			<h:form id="formEditarCliente">
+			<h:form id="formEditarFornecedor">
 
 				<p:tabView activeIndex="#{fornecedorController.currentTab}">
 					<p:tab title="Dados básicos">
@@ -351,27 +351,27 @@
 					</p:tab>
 				</p:tabView>
 
-				<h:panelGrid id="panelBotoesCliente" columns="2">
+				<h:panelGrid id="panelBotoesFornecedor" columns="2">
 					<h:panelGrid columns="2">
-						<p:commandButton id="btnSalvarCliente" value="Salvar"
+						<p:commandButton id="btnSalvarFornecedor" value="Salvar"
 							icon="ui-icon-check" action="#{fornecedorController.salvar}"
-							update=":msgGlobal :formGeralCliente:tableCliente" />
+							update=":msgGlobal :formGeralFornecedor:tableFornecedor" />
 						<p:commandButton value="Cancelar" icon="ui-icon-close"
-							oncomplete="PF('dialogEditarCliente').hide();"
+							oncomplete="PF('dialogEditarFornecedor').hide();"
 							actionListener="#{fornecedorController.cancelar}"
-							update=":msgGlobal :formGeralCliente:tableCliente" />
+							update=":msgGlobal :formGeralFornecedor:tableFornecedor" />
 					</h:panelGrid>
 				</h:panelGrid>
-				<p:blockUI block="panelBotoesCliente" trigger="btnSalvarCliente" />
+				<p:blockUI block="panelBotoesFornecedor" trigger="btnSalvarFornecedor" />
 			</h:form>
 		</p:dialog>
 
 
 		<!-- Dialog novo fornecedor -->
-		<p:dialog widgetVar="dialogNovoCliente" header="Novo fornecedor"
+		<p:dialog widgetVar="dialogNovoFornecedor" header="Novo fornecedor"
 			modal="true" appendTo="@(body)" resizable="false" position="top"
 			width="600" closable="false">
-			<h:form id="formNovoCliente">
+			<h:form id="formNovoFornecedor">
 				<p:tabView activeIndex="#{fornecedorController.currentTab}">
 					<p:tab title="Dados básicos">
 
@@ -609,17 +609,17 @@
 						</h:panelGrid>
 					</p:tab>
 				</p:tabView>
-				<h:panelGrid id="panelBotoesNovoCliente" columns="2">
+				<h:panelGrid id="panelBotoesNovoFornecedor" columns="2">
 					<h:panelGrid columns="2">
-						<p:commandButton id="btnSalvarNovoCliente" value="Salvar"
+						<p:commandButton id="btnSalvarNovoFornecedor" value="Salvar"
 							icon="ui-icon-check" action="#{fornecedorController.salvar}"
-							update=":msgGlobal :formGeralCliente:tableCliente" />
+							update=":msgGlobal :formGeralFornecedor:tableFornecedor" />
 						<p:commandButton value="Cancelar" icon="ui-icon-close"
-							oncomplete="PF('dialogNovoCliente').hide();" />
+							oncomplete="PF('dialogNovoFornecedor').hide();" />
 					</h:panelGrid>
 				</h:panelGrid>
-				<p:blockUI block="panelBotoesNovoCliente"
-					trigger="btnSalvarNovoCliente" />
+				<p:blockUI block="panelBotoesNovoFornecedor"
+					trigger="btnSalvarNovoFornecedor" />
 			</h:form>
 		</p:dialog>
 
@@ -636,7 +636,7 @@
 					<p:commandButton id="btnCarregarCNPJ" value="Carregar"
 						icon="ui-icon-refresh"
 						actionListener="#{fornecedorController.consultarCnpj}"
-						update=":msgGlobal :formNovoCliente :formEditarCliente" />
+						update=":msgGlobal :formNovoFornecedor :formEditarFornecedor" />
 					<p:commandButton value="Cancelar" icon="ui-icon-closethick"
 						oncomplete="PF('dialog_procurar_cnpj').hide();" />
 				</p:panelGrid>

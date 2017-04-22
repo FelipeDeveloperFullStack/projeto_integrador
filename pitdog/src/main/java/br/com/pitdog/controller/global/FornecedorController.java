@@ -96,8 +96,8 @@ public class FornecedorController implements Serializable {
 	}
 	
 	private void fecharDialogs(){
-		RequestContextUtil.execute("PF('dialogNovoCliente').hide();");
-		RequestContextUtil.execute("PF('dialogEditarCliente').hide();");
+		RequestContextUtil.execute("PF('dialogNovoFornecedor').hide();");
+		RequestContextUtil.execute("PF('dialogEditarFornecedor').hide();");
 	}
 	
 	private void fecharDialodDeProcurarCnpj(){

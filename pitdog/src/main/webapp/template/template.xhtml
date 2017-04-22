@@ -9,6 +9,7 @@
 	<title></title>
 	<h:outputStylesheet library="css" name="template.css" />
 	<h:outputStylesheet library="css" name="allstyle.css" />
+	<h:outputScript library="js" name="script.js" />
 
 </h:head>
 <h:body>
@@ -85,6 +86,7 @@
 							<p:submenu label="Cadastros">
 								<p:menuitem value="Produto" icon="ui-icon-newwin" outcome="/pages/estoque/p_produto.xhtml?faces-redirect=true"/>
 								<p:menuitem value="Fabricante" icon="ui-icon-newwin" outcome="/pages/estoque/p_fabricante.xhtml?faces-redirect=true"/>
+								<p:menuitem value="Estoque Mínimo Ideal" icon="ui-icon-newwin" outcome="/pages/estoque/p_estoqueMinimoIdeal.xhtml?faces-redirect=true"/>
 							</p:submenu>
 						</p:submenu>
 						
@@ -96,6 +98,7 @@
 						
 						<p:submenu label="Global">
 							<p:submenu label="Cadastros">
+								<p:menuitem value="Cliente" icon="ui-icon-newwin" outcome="/pages/global/p_cliente.xhtml?faces-redirect=true"/>
 								<p:menuitem value="Distribuidor" icon="ui-icon-newwin" outcome="/pages/global/p_distribuidor.xhtml?faces-redirect=true"/>
 								<p:menuitem value="Categoria" icon="ui-icon-newwin" outcome="/pages/global/p_categoria.xhtml?faces-redirect=true"/>
 								<p:menuitem value="Função" icon="ui-icon-newwin" outcome="/pages/global/p_funcao.xhtml?faces-redirect=true"/>

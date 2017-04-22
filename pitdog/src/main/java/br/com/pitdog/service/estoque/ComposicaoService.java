@@ -11,7 +11,7 @@ public class ComposicaoService extends GenericDaoImpl<Composicao, Long>{
 	
 	public boolean verificarSeExisteComposicaoNaTabela(List<Composicao> composicoes, Composicao composicao) {
 		for (Composicao c : composicoes) {
-			if (c.getInsumo().getId() == composicao.getInsumo().getId()) {
+			if (c.getInsumo().getDescricaoProduto() == composicao.getInsumo().getDescricaoProduto()) {
 				return true;
 			}
 		}
