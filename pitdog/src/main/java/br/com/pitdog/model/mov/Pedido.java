@@ -1,6 +1,5 @@
 package br.com.pitdog.model.mov;
 
-import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -13,7 +12,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.pitdog.model.estoque.Produto;
 import br.com.pitdog.model.global.Distribuidor;
 import br.com.pitdog.model.type.Situacao;
 import br.com.sysge.infraestrutura.dao.GenericDomain;
@@ -32,14 +30,10 @@ public class Pedido extends GenericDomain {
 	@OneToOne(fetch = FetchType.EAGER)
 	private Distribuidor distribuidor;
 	
-	@OneToOne(fetch = FetchType.EAGER)
-	private Produto produto;
+	private String numeroNotaFiscal;
 	
-	private long quantidade = 1L;;
-	
-	private BigDecimal preco = BigDecimal.ZERO;
-	
-	private BigDecimal desconto = BigDecimal.ZERO;
+	@Temporal(TemporalType.DATE)
+	private Date dataEntrada = Calendar.getInstance().getTime();
 	
 	@Enumerated(EnumType.STRING)
 	private Situacao situacao;
@@ -68,44 +62,28 @@ public class Pedido extends GenericDomain {
 		this.distribuidor = distribuidor;
 	}
 
-	public Produto getProduto() {
-		return produto == null ? new Produto() : this.produto;
-	}
-
-	public void setProduto(Produto produto) {
-		this.produto = produto;
-	}
-
-	public long getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(long quantidade) {
-		this.quantidade = quantidade;
-	}
-
-	public BigDecimal getPreco() {
-		return preco;
-	}
-
-	public void setPreco(BigDecimal preco) {
-		this.preco = preco;
-	}
-
-	public BigDecimal getDesconto() {
-		return desconto;
-	}
-
-	public void setDesconto(BigDecimal desconto) {
-		this.desconto = desconto;
-	}
-
 	public Situacao getSituacao() {
 		return situacao;
 	}
 
 	public void setSituacao(Situacao situacao) {
 		this.situacao = situacao;
+	}
+
+	public String getNumeroNotaFiscal() {
+		return numeroNotaFiscal;
+	}
+
+	public void setNumeroNotaFiscal(String numeroNotaFiscal) {
+		this.numeroNotaFiscal = numeroNotaFiscal;
+	}
+
+	public Date getDataEntrada() {
+		return dataEntrada;
+	}
+
+	public void setDataEntrada(Date dataEntrada) {
+		this.dataEntrada = dataEntrada;
 	}
 	
 	
