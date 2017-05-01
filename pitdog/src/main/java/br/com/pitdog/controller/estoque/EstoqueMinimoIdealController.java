@@ -68,6 +68,9 @@ public class EstoqueMinimoIdealController implements Serializable{
 	}
 
 	public List<EstoqueIdeal> getListaEstoqueMinimoIdealPrincipal() {
+		if(listaEstoqueMinimoIdealPrincipal.isEmpty()){
+			return listarEstoqueMinimoIdealAtivos();
+		}
 		return listaEstoqueMinimoIdealPrincipal;
 	}
 
@@ -136,6 +139,7 @@ public class EstoqueMinimoIdealController implements Serializable{
 		LocalDate localDate = LocalDate.now();
 		
 		List<String> diasS = new ArrayList<String>();
+		
 		diasS.add(adicionarDiaSemana(localDate));
 		
 		LocalDate d1 = localDate.plusDays(1);
@@ -162,6 +166,18 @@ public class EstoqueMinimoIdealController implements Serializable{
 		return diasS;
 	}
 	
+	private void converterDiaSemanaEmData(String diaSemana){
+		LocalDate localDate = LocalDate.now();
+		if(adicionarDiaSemana(localDate).equals(diaSemana)){
+			this.estoqueMinimoIdeal.getEstoqueIdeal().setDataSemana(DateUtil.asDate(localDate));
+		}
+		for(int i = 1; i <= 7; i++){
+			if(adicionarDiaSemana(localDate.plusDays(i)).equals(diaSemana)){
+				this.estoqueMinimoIdeal.getEstoqueIdeal().setDataSemana(DateUtil.asDate(localDate.plusDays(i)));
+			}
+		}
+	}
+	
 	private String adicionarDiaSemana(LocalDate localDate){
 		Calendar calendar = Calendar.getInstance();
 		DateFormat df = new SimpleDateFormat("MMMM"); 
@@ -185,6 +201,7 @@ public class EstoqueMinimoIdealController implements Serializable{
 	
 	public void salvar(){
 		try {
+			converterDiaSemanaEmData(this.estoqueMinimoIdeal.getEstoqueIdeal().getDiaSemana());
 			estoqueMinimoIdeal.setEstoqueIdeal(estoqueIdealService.salvar(estoqueMinimoIdeal.getEstoqueIdeal()));
 			for(EstoqueMinimoIdeal es : listaEstoqueMinimo){
 				es.setEstoqueIdeal(estoqueMinimoIdeal.getEstoqueIdeal());
@@ -198,8 +215,17 @@ public class EstoqueMinimoIdealController implements Serializable{
 	}
 	
 	public void pesquisar(){
-		this.listaEstoqueMinimoIdealPrincipal = new ArrayList<EstoqueIdeal>();
-		this.listaEstoqueMinimoIdealPrincipal = estoqueIdealService.pesquisarEstoqueIdeal(estoqueMinimoIdeal.getEstoqueIdeal(), diaSemana);
+		try {
+			this.listaEstoqueMinimoIdealPrincipal = new ArrayList<EstoqueIdeal>();
+			estoqueMinimoIdeal.getEstoqueIdeal().setDataSemana(diaSemana);
+			this.listaEstoqueMinimoIdealPrincipal = estoqueIdealService.pesquisarEstoqueIdeal(estoqueMinimoIdeal.getEstoqueIdeal());
+		} catch (Exception e) {
+			FacesUtil.mensagemWarn(e.getMessage());
+		}
+	}
+	
+	public List<EstoqueIdeal> listarEstoqueMinimoIdealAtivos(){
+		return listaEstoqueMinimoIdealPrincipal = estoqueIdealService.findBySituation(Situacao.ATIVO);
 	}
 	
 

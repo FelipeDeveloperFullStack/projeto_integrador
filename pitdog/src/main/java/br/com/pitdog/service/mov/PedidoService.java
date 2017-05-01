@@ -24,10 +24,7 @@ public class PedidoService extends GenericDaoImpl<Pedido, Long>{
 	
 	private Pedido consistirPedido(Pedido pedido){
 		if(pedido.getId() == null){
-			pedido.setDescricaoPedido(pedido.getDescricaoPedido().toUpperCase());
 			pedido.setSituacao(Situacao.ATIVO);
-		}else{
-			pedido.setDescricaoPedido(pedido.getDescricaoPedido().toUpperCase());
 		}
 		return pedido;
 	}
@@ -36,7 +33,7 @@ public class PedidoService extends GenericDaoImpl<Pedido, Long>{
 		if(pedido.getDescricaoPedido().trim().isEmpty()){
 			return super.findBySituation(pedido.getSituacao());
 		}else{
-			return super.findByParametersForSituation(pedido.getDescricaoPedido().toUpperCase(), 
+			return super.findByParametersForSituation(pedido.getDescricaoPedido(), 
 					pedido.getSituacao(), "descricaoPedido", "LIKE", "%", "%");
 		}
 }

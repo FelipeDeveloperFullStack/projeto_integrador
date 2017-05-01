@@ -99,18 +99,29 @@
 			closable="false">
 			<h:form id="formNovoPedido">
 
-				<h:panelGrid columns="2">
+				<h:panelGrid columns="4">
 
 					<h:panelGrid columns="1">
-						<p:outputLabel value="Descrição do pedido" />
-						<p:inputText value="#{pedidoController.pedido.descricaoPedido}"
-							style="width: 350px;" />
+						<p:outputLabel value="código do pedido" />
+						<p:inputText value="#{pedidoController.pedido.id}"
+							style="width: 120px;" readonly="true"/>
 					</h:panelGrid>
 
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Data do pedido" />
 						<p:calendar value="#{pedidoController.pedido.dataPedido}"
-							pattern="dd/MM/yyyy" mask="true" />
+							pattern="dd/MM/yyyy" mask="true" locale="pt"/>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Data de entrada" />
+						<p:calendar value="#{pedidoController.pedido.dataEntrada}"
+							pattern="dd/MM/yyyy" mask="true" locale="pt"/>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Número nota fiscal" />
+						<p:inputText value="#{pedidoController.pedido.numeroNotaFiscal}" style="width: 470px;"/>
 					</h:panelGrid>
 
 				</h:panelGrid>
@@ -125,12 +136,10 @@
 								itemLabel="#{d.razaoSocial}" itemValue="#{d}" />
 						</p:selectOneMenu>
 					</h:panelGrid>
-				</h:panelGrid>
-
-				<h:panelGrid columns="2">
+					
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Produto / Insumo" />
-						<p:selectOneMenu value="#{pedidoController.pedido.produto}"
+						<p:selectOneMenu value="#{pedidoController.itemPedido.produto}"
 							filter="true" filterMatchMode="startsWith" style="width: 500px;"
 							converter="omnifaces.SelectItemsConverter">
 							<f:selectItems var="p" value="#{pedidoController.produtos}"
@@ -140,24 +149,82 @@
 					</h:panelGrid>
 				</h:panelGrid>
 
-				<h:panelGrid columns="3">
+				<h:panelGrid columns="5">
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Qtde" />
-						<p:spinner value="#{pedidoController.pedido.quantidade}" min="1" />
+						<p:inputNumber value="#{pedidoController.itemPedido.quantidade}"/>  
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Unid. Medida" />
+						<p:selectOneMenu value="#{pedidoController.itemPedido.unidadeMedida}"
+							converter="omnifaces.SelectItemsConverter">
+							<f:selectItems var="u" value="#{pedidoController.unidadeMedidas}"
+								itemLabel="#{u.unidadeMedida}"
+								itemValue="#{u}" />
+						</p:selectOneMenu>
 					</h:panelGrid>
 
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Preço" />
-						<p:inputNumber value="#{pedidoController.pedido.preco}"
+						<p:inputNumber value="#{pedidoController.itemPedido.preco}"
 							symbol="R$ " decimalSeparator="," thousandSeparator="." />
 					</h:panelGrid>
 
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Desconto" />
-						<p:inputNumber value="#{pedidoController.pedido.desconto}"
+						<p:inputNumber value="#{pedidoController.itemPedido.desconto}"
 							symbol=" %" decimalSeparator="," thousandSeparator="."
 							symbolPosition="s" minValue="0.00" />
 					</h:panelGrid>
+					
+					<h:panelGrid columns="1">
+						<p:outputLabel value="." style="color: white;"/>
+						<p:commandButton icon="ui-icon-plusthick" value="Adicionar" 
+							update=":msgGlobal tableItemPedido" actionListener="#{pedidoController.adicionar}"/>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2">
+					<p:dataTable id="tableItemPedido" var="item" paginator="true"
+					paginatorPosition="bottom" value="#{pedidoController.itensPedidos}"
+					emptyMessage="Nenhum registro encontrado!" rows="8"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
+					{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+					<p:column headerText="Cod." width="30" style="text-align:center;" rendered="#{item.id != null}">
+						<p:outputLabel value="#{item.id}" />
+					</p:column>
+					
+					<p:column headerText="Produto">
+						<p:outputLabel value="#{item.produto.descricaoProduto}" />
+					</p:column>
+					
+					<p:column headerText="Fabricante">
+						<p:outputLabel value="#{item.produto.fabricante.razaoSocial}" />
+					</p:column>
+					
+					<p:column headerText="Qtde" width="30" style="text-align:center;">
+						<p:outputLabel value="#{item.quantidade}" />
+					</p:column>
+					
+					<p:column headerText="Preço" width="75" style="text-align:center;">
+						<p:outputLabel value="#{item.preco}">
+							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+						</p:outputLabel>
+					</p:column>
+					
+					<p:column headerText="Desconto" width="75" style="text-align:center;">
+						<p:outputLabel value="#{item.desconto}">
+							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+						</p:outputLabel>
+					</p:column>
+					
+					<p:column width="30" style="text-align:center;">
+						<p:commandButton icon="ui-icon-trash"/>
+					</p:column>
+					
+					</p:dataTable>
 				</h:panelGrid>
 
 				<h:panelGrid id="panelBotoesEditarPedido" columns="2">
@@ -211,7 +278,7 @@
 				<h:panelGrid columns="2">
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Produto / Insumo" />
-						<p:selectOneMenu value="#{pedidoController.pedido.produto}"
+						<p:selectOneMenu value="#{pedidoController.itemPedido.produto}"
 							filter="true" filterMatchMode="startsWith" style="width: 500px;"
 							converter="omnifaces.SelectItemsConverter">
 							<f:selectItems var="p" value="#{pedidoController.produtos}"
@@ -221,21 +288,31 @@
 					</h:panelGrid>
 				</h:panelGrid>
 
-				<h:panelGrid columns="3">
+				<h:panelGrid columns="4">
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Qtde" />
-						<p:spinner value="#{pedidoController.pedido.quantidade}" min="1" />
+						<p:inputNumber value="#{pedidoController.itemPedido.quantidade}" />  
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Unid. Medida" />
+						<p:selectOneMenu value="#{pedidoController.itemPedido.unidadeMedida}"
+							converter="omnifaces.SelectItemsConverter">
+							<f:selectItems var="u" value="#{pedidoController.unidadeMedidas}"
+								itemLabel="#{u.unidadeMedida}"
+								itemValue="#{u}" />
+						</p:selectOneMenu>
 					</h:panelGrid>
 
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Preço" />
-						<p:inputNumber value="#{pedidoController.pedido.preco}"
+						<p:inputNumber value="#{pedidoController.itemPedido.preco}"
 							symbol="R$ " decimalSeparator="," thousandSeparator="." />
 					</h:panelGrid>
 
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Desconto" />
-						<p:inputNumber value="#{pedidoController.pedido.desconto}"
+						<p:inputNumber value="#{pedidoController.itemPedido.desconto}"
 							symbol=" %" decimalSeparator="," thousandSeparator="."
 							symbolPosition="s" minValue="0.00" />
 					</h:panelGrid>

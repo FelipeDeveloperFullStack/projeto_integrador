@@ -14,12 +14,19 @@ import br.com.sysge.infraestrutura.dao.GenericDaoImpl;
 public class EstoqueIdealService extends GenericDaoImpl<EstoqueIdeal, Long>{
 
 	private static final long serialVersionUID = -4926596484151161679L;
-
+	
 	public EstoqueIdeal salvar(EstoqueIdeal estoqueMinimoIdeal){
 		try {
+			List<EstoqueIdeal> listaEstoqueMinimoIdeal = super.findByData(estoqueMinimoIdeal.getDataSemana(),"dataSemana");
+			for(EstoqueIdeal e : listaEstoqueMinimoIdeal){
+				if(e.getDataSemana().equals(estoqueMinimoIdeal.getDataSemana())){
+					throw new RuntimeException("Já existe um estoque mínimo ideal cadastrado com a data da semana "
+							+ "informada, por favor escolha outro dia da semana!");
+				}
+			}
 			return super.save(consistirEstoqueIdeal(estoqueMinimoIdeal));
 		} catch (RuntimeException e) {
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 	
@@ -30,14 +37,20 @@ public class EstoqueIdealService extends GenericDaoImpl<EstoqueIdeal, Long>{
 		return estoqueMinimoIdeal;
 	}
 	
-	public List<EstoqueIdeal> pesquisarEstoqueIdeal(EstoqueIdeal estoqueMinimoIdeal, Date diaSemana){
+	public List<EstoqueIdeal> pesquisarEstoqueIdeal(EstoqueIdeal estoqueMinimoIdeal){
 		try {
-			if(diaSemana == null){
+			if(estoqueMinimoIdeal.getDataSemana() == null){
 				return super.findBySituation(estoqueMinimoIdeal.getSituacao());
 			}else{
-				estoqueMinimoIdeal.setDiaSemana(converterDataDiaSemana(diaSemana));
-				return super.findByParametersForSituation(estoqueMinimoIdeal.getDiaSemana(), 
-						estoqueMinimoIdeal.getSituacao(), "diaSemana", "LIKE", "%", "%"); 
+				List<EstoqueIdeal> listaEstoqueMinimoIdeal = 
+						super.findByData(estoqueMinimoIdeal.getDataSemana(), 
+								estoqueMinimoIdeal.getSituacao(),
+								"dataSemana"); 
+				if(listaEstoqueMinimoIdeal.isEmpty()){
+					throw new RuntimeException("Nenhum registro encontrado!");
+				}else{
+					return listaEstoqueMinimoIdeal;
+				}
 			}
 		} catch (RuntimeException e) {
 			e.getStackTrace();
@@ -45,6 +58,7 @@ public class EstoqueIdealService extends GenericDaoImpl<EstoqueIdeal, Long>{
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private String converterDataDiaSemana(Date dataDiaSemana){
 		Calendar calendar = Calendar.getInstance();
 		DateFormat df = new SimpleDateFormat("MMMM"); 

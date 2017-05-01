@@ -45,6 +45,10 @@ public interface GenericDao<E, I> extends Serializable {
 	List<E> findByNumeroStatusOS(long numero, StatusOS statusOS);
 	
 	List<E> findByDataEntradaOs(Date dataInicial, Date dataFinal);
+	
+	List<E> findByData(Date data, Situacao situacao, String attributeClass);
+	
+	List<E> findByData(Date data, String attributeClass);
 
 	List<E> findAllByIdWithNativeQuery(I id, String table, String column);
 

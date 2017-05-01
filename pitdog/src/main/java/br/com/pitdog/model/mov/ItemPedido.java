@@ -3,11 +3,16 @@ package br.com.pitdog.model.mov;
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import br.com.pitdog.model.estoque.Produto;
+import br.com.pitdog.model.mov.type.UnidadeMedida;
 import br.com.sysge.infraestrutura.dao.GenericDomain;
 
 @Entity
@@ -19,10 +24,14 @@ public class ItemPedido extends GenericDomain{
 	@OneToOne(fetch = FetchType.EAGER)
 	private Produto produto;
 	
-	@OneToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "pedido_id")
 	private Pedido pedido;
-
-	private long quantidade = 1L;;
+	
+	private long quantidade;
+	
+	@Enumerated(EnumType.STRING)
+	private UnidadeMedida unidadeMedida;
 
 	private BigDecimal preco = BigDecimal.ZERO;
 
@@ -66,6 +75,14 @@ public class ItemPedido extends GenericDomain{
 
 	public void setDesconto(BigDecimal desconto) {
 		this.desconto = desconto;
+	}
+
+	public UnidadeMedida getUnidadeMedida() {
+		return unidadeMedida;
+	}
+
+	public void setUnidadeMedida(UnidadeMedida unidadeMedida) {
+		this.unidadeMedida = unidadeMedida;
 	}
 	
 	

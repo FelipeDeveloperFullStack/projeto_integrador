@@ -237,6 +237,27 @@ public class GenericDaoImpl<E, I> implements GenericDao<E, I> {
 		return query.getResultList();
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<E> findByData(Date data, Situacao situacao, String attributeClass){
+		Query query = manager.createQuery
+				("SELECT o FROM "+entityClass.getSimpleName()+ " o "
+						+ "WHERE o."+attributeClass+" = :dataSemana AND o.situacao = :situacao");
+		query.setParameter("dataSemana", data);
+		query.setParameter("situacao", situacao);
+		return query.getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<E> findByData(Date data, String attributeClass){
+		Query query = manager.createQuery
+				("SELECT o FROM "+entityClass.getSimpleName()+ " o "
+						+ "WHERE o."+attributeClass+" = :dataSemana");
+		query.setParameter("dataSemana", data);
+		return query.getResultList();
+	}
+	
 	
 	@SuppressWarnings("unchecked")
 	@Override

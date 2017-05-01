@@ -9,21 +9,23 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </h:head>
 
+
 <ui:composition template="/template/template.xhtml">
 	<ui:define name="conteudo">
+	
 		<h:form id="formGeralEstoqueIdeal">
 			<p:panel header="Listagem de Estoque Mínimo Ideal">
 
 				<h:panelGrid columns="6" id="panelPesquisa">
 					<p:calendar id="txtEstoqueIdealPesquisa" style="width: 300px;"
 						value="#{estoqueMinimoIdealController.diaSemana}" showOn="button"
-						locale="pt"/>
+						locale="pt" pattern="dd/MM/yyyy" mask="true"/>
 					<p:selectOneMenu value="#{estoqueMinimoIdealController.estoqueMinimoIdeal.estoqueIdeal.situacao}">
 						<f:selectItems var="s" value="#{estoqueMinimoIdealController.situacoes}"
 							itemLabel="#{s.situacao}" itemValue="#{s}" />
 					</p:selectOneMenu>
 					<p:commandButton id="btnPesquisarEstoqueIdeal" value="Pesquisar"
-						icon="ui-icon-search" update="formGeralEstoqueIdeal"
+						icon="ui-icon-search" update=":msgGlobal formGeralEstoqueIdeal"
 						actionListener="#{estoqueMinimoIdealController.pesquisar}" />
 					<p:focus context="panelPesquisa" />
 					<p:blockUI block="tableEstoqueIdeal" trigger="btnPesquisarEstoqueIdeal">
@@ -44,6 +46,13 @@
 
 					<p:column headerText="Dia da semana">
 						<p:outputLabel value="#{e.diaSemana}" />
+					</p:column>
+					
+					<p:column headerText="Data" style="text-align:center;">
+						<p:outputLabel value="#{e.dataSemana}">
+							<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"
+								timeZone="GMT-2" type="both" />
+						</p:outputLabel>
 					</p:column>
 
 					<p:column headerText="Situação" width="50"
@@ -152,7 +161,6 @@
 						<p:commandButton id="btnEditarFabricanteCancelar" value="Cancelar"
 							icon="ui-icon-close"
 							oncomplete="PF('dialogEditarEstoqueIdeal').hide();"
-							actionListener="#{estoqueMinimoIdealController.novo}"
 							update=":formGeralEstoqueIdeal:tableEstoqueIdeal" />
 					</h:panelGrid>
 				</h:panelGrid>
@@ -233,7 +241,6 @@
 							update=":msgGlobal :formGeralEstoqueIdeal:tableEstoqueIdeal" />
 						<p:commandButton value="Cancelar" icon="ui-icon-close"
 							oncomplete="PF('dialogNovoEstoqueIdeal').hide();"
-							actionListener="#{estoqueMinimoIdealController.novo}"
 							update=":formGeralEstoqueIdeal:tableEstoqueIdeal" />
 					</h:panelGrid>
 				</h:panelGrid>

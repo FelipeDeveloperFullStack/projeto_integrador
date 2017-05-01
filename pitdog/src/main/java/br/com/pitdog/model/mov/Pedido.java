@@ -2,17 +2,20 @@ package br.com.pitdog.model.mov;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import br.com.pitdog.model.global.Distribuidor;
+import br.com.pitdog.model.mov.type.TipoPE;
 import br.com.pitdog.model.type.Situacao;
 import br.com.sysge.infraestrutura.dao.GenericDomain;
 
@@ -33,11 +36,17 @@ public class Pedido extends GenericDomain {
 	private String numeroNotaFiscal;
 	
 	@Temporal(TemporalType.DATE)
-	private Date dataEntrada = Calendar.getInstance().getTime();
+	private Date dataEntrada;
+	
+	@OneToMany(mappedBy = "pedido", fetch = FetchType.EAGER, targetEntity = ItemPedido.class)
+	private List<ItemPedido> itensPedidos;
+
+	@Enumerated(EnumType.STRING)
+	private TipoPE tipoPe;
 	
 	@Enumerated(EnumType.STRING)
 	private Situacao situacao;
-
+	
 	public String getDescricaoPedido() {
 		return descricaoPedido;
 	}
@@ -84,6 +93,22 @@ public class Pedido extends GenericDomain {
 
 	public void setDataEntrada(Date dataEntrada) {
 		this.dataEntrada = dataEntrada;
+	}
+
+	public List<ItemPedido> getItensPedidos() {
+		return itensPedidos;
+	}
+
+	public void setItensPedidos(List<ItemPedido> itensPedidos) {
+		this.itensPedidos = itensPedidos;
+	}
+
+	public TipoPE getTipoPe() {
+		return tipoPe;
+	}
+
+	public void setTipoPe(TipoPE tipoPe) {
+		this.tipoPe = tipoPe;
 	}
 	
 	
