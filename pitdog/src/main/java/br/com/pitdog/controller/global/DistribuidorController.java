@@ -80,11 +80,18 @@ public class DistribuidorController implements Serializable{
 	}
 
 	public List<Distribuidor> getDistribuidores() {
+		if(distribuidores.isEmpty()){
+			return listarDistribuidoresAtivos();
+		}
 		return distribuidores;
 	}
 
 	public void setDistribuidores(List<Distribuidor> distribuidores) {
 		this.distribuidores = distribuidores;
+	}
+	
+	public List<Distribuidor> listarDistribuidoresAtivos(){
+		return distribuidores = distribuidorService.findBySituation(Situacao.ATIVO);
 	}
 	
 	

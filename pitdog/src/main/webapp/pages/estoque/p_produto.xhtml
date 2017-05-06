@@ -117,8 +117,7 @@
 
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Quantidade" />
-						<p:spinner min="1"
-							value="#{produtoController.composicao.quantidade}" />
+						<p:inputNumber value="#{produtoController.composicao.quantidade}" minValue="1.0"/>
 					</h:panelGrid>
 
 					<h:panelGrid columns="1">
@@ -176,7 +175,6 @@
 							update=":msgGlobal :formGeralProduto:tableProduto" />
 						<p:commandButton value="Cancelar" icon="ui-icon-disk"
 							oncomplete="PF('dialogComposicao').hide();"
-							actionListener="#{produtoController.novaListaProduto}"
 							update=":formGeralProduto:tableProduto" />
 					</h:panelGrid>
 				</h:panelGrid>
@@ -189,7 +187,7 @@
 			appendTo="@(body)" resizable="false" position="top" closable="false">
 			<h:form id="formEditarProduto">
 
-				<h:panelGrid columns="2" id="panel_editar_produto_1">
+				<h:panelGrid columns="2">
 					<h:panelGrid columns="1">
 
 						<p:outputLabel value="Tipo" />
@@ -201,12 +199,7 @@
 								process="tipo_produto" />
 						</p:selectOneMenu>
 					</h:panelGrid>
-
-					<h:panelGrid columns="1"
-						rendered="#{produtoController.produto.tipo == 'PRODUTO'}">
-						<p:outputLabel value="Código do produto" />
-						<p:inputText value="#{produtoController.produto.codigoProduto}" />
-					</h:panelGrid>
+					
 				</h:panelGrid>
 
 				<h:panelGrid columns="1">
@@ -237,13 +230,18 @@
 					</h:panelGrid>
 				</h:panelGrid>
 
-				<h:panelGrid columns="2">
+				<h:panelGrid columns="2" id="panel_editar_produto_1">
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Situação" />
 						<p:selectOneMenu value="#{produtoController.produto.situacao}">
 							<f:selectItems var="s" value="#{produtoController.situacoes}"
 								itemLabel="#{s.situacao}" itemValue="#{s}" />
 						</p:selectOneMenu>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Quantidade estoque" />
+						<p:inputText value="#{produtoController.produto.quantidadeEstoque}" readonly="true"/>
 					</h:panelGrid>
 
 				</h:panelGrid>
@@ -256,7 +254,6 @@
 						<p:commandButton id="btnEditarProdutoCancelar" value="Cancelar"
 							icon="ui-icon-close"
 							oncomplete="PF('dialogEditarProduto').hide();"
-							actionListener="#{produtoController.novaListaProduto}"
 							update=":formGeralProduto:tableProduto" />
 					</h:panelGrid>
 				</h:panelGrid>
@@ -284,11 +281,7 @@
 								process="tipo_produto" />
 						</p:selectOneMenu>
 					</h:panelGrid>
-					<h:panelGrid columns="1"
-						rendered="#{produtoController.produto.tipo == 'PRODUTO'}">
-						<p:outputLabel value="Código do produto" />
-						<p:inputText value="#{produtoController.produto.codigoProduto}" />
-					</h:panelGrid>
+					
 				</h:panelGrid>
 
 				<h:panelGrid columns="1">
@@ -326,7 +319,6 @@
 							update=":msgGlobal :formGeralProduto:tableProduto" />
 						<p:commandButton value="Cancelar" icon="ui-icon-close"
 							oncomplete="PF('dialogNovoProduto').hide();"
-							actionListener="#{produtoController.novaListaProduto}"
 							update=":formGeralProduto:tableProduto" />
 					</h:panelGrid>
 				</h:panelGrid>

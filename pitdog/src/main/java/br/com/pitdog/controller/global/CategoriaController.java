@@ -80,6 +80,9 @@ public class CategoriaController implements Serializable{
 	}
 
 	public List<Categoria> getCategorias() {
+		if(categorias.isEmpty()){
+			return listarCategoriasAtivos();
+		}
 		return categorias;
 	}
 
@@ -87,6 +90,9 @@ public class CategoriaController implements Serializable{
 		this.categorias = categorias;
 	}
 
+	public List<Categoria> listarCategoriasAtivos(){
+		return categorias = categoriaService.findBySituation(Situacao.ATIVO);
+	}
 
 
 }

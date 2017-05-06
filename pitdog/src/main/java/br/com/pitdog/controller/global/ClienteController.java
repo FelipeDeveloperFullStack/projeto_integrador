@@ -80,6 +80,9 @@ public class ClienteController implements Serializable{
 	}
 
 	public List<Cliente> getClientes() {
+		if(clientes.isEmpty()){
+			return listarClientesAtivos();
+		}
 		return clientes;
 	}
 
@@ -87,6 +90,8 @@ public class ClienteController implements Serializable{
 		this.clientes = clientes;
 	}
 	
-	
+	public List<Cliente> listarClientesAtivos(){
+		return clientes = clienteService.findBySituation(Situacao.ATIVO);
+	}
 
 }

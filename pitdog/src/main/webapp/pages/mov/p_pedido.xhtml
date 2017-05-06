@@ -102,21 +102,15 @@
 				<h:panelGrid columns="4">
 
 					<h:panelGrid columns="1">
-						<p:outputLabel value="código do pedido" />
-						<p:inputText value="#{pedidoController.pedido.id}"
-							style="width: 120px;" readonly="true"/>
-					</h:panelGrid>
-
-					<h:panelGrid columns="1">
 						<p:outputLabel value="Data do pedido" />
 						<p:calendar value="#{pedidoController.pedido.dataPedido}"
-							pattern="dd/MM/yyyy" mask="true" locale="pt"/>
+							pattern="dd/MM/yyyy" mask="true" locale="pt" showOn="button"/>
 					</h:panelGrid>
 					
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Data de entrada" />
 						<p:calendar value="#{pedidoController.pedido.dataEntrada}"
-							pattern="dd/MM/yyyy" mask="true" locale="pt"/>
+							pattern="dd/MM/yyyy" mask="true" locale="pt" showOn="button"/>
 					</h:panelGrid>
 					
 					<h:panelGrid columns="1">
@@ -130,7 +124,7 @@
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Distribuidor" />
 						<p:selectOneMenu value="#{pedidoController.pedido.distribuidor}"
-							filter="true" filterMatchMode="startsWith" style="width: 500px;"
+							filter="true" filterMatchMode="startsWith" style="width: 395px;"
 							converter="omnifaces.SelectItemsConverter">
 							<f:selectItems var="d" value="#{pedidoController.distribuidores}"
 								itemLabel="#{d.razaoSocial}" itemValue="#{d}" />
@@ -140,7 +134,7 @@
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Produto / Insumo" />
 						<p:selectOneMenu value="#{pedidoController.itemPedido.produto}"
-							filter="true" filterMatchMode="startsWith" style="width: 500px;"
+							filter="true" filterMatchMode="startsWith" style="width: 440px;"
 							converter="omnifaces.SelectItemsConverter">
 							<f:selectItems var="p" value="#{pedidoController.produtos}"
 								itemLabel="#{p.descricaoProduto} - #{p.tipo.tipo}"

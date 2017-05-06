@@ -86,6 +86,8 @@ public class ProdutoController implements Serializable{
 		if(composicaoService.verificarSeExisteComposicaoNaTabela(composicoes, composicao)){
 			FacesUtil.mensagemWarn("Já existe um insumo '"+this.composicao.getInsumo().getDescricaoProduto() +
 					"' na lista, por favor escolha outro insumo!");
+		}else if(composicaoService.verificarQuantidadeComposicao(composicao)){
+			FacesUtil.mensagemWarn("A quantidade não pode ser igual a ZERO!");
 		}else{
 			composicao.setProduto(produto);
 			this.composicoes.add(composicao);
@@ -161,6 +163,9 @@ public class ProdutoController implements Serializable{
 	}
 
 	public List<Produto> getProdutos() {
+		if(produtos.isEmpty()){
+			return listarProdutosAtivos();
+		}
 		return produtos;
 	}
 
@@ -205,6 +210,10 @@ public class ProdutoController implements Serializable{
 
 	public void setComposicoes(List<Composicao> composicoes) {
 		this.composicoes = composicoes;
+	}
+	
+	public List<Produto> listarProdutosAtivos(){
+		return produtos = produtoService.findBySituation(Situacao.ATIVO);
 	}
 
 }

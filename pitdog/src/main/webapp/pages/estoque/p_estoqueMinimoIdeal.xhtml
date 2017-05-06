@@ -103,13 +103,9 @@
 						</p:selectOneMenu>
 					</h:panelGrid>
 					
-					<!-- <h:panelGrid columns="1">
-						<p:outputLabel value="." style="color: white;"/>
-						<p:commandButton icon="ui-icon-locked"/>
-					</h:panelGrid> -->
 				</h:panelGrid>
 				
-				<h:panelGrid columns="3">	
+				<h:panelGrid columns="4">	
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Descrição do produto" />
 						<p:selectOneMenu value="#{estoqueMinimoIdealController.estoqueMinimoIdeal.produto}" converter="omnifaces.SelectItemsConverter" filter="true" filterMatchMode="startsWith">
@@ -119,7 +115,17 @@
 					
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Quantidade" />
-						<p:spinner value="#{estoqueMinimoIdealController.estoqueMinimoIdeal.quantidade}" min="1"/>
+						<p:inputNumber value="#{estoqueMinimoIdealController.estoqueMinimoIdeal.quantidade}" minValue="1.0"/>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Unid. Medida" />
+						<p:selectOneMenu value="#{estoqueMinimoIdealController.estoqueMinimoIdeal.unidadeMedida}"
+							converter="omnifaces.SelectItemsConverter">
+							<f:selectItems var="u" value="#{estoqueMinimoIdealController.unidadeMedidas}"
+								itemLabel="#{u.unidadeMedida}"
+								itemValue="#{u}" />
+						</p:selectOneMenu>
 					</h:panelGrid>
 					
 					<h:panelGrid columns="1">
@@ -144,6 +150,10 @@
 						
 						<p:column headerText="Qtde" width="50" style="text-align:center;">
 							<p:outputLabel value="#{e.quantidade}" />
+						</p:column>
+						
+						<p:column headerText="Unidade Medida" width="50" style="text-align:center;">
+							<p:outputLabel value="#{e.unidadeMedida.unidadeMedida}" />
 						</p:column>
 						
 						<p:column width="40" style="text-align:center;">
@@ -190,7 +200,7 @@
 					</h:panelGrid> -->
 				</h:panelGrid>
 				
-				<h:panelGrid columns="3">	
+				<h:panelGrid columns="4">	
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Descrição do produto" />
 						<p:selectOneMenu value="#{estoqueMinimoIdealController.estoqueMinimoIdeal.produto}" converter="omnifaces.SelectItemsConverter" filter="true" filterMatchMode="startsWith">
@@ -200,7 +210,17 @@
 					
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Quantidade" />
-						<p:spinner value="#{estoqueMinimoIdealController.estoqueMinimoIdeal.quantidade}" min="1"/>
+						<p:inputNumber value="#{estoqueMinimoIdealController.estoqueMinimoIdeal.quantidade}" minValue="1.0"/>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Unid. Medida" />
+						<p:selectOneMenu value="#{estoqueMinimoIdealController.estoqueMinimoIdeal.unidadeMedida}"
+							converter="omnifaces.SelectItemsConverter">
+							<f:selectItems var="u" value="#{estoqueMinimoIdealController.unidadeMedidas}"
+								itemLabel="#{u.unidadeMedida}"
+								itemValue="#{u}" />
+						</p:selectOneMenu>
 					</h:panelGrid>
 					
 					<h:panelGrid columns="1">
@@ -225,6 +245,10 @@
 						
 						<p:column headerText="Qtde" width="50" style="text-align:center;">
 							<p:outputLabel value="#{e.quantidade}" />
+						</p:column>
+						
+						<p:column headerText="Unidade Medida" width="50" style="text-align:center;">
+							<p:outputLabel value="#{e.unidadeMedida.unidadeMedida}" />
 						</p:column>
 						
 						<p:column width="40" style="text-align:center;">

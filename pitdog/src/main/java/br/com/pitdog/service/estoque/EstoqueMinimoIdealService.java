@@ -19,5 +19,13 @@ public class EstoqueMinimoIdealService extends GenericDaoImpl<EstoqueMinimoIdeal
 		}
 		return false;
 	}
+	
+	public boolean verificarQuantidadeEstoque(EstoqueMinimoIdeal estoqueMinimoIdeal){
+		if(estoqueMinimoIdeal.getQuantidade() == 0.0){
+			return true;
+		}else{
+			return false;
+		}
+	}
 
 }

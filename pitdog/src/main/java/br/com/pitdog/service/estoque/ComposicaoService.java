@@ -11,11 +11,19 @@ public class ComposicaoService extends GenericDaoImpl<Composicao, Long>{
 	
 	public boolean verificarSeExisteComposicaoNaTabela(List<Composicao> composicoes, Composicao composicao) {
 		for (Composicao c : composicoes) {
-			if (c.getInsumo().getDescricaoProduto() == composicao.getInsumo().getDescricaoProduto()) {
+			if (c.getInsumo().getDescricaoProduto().trim().equals(composicao.getInsumo().getDescricaoProduto().trim())) {
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	public boolean verificarQuantidadeComposicao(Composicao composicao){
+		if(composicao.getQuantidade() == 0.0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 }

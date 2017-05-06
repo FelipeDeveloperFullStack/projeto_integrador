@@ -130,6 +130,9 @@ public class UsuarioController implements Serializable{
 	}
 	
 	public List<Usuario> getUsuarios(){
+		if(usuarios.isEmpty()){
+			return listarUsuariosAtivos();
+		}
 		return usuarios;
 	}
 
@@ -188,6 +191,10 @@ public class UsuarioController implements Serializable{
 
 	public void setUsuariosPesquisa(List<Usuario> usuariosPesquisa) {
 		this.usuariosPesquisa = usuariosPesquisa;
+	}
+	
+	public List<Usuario> listarUsuariosAtivos(){
+		return usuarios = usuarioService.findBySituation(Situacao.ATIVO);
 	}
 
 }

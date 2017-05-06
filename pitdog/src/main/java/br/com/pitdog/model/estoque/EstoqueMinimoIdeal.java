@@ -1,10 +1,13 @@
 package br.com.pitdog.model.estoque;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import br.com.pitdog.model.mov.type.UnidadeMedida;
 import br.com.sysge.infraestrutura.dao.GenericDomain;
 
 @Entity
@@ -16,7 +19,10 @@ public class EstoqueMinimoIdeal extends GenericDomain{
 	@OneToOne(fetch =FetchType.EAGER)
 	private Produto produto;
 	
-	private Long quantidade = 1L;
+	private double quantidade;
+	
+	@Enumerated(EnumType.STRING)
+	private UnidadeMedida unidadeMedida;
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	private EstoqueIdeal estoqueIdeal;
@@ -29,11 +35,11 @@ public class EstoqueMinimoIdeal extends GenericDomain{
 		this.produto = produto;
 	}
 
-	public Long getQuantidade() {
+	public double getQuantidade() {
 		return quantidade;
 	}
 
-	public void setQuantidade(Long quantidade) {
+	public void setQuantidade(double quantidade) {
 		this.quantidade = quantidade;
 	}
 
@@ -43,6 +49,14 @@ public class EstoqueMinimoIdeal extends GenericDomain{
 
 	public void setEstoqueIdeal(EstoqueIdeal estoqueIdeal) {
 		this.estoqueIdeal = estoqueIdeal;
+	}
+
+	public UnidadeMedida getUnidadeMedida() {
+		return unidadeMedida;
+	}
+
+	public void setUnidadeMedida(UnidadeMedida unidadeMedida) {
+		this.unidadeMedida = unidadeMedida;
 	}
 	
 	

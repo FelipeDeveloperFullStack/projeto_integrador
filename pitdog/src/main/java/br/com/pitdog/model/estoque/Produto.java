@@ -21,17 +21,13 @@ public class Produto extends GenericDomain{
 
 	private static final long serialVersionUID = -7328127398997221454L;
 
-	private String codigoProduto;
-	
 	private String descricaoProduto;
 	
 	private BigDecimal valorCusto = BigDecimal.ZERO;
 	
 	private BigDecimal valorVenda = BigDecimal.ZERO;
 	
-	private long quantidadeEstoque = 0L;
-	
-	private long quantidadeEstoqueMinimo = 0L;
+	private double quantidadeEstoque;
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	private Categoria categoria;
@@ -46,14 +42,6 @@ public class Produto extends GenericDomain{
 	private TipoProduto tipo;
 	
 	private boolean mostrarEstoqueMinimoTelaInicial;
-
-	public String getCodigoProduto() {
-		return codigoProduto;
-	}
-
-	public void setCodigoProduto(String codigoProduto) {
-		this.codigoProduto = codigoProduto;
-	}
 
 	public String getDescricaoProduto() {
 		return descricaoProduto;
@@ -79,20 +67,9 @@ public class Produto extends GenericDomain{
 		this.valorVenda = valorVenda;
 	}
 
-	public long getQuantidadeEstoque() {
-		return quantidadeEstoque;
-	}
 
 	public void setQuantidadeEstoque(long quantidadeEstoque) {
 		this.quantidadeEstoque = quantidadeEstoque;
-	}
-
-	public long getQuantidadeEstoqueMinimo() {
-		return quantidadeEstoqueMinimo;
-	}
-
-	public void setQuantidadeEstoqueMinimo(long quantidadeEstoqueMinimo) {
-		this.quantidadeEstoqueMinimo = quantidadeEstoqueMinimo;
 	}
 
 	public Categoria getCategoria() {
@@ -136,6 +113,14 @@ public class Produto extends GenericDomain{
 
 	public void setTipo(TipoProduto tipo) {
 		this.tipo = tipo;
+	}
+
+	public double getQuantidadeEstoque() {
+		return quantidadeEstoque;
+	}
+
+	public void setQuantidadeEstoque(double quantidadeEstoque) {
+		this.quantidadeEstoque = quantidadeEstoque;
 	}
 	
 	

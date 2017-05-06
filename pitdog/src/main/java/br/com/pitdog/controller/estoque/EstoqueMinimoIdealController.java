@@ -18,6 +18,7 @@ import javax.inject.Named;
 import br.com.pitdog.model.estoque.EstoqueIdeal;
 import br.com.pitdog.model.estoque.EstoqueMinimoIdeal;
 import br.com.pitdog.model.estoque.Produto;
+import br.com.pitdog.model.mov.type.UnidadeMedida;
 import br.com.pitdog.model.type.Situacao;
 import br.com.pitdog.service.estoque.EstoqueIdealService;
 import br.com.pitdog.service.estoque.EstoqueMinimoIdealService;
@@ -82,6 +83,10 @@ public class EstoqueMinimoIdealController implements Serializable{
 		return Situacao.values();
 	}
 	
+	public UnidadeMedida[] getUnidadeMedidas(){
+		return UnidadeMedida.values();
+	}
+	
 	
 	public EstoqueMinimoIdeal getEstoqueMinimoIdeal() {
 		return estoqueMinimoIdeal == null ? new EstoqueMinimoIdeal() : this.estoqueMinimoIdeal;
@@ -103,6 +108,8 @@ public class EstoqueMinimoIdealController implements Serializable{
 		if(estoqueMinimoService.verificarSeExisteProdutoEDiaSemanaNaTabela(listaEstoqueMinimo, estoqueMinimoIdeal)){
 			FacesUtil.mensagemWarn("Já existe o produto ("+estoqueMinimoIdeal.getProduto().getDescricaoProduto() 
 					+ ") adicionado na lista com o dia da semana ("+estoqueMinimoIdeal.getEstoqueIdeal().getDiaSemana()+")");
+		}else if(estoqueMinimoService.verificarQuantidadeEstoque(estoqueMinimoIdeal)){
+			FacesUtil.mensagemWarn("A quantidade não pode ser igual a ZERO");
 		}else{
 			this.listaEstoqueMinimo.add(estoqueMinimoIdeal);
 			this.estoqueMinimoIdeal = new EstoqueMinimoIdeal();

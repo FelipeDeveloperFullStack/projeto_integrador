@@ -21,13 +21,13 @@ public class Composicao extends GenericDomain {
 	private Produto insumo;
 
 	@Column(name = "comp_qtde")
-	private Long quantidade = 1L;
+	private double quantidade;
 
-	public Long getQuantidade() {
+	public double getQuantidade() {
 		return quantidade;
 	}
 
-	public void setQuantidade(Long quantidade) {
+	public void setQuantidade(double quantidade) {
 		this.quantidade = quantidade;
 	}
 

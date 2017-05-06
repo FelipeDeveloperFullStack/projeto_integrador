@@ -76,11 +76,18 @@ public class FuncaoController implements Serializable {
 	}
 
 	public List<Funcao> getFuncoes() {
+		if(funcoes.isEmpty()){
+			return listarFuncoesAtivos();
+		}
 		return funcoes;
 	}
 
 	public void setFuncoes(List<Funcao> funcoes) {
 		this.funcoes = funcoes;
+	}
+	
+	public List<Funcao> listarFuncoesAtivos(){
+		return funcoes = funcaoService.findBySituation(Situacao.ATIVO);
 	}
 
 }

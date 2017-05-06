@@ -80,11 +80,18 @@ public class FabricanteController implements Serializable {
 	}
 
 	public List<Fabricante> getFabricantes() {
+		if(fabricantes.isEmpty()){
+			return listarFabricantesAtivos();
+		}
 		return fabricantes;
 	}
 
 	public void setFabricantes(List<Fabricante> fabricantes) {
 		this.fabricantes = fabricantes;
+	}
+	
+	public List<Fabricante> listarFabricantesAtivos(){
+		return fabricantes = fabricanteService.findBySituation(Situacao.ATIVO);
 	}
 
 }

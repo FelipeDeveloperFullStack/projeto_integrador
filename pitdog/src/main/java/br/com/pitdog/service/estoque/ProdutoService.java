@@ -1,6 +1,5 @@
 package br.com.pitdog.service.estoque;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.com.pitdog.model.estoque.Produto;
@@ -40,7 +39,6 @@ public class ProdutoService extends GenericDaoImpl<Produto, Long>{
 	
 	private Produto consistirProduto(Produto produto){
 		if(produto.getId() == null){
-			//produto.setDescricaoProduto(produto.getDescricaoProduto().toUpperCase());
 			produto.setSituacao(Situacao.ATIVO);
 		}
 		return produto;
@@ -59,17 +57,5 @@ public class ProdutoService extends GenericDaoImpl<Produto, Long>{
 			throw new RuntimeException(e.getMessage());
 		}
 	}
-	
-	
-	public List<Produto> obterProdutoQuantidadeMinimoEstoque(){
-		List<Produto> listaProdutos = new ArrayList<Produto>();
-		for(Produto p : super.findBySituation(Situacao.ATIVO)){
-			if((p.getQuantidadeEstoque() <= p.getQuantidadeEstoqueMinimo()) && p.isMostrarEstoqueMinimoTelaInicial()){
-				listaProdutos.add(p);
-			}
-		}
-		return listaProdutos;
-	}
-	
 	
 }

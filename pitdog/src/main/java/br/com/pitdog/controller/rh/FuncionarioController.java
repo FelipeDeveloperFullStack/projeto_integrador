@@ -89,6 +89,9 @@ public class FuncionarioController implements Serializable{
 	}
 
 	public List<Funcionario> getFuncionarios() {
+		if(funcionarios.isEmpty()){
+			return listarFuncionariosAtivos();
+		}
 		return funcionarios;
 	}
 
@@ -102,6 +105,10 @@ public class FuncionarioController implements Serializable{
 
 	public List<Funcao> getFuncoes() {
 		return funcaoService.findBySituation(Situacao.ATIVO);
+	}
+	
+	public List<Funcionario> listarFuncionariosAtivos(){
+		return funcionarios = funcionarioService.findBySituation(Situacao.ATIVO);
 	}
 
 }
