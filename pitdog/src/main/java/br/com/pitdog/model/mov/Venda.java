@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -15,6 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import br.com.pitdog.model.conf.Usuario;
+import br.com.pitdog.model.mov.type.StatusVenda;
 import br.com.sysge.infraestrutura.dao.GenericDomain;
 
 @Entity
@@ -24,6 +27,9 @@ public class Venda extends GenericDomain{
 	private static final long serialVersionUID = -997149987670519720L;
 
 	private int numero = 0;
+	
+	@Enumerated(EnumType.STRING)
+	private StatusVenda status = StatusVenda.DIGITACAO;
 	
 	@Temporal(TemporalType.DATE)
 	private Date data = new Date();
