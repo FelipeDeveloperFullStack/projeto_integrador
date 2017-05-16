@@ -81,5 +81,14 @@ public class Venda extends GenericDomain{
 	public void setItens(List<ItemVenda> itens) {
 		this.itens = itens;
 	}
+
+	public StatusVenda getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusVenda status) {
+		this.status = status;
+	}
+	
 	
 }
