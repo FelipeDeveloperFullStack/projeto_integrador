@@ -1,5 +1,6 @@
 package br.com.pitdog.model.mov;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,11 +30,11 @@ public class ItemVenda extends GenericDomain {
 	@JoinColumn(name = "venda_id")
 	private Venda venda;
 	
-	private Double quantidade = 0.0;
+	private BigDecimal quantidade = BigDecimal.ZERO;
 	
-	private Double desconto = 0.0;
+	private BigDecimal desconto = BigDecimal.ZERO;
 	
-	private Double valorLiquido = 0.0;
+	private BigDecimal valorLiquido = BigDecimal.ZERO;
 	
 	@OneToMany
 	@JoinTable (name="tbl_item_venda_insumo_adicional",
@@ -63,27 +64,27 @@ public class ItemVenda extends GenericDomain {
 		this.venda = venda;
 	}
 
-	public Double getQuantidade() {
+	public BigDecimal getQuantidade() {
 		return quantidade;
 	}
 
-	public void setQuantidade(Double quantidade) {
+	public void setQuantidade(BigDecimal quantidade) {
 		this.quantidade = quantidade;
 	}
 
-	public Double getDesconto() {
+	public BigDecimal getDesconto() {
 		return desconto;
 	}
 
-	public void setDesconto(Double desconto) {
+	public void setDesconto(BigDecimal desconto) {
 		this.desconto = desconto;
 	}
 
-	public Double getValorLiquido() {
+	public BigDecimal getValorLiquido() {
 		return valorLiquido;
 	}
 
-	public void setValorLiquido(Double valorLiquido) {
+	public void setValorLiquido(BigDecimal valorLiquido) {
 		this.valorLiquido = valorLiquido;
 	}
 

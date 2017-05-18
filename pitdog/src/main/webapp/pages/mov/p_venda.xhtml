@@ -32,8 +32,7 @@
 					style="width: 300px;"
 					value="#{vendaController.itemVenda.produto.descricaoProduto}" />
 				<p:commandButton onclick="PF('dialogItem').show()"
-								 update="infoItens"
-								 icon="fa-search-plus"/>
+								 icon="ui-icon-plus"/>
 			</h:panelGrid>
 
 			<h:panelGrid id="infoItens" columns="2" rendered="#{vendaController.exibirItem}">
@@ -44,17 +43,36 @@
 						value="#{vendaController.itemVenda.quantidade}" />
 				</h:panelGrid>
 				<h:panelGrid columns="1">
-					<p:outputLabel value="Preço" />
+					<p:outputLabel value="Desconto" />
 					<p:outputLabel
 						value="#{vendaController.itemVenda.desconto}" />
 				</h:panelGrid>
 
 				<h:panelGrid columns="1">
-					<p:outputLabel value="Produto" />
+					<p:outputLabel value="valor" />
 					<p:outputLabel
 						value="#{vendaController.itemVenda.valorLiquido}" />
 				</h:panelGrid>
 			</h:panelGrid>
+			
+			<p:dataTable id="tableProdutos" var="item" paginator="true"
+						paginatorPosition="bottom" value="#{vendaController.venda.itens}"
+						emptyMessage="Nenhum registro encontrado!" rows="8"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
+						{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+					<p:column headerText="Descrição" width="30" style="text-align:center;">
+						<p:outputLabel value="#{item.produto.descricaoProduto}" />
+					</p:column>
+					
+					<p:column headerText="Preço" width="75" style="text-align:center;">
+						<p:outputLabel value="#{item.valorLiquido}">
+							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+						</p:outputLabel>
+					</p:column>
+						
+						
+			</p:dataTable>
 
 
 			<h:panelGrid columns="2">
@@ -64,16 +82,22 @@
 								 value="Cancelar"/>
 			</h:panelGrid>
 			
-			
-			<p:dialog widgetVar="dialogItem" header="vendaController.itemHeader"
-			modal="true" appendTo="@(body)" resizable="false" position="center"
-			closable="false">
+		</h:form>
+		
+		<p:dialog widgetVar="dialogItem" header="vendaController.itemHeader"
+				modal="true" resizable="false" position="center"
+				appendTo="@(body)"
+				height="500"
+				width="700"
+				closable="true">
 				<h:form id="pesquisaItem">
 				
 
 					<h:panelGrid columns="3">
-						<p:outputLabel value="pesquisa" />
-						<p:inputText value="#{vendaController.pesquisa}" id="inputPesquisa" />
+						<p:outputLabel value="Pesquisa" />
+						<p:inputText value="#{vendaController.pesquisa}" id="inputPesquisa">
+           		 			<p:ajax event="keyup" update="tableProdutos" listener="#{vendaController.pesquisar}" />
+       					</p:inputText>
 						<p:commandButton icon="ui-icon-trash"
 										 process="@this,inputPesquisa"
 										 update="tableProdutos"
@@ -81,32 +105,32 @@
 					</h:panelGrid>
 	
 					
-					<p:dataTable id="tableProdutos" var="produto" paginator="true"
+					<p:dataTable id="tableProdutos" var="p" paginator="true"
 						paginatorPosition="bottom" value="#{vendaController.produtos}"
 						emptyMessage="Nenhum registro encontrado!" rows="8"
 						paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
 						{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
 
 						<p:column headerText="Descrição" width="30" style="text-align:center;">
-							<p:outputLabel value="#{produto.descricaoProduto}" />
+							<p:outputLabel value="#{p.descricaoProduto}" />
 						</p:column>
 						
 						<p:column headerText="Preço" width="75" style="text-align:center;">
-							<p:outputLabel value="#{produto.valorVenda}">
+							<p:outputLabel value="#{p.valorVenda}">
 								<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
 							</p:outputLabel>
 						</p:column>
 						
 						<p:column width="30" style="text-align:center;">
 							<p:commandButton icon="ui-icon-trash"
-											 actionListener="#{vendaController.selecionarProduto(produto.id)}"/>
+										     update="formVenda"
+										     actionListener="#{vendaController.selecionarProduto(p)}"
+										     oncomplete="PF('dialogItem').hide()"/>
 						</p:column>
 					
 					</p:dataTable>
 				</h:form>
 			</p:dialog>
-			
-		</h:form>
 
 	</ui:define>
 </ui:composition>

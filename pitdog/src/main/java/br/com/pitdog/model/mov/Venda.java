@@ -17,6 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import br.com.pitdog.model.conf.Usuario;
+import br.com.pitdog.model.global.Cliente;
 import br.com.pitdog.model.mov.type.StatusVenda;
 import br.com.sysge.infraestrutura.dao.GenericDomain;
 
@@ -38,6 +39,9 @@ public class Venda extends GenericDomain{
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Usuario balconista;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Cliente cliente;
 	
 	@OneToMany(mappedBy = "venda", fetch = FetchType.EAGER, targetEntity = ItemVenda.class, cascade=CascadeType.ALL)
 	private List<ItemVenda> itens = new ArrayList<>();
@@ -88,6 +92,14 @@ public class Venda extends GenericDomain{
 
 	public void setStatus(StatusVenda status) {
 		this.status = status;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 	
 	

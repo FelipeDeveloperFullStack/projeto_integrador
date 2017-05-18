@@ -1,11 +1,11 @@
 package br.com.pitdog.controller.mov;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -66,8 +66,12 @@ public class VendaController implements Serializable{
 				Situacao.ATIVO, "descricaoProduto", "LIKE", "%", "%"); 
 	}
 	
-	public void selecionarProduto(Long id){
-		
+	public void selecionarProduto(Produto produto){
+		itemVenda = new ItemVenda();
+		itemVenda.setProduto(produto);
+		itemVenda.setValorLiquido(itemVenda.getProduto().getValorVenda());
+		itemVenda.setQuantidade(BigDecimal.ONE);
+		exibirItem = true;
 	}
 
 	public Venda getVenda() {
