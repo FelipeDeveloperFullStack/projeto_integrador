@@ -34,6 +34,10 @@ public class ItemVenda extends GenericDomain {
 	
 	private BigDecimal desconto = BigDecimal.ZERO;
 	
+	private BigDecimal valorUnitario = BigDecimal.ZERO;
+	
+	private BigDecimal valorTotal = BigDecimal.ZERO;
+	
 	private BigDecimal valorLiquido = BigDecimal.ZERO;
 	
 	@OneToMany
@@ -48,6 +52,17 @@ public class ItemVenda extends GenericDomain {
 		    inverseJoinColumns={ @JoinColumn(name="produto_id", referencedColumnName="id", unique=true) })	
 	private List<Produto> insumosRemovidos = new ArrayList<>();
 
+	
+	public void calcularValores(){
+		valorTotal = getValorUnitario().multiply(getQuantidade());
+		if(BigDecimal.ZERO.equals(valorLiquido)){
+			valorLiquido = valorTotal;
+		}else{
+			BigDecimal valorDesconto = valorTotal.divide(new BigDecimal(100)).multiply(desconto);
+			valorLiquido = valorTotal.subtract(valorDesconto);
+		}
+	}
+	
 	public Produto getProduto() {
 		return produto;
 	}
@@ -103,6 +118,19 @@ public class ItemVenda extends GenericDomain {
 	public void setInsumosRemovidos(List<Produto> insumosRemovidos) {
 		this.insumosRemovidos = insumosRemovidos;
 	}
-	
 
+	public BigDecimal getValorTotal() {
+		return valorTotal;
+	}
+
+	public BigDecimal getValorUnitario() {
+		return valorUnitario;
+	}
+
+	public void setValorUnitario(BigDecimal valorUnitario) {
+		this.valorUnitario = valorUnitario;
+	}
+	
+	
+	
 }

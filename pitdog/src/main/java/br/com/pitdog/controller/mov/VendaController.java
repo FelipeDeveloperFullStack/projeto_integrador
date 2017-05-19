@@ -13,6 +13,7 @@ import javax.inject.Named;
 import br.com.pitdog.model.estoque.Produto;
 import br.com.pitdog.model.mov.ItemVenda;
 import br.com.pitdog.model.mov.Venda;
+import br.com.pitdog.model.mov.type.StatusVenda;
 import br.com.pitdog.model.type.Situacao;
 import br.com.pitdog.service.estoque.ComposicaoService;
 import br.com.pitdog.service.estoque.ProdutoService;
@@ -50,15 +51,21 @@ public class VendaController implements Serializable{
 	}
 	
 	public void adicionarItem(){
-		
+		venda.getItens().add(itemVenda);
+		itemVenda = null;
+		exibirItem = false;
+		venda = vendaService.save(venda);
 	}
 	
 	public void finalizar(){
-		
+		venda.setStatus(StatusVenda.CONCLUIDA);
+		vendaService.save(venda);
 	}
 	
 	public void cancelar(){
-		
+		venda.setStatus(StatusVenda.CANCELADA);
+		vendaService.save(venda);
+		venda = new Venda();
 	}
 	
 	public void pesquisar() {
@@ -67,11 +74,23 @@ public class VendaController implements Serializable{
 	}
 	
 	public void selecionarProduto(Produto produto){
+		produto = produtoService.findById(produto.getId());
 		itemVenda = new ItemVenda();
 		itemVenda.setProduto(produto);
+		itemVenda.setValorUnitario(itemVenda.getProduto().getValorVenda());
 		itemVenda.setValorLiquido(itemVenda.getProduto().getValorVenda());
 		itemVenda.setQuantidade(BigDecimal.ONE);
 		exibirItem = true;
+		itemVenda.calcularValores();
+	}
+	
+	public void quantidadeChange() {
+		itemVenda.calcularValores();
+		
+	}
+	
+	public void descontoChange() {
+		itemVenda.calcularValores();
 	}
 
 	public Venda getVenda() {

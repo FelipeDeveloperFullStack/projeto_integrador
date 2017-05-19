@@ -74,17 +74,11 @@
 			<!-- <scope>compile</scope> -->  <!-- dependência será empacotada no war -->
 		</dependency>
 
-		<!-- <dependency>
-			<groupId>org.primefaces.themes</groupId>
-			<artifactId>all-themes</artifactId>
-			<version>1.0.10</version>
-		</dependency> -->
-		
-		<!-- <dependency>
-			<groupId>org.primefaces.themes</groupId>
-			<artifactId>bootstrap</artifactId>
-			<version>1.0.10</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>org.primefaces.themes</groupId> <artifactId>all-themes</artifactId> 
+			<version>1.0.10</version> </dependency> -->
+
+		<!-- <dependency> <groupId>org.primefaces.themes</groupId> <artifactId>bootstrap</artifactId> 
+			<version>1.0.10</version> </dependency> -->
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -107,12 +101,18 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.glassfish</groupId>
-			<artifactId>javax.faces</artifactId>
-			<version>2.3.0</version>
+			<groupId>com.sun.faces</groupId>
+			<artifactId>jsf-api</artifactId>
+			<version>2.2.14</version>
 			<scope>compile</scope>
 		</dependency>
-
+		
+		<dependency>
+			<groupId>com.sun.faces</groupId>
+			<artifactId>jsf-impl</artifactId>
+			<version>2.2.14</version>
+			<scope>compile</scope>
+		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>

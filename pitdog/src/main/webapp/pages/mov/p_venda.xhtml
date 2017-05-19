@@ -32,6 +32,7 @@
 					style="width: 300px;"
 					value="#{vendaController.itemVenda.produto.descricaoProduto}" />
 				<p:commandButton onclick="PF('dialogItem').show()"
+								 rendered="#{!vendaController.exibirItem}"
 								 icon="ui-icon-plus"/>
 			</h:panelGrid>
 
@@ -39,19 +40,29 @@
 			
 				<h:panelGrid columns="1">
 					<p:outputLabel value="Quantidade" />
-					<p:outputLabel
-						value="#{vendaController.itemVenda.quantidade}" />
+					<p:inputNumber id="quantidadeItem"
+						value="#{vendaController.itemVenda.quantidade}">
+           		 			<p:ajax event="blur" update="valorItem" process="@this,descontoItem" listener="#{vendaController.quantidadeChange}" />
+       				</p:inputNumber>
 				</h:panelGrid>
 				<h:panelGrid columns="1">
 					<p:outputLabel value="Desconto" />
-					<p:outputLabel
-						value="#{vendaController.itemVenda.desconto}" />
+					<p:inputNumber id="descontoItem"
+						value="#{vendaController.itemVenda.desconto}" >
+           		 			<p:ajax event="blur" update="valorItem" process="@this,descontoItem" listener="#{vendaController.descontoChange}" />
+       				</p:inputNumber>
 				</h:panelGrid>
 
 				<h:panelGrid columns="1">
 					<p:outputLabel value="valor" />
-					<p:outputLabel
+					<p:outputLabel id="valorItem"
 						value="#{vendaController.itemVenda.valorLiquido}" />
+				</h:panelGrid>
+				
+				<h:panelGrid columns="1">
+					<p:commandButton icon="ui-icon-plus"
+									 update="formVenda"
+									 actionListener="vendaController.adicionarItem"/>
 				</h:panelGrid>
 			</h:panelGrid>
 			
@@ -96,7 +107,7 @@
 					<h:panelGrid columns="3">
 						<p:outputLabel value="Pesquisa" />
 						<p:inputText value="#{vendaController.pesquisa}" id="inputPesquisa">
-           		 			<p:ajax event="keyup" update="tableProdutos" listener="#{vendaController.pesquisar}" />
+           		 			<p:ajax event="keyup" update="tableProdutos" process="@this,inputPesquisa" listener="#{vendaController.pesquisar}" />
        					</p:inputText>
 						<p:commandButton icon="ui-icon-trash"
 										 process="@this,inputPesquisa"
