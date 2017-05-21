@@ -108,11 +108,11 @@ public class GenericDaoImpl<E, I> implements GenericDao<E, I> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<E> findByDate(Date dataInicial, Date dataFinal, String atributoData){
+	public List<E> findByDate(Date dataInicial, Date dataFinal, String atributoData1, String atributoData2){
 		try {
 			TypedQuery<E> query = (TypedQuery<E>) manager.createQuery(""
-					+ "SELECT b FROM "+entityClass.getSimpleName()+" b "
-					+ "WHERE b."+atributoData+" >= "+dataInicial+" OR b.dataBackup <= "+dataFinal+"");
+					+ "SELECT e FROM "+entityClass.getSimpleName()+" e "
+					+ "WHERE e."+atributoData1+" >= "+dataInicial+" OR e."+atributoData2+" <= "+dataFinal+"");
 			return query.getResultList();
 		} catch (Exception e) {
 			throw e;

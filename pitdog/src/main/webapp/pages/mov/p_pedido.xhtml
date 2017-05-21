@@ -11,19 +11,47 @@
 <ui:composition template="/template/template.xhtml">
 	<ui:define name="conteudo">
 		<h:form id="formGeralPedido">
-			<p:panel header="Listagem de Pedido">
+			<p:panel header="Listagem de Pedido/Entrada">
 
 				<h:panelGrid columns="5" id="panelPesquisa">
-					<p:inputText style="width: 300px;" id="txtPedidoPesquisa"
-						value="#{pedidoController.pedido.descricaoPedido}" />
-					<p:selectOneMenu value="#{pedidoController.pedido.situacao}">
-						<f:selectItems var="s" value="#{pedidoController.situacoes}"
-							itemLabel="#{s.situacao}" itemValue="#{s}" />
-					</p:selectOneMenu>
-					<p:commandButton id="btnPesquisarFun" value="Pesquisar"
-						icon="ui-icon-search" update="tablePerfilPedido"
-						actionListener="#{pedidoController.pesquisar}" />
-					<p:commandButton value="Imprimir" icon="ui-icon-print"/>	
+					
+					<h:panelGrid columns="2">
+						<h:panelGrid columns="1">
+							<p:outputLabel value="Data" />
+							<p:calendar value="#{pedidoController.data}"
+								pattern="dd/MM/yyyy" mask="true" locale="pt" showOn="button"/>
+						</h:panelGrid>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:panelGrid columns="1">
+							<p:outputLabel value="." style="color: white;"/>
+							<p:selectOneMenu value="#{pedidoController.pedido.tipoPe}">
+								<f:selectItems var="t" value="#{pedidoController.tipoPEs}"
+									itemLabel="#{t.tipoPE}" itemValue="#{t}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+					</h:panelGrid>					
+					
+					<h:panelGrid columns="2">
+						<h:panelGrid columns="1">
+							<p:outputLabel value="." style="color: white;"/>
+							<p:selectOneMenu value="#{pedidoController.pedido.situacao}">
+								<f:selectItems var="s" value="#{pedidoController.situacoes}"
+									itemLabel="#{s.situacao}" itemValue="#{s}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+					</h:panelGrid>					
+					
+					<h:panelGrid columns="2">
+						<h:panelGrid columns="1">
+							<p:outputLabel value="." style="color: white;"/>
+								<p:commandButton id="btnPesquisarFun" 
+									icon="ui-icon-search" update="tablePerfilPedido"
+									actionListener="#{pedidoController.pesquisar}" />
+						</h:panelGrid>
+					</h:panelGrid>					
+						
 					<p:focus context="panelPesquisa" />
 					<p:blockUI block="tablePerfilPedido" trigger="btnPesquisarFun">
 						        Carregando! Aguarde...<br />
@@ -41,26 +69,23 @@
 						<p:outputLabel value="#{p.id}" />
 					</p:column>
 
-					<p:column headerText="Produto/Insumo">
-						<p:outputLabel
-							value="#{p.produto.descricaoProduto} - #{p.produto.tipo.tipo}" />
-					</p:column>
-
-					<p:column headerText="Qtde" width="30" style="text-align:center;">
-						<p:outputLabel value="#{p.quantidade}" />
-					</p:column>
-
-					<p:column headerText="Preço" width="75" style="text-align:center;">
-						<p:outputLabel value="#{p.preco}">
-							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+					<p:column headerText="Data" width="100" style="text-align:center;">
+						<p:outputLabel value="#{p.dataEntrada}" rendered="#{p.tipoPe == 'ENTRADA'}">
+							<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"
+								timeZone="GMT-2" type="both" />
+						</p:outputLabel>
+						<p:outputLabel value="#{p.dataPedido}"  rendered="#{p.tipoPe == 'PEDIDO'}">
+							<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"
+								timeZone="GMT-2" type="both" />
 						</p:outputLabel>
 					</p:column>
-
-					<p:column headerText="Desconto" width="75"
-						style="text-align:center;">
-						<p:outputLabel value="#{p.desconto}">
-							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
-						</p:outputLabel>
+					
+					<p:column headerText="Distribuidor">
+						<p:outputLabel value="#{p.distribuidor.razaoSocial}"/>
+					</p:column>
+					
+					<p:column headerText="Tipo" width="60" style="text-align:center;">
+						<p:outputLabel value="#{p.tipoPe.tipoPE}" />
 					</p:column>
 
 					<p:column width="70">
@@ -77,8 +102,8 @@
 					</p:column>
 
 					<f:facet name="footer">
-						<p:commandButton value="Novo Pedido"
-							actionListener="#{funcionarioController.novo}"
+						<p:commandButton value="Novo"
+							actionListener="#{pedidoController.novo}"
 							oncomplete="PF('dialogNovoPedido').show();"
 							update=":msgGlobal :formNovoPedido" icon="ui-icon-circle-plus" />
 					</f:facet>
@@ -185,10 +210,6 @@
 					emptyMessage="Nenhum registro encontrado!" rows="8"
 					paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
 					{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
-
-					<p:column headerText="Cod." width="30" style="text-align:center;" rendered="#{item.id != null}">
-						<p:outputLabel value="#{item.id}" />
-					</p:column>
 					
 					<p:column headerText="Produto">
 						<p:outputLabel value="#{item.produto.descricaoProduto}" />
@@ -200,6 +221,10 @@
 					
 					<p:column headerText="Qtde" width="30" style="text-align:center;">
 						<p:outputLabel value="#{item.quantidade}" />
+					</p:column>
+					
+					<p:column headerText="Medida" width="50" style="text-align:center;">
+						<p:outputLabel value="#{item.unidadeMedida.unidadeMedida}" />
 					</p:column>
 					
 					<p:column headerText="Preço" width="75" style="text-align:center;">
@@ -215,7 +240,8 @@
 					</p:column>
 					
 					<p:column width="30" style="text-align:center;">
-						<p:commandButton icon="ui-icon-trash"/>
+						<p:commandButton icon="ui-icon-trash" actionListener="#{pedidoController.removerItem(item)}" 
+										 update="tableItemPedido"/>
 					</p:column>
 					
 					</p:dataTable>
@@ -240,19 +266,23 @@
 			modal="true" appendTo="@(body)" resizable="false" position="top"
 			closable="false">
 			<h:form id="formEditarPedido">
-
-				<h:panelGrid columns="2">
-
-					<h:panelGrid columns="1">
-						<p:outputLabel value="Descrição do pedido" />
-						<p:inputText value="#{pedidoController.pedido.descricaoPedido}"
-							style="width: 350px;" />
-					</h:panelGrid>
+				<h:panelGrid columns="4">
 
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Data do pedido" />
 						<p:calendar value="#{pedidoController.pedido.dataPedido}"
-							pattern="dd/MM/yyyy" mask="true" />
+							pattern="dd/MM/yyyy" mask="true" locale="pt" showOn="button"/>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Data de entrada" />
+						<p:calendar value="#{pedidoController.pedido.dataEntrada}"
+							pattern="dd/MM/yyyy" mask="true" locale="pt" showOn="button"/>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Número nota fiscal" />
+						<p:inputText value="#{pedidoController.pedido.numeroNotaFiscal}" style="width: 470px;"/>
 					</h:panelGrid>
 
 				</h:panelGrid>
@@ -261,19 +291,17 @@
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Distribuidor" />
 						<p:selectOneMenu value="#{pedidoController.pedido.distribuidor}"
-							filter="true" filterMatchMode="startsWith" style="width: 500px;"
+							filter="true" filterMatchMode="startsWith" style="width: 395px;"
 							converter="omnifaces.SelectItemsConverter">
 							<f:selectItems var="d" value="#{pedidoController.distribuidores}"
 								itemLabel="#{d.razaoSocial}" itemValue="#{d}" />
 						</p:selectOneMenu>
 					</h:panelGrid>
-				</h:panelGrid>
-
-				<h:panelGrid columns="2">
+					
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Produto / Insumo" />
 						<p:selectOneMenu value="#{pedidoController.itemPedido.produto}"
-							filter="true" filterMatchMode="startsWith" style="width: 500px;"
+							filter="true" filterMatchMode="startsWith" style="width: 440px;"
 							converter="omnifaces.SelectItemsConverter">
 							<f:selectItems var="p" value="#{pedidoController.produtos}"
 								itemLabel="#{p.descricaoProduto} - #{p.tipo.tipo}"
@@ -282,10 +310,10 @@
 					</h:panelGrid>
 				</h:panelGrid>
 
-				<h:panelGrid columns="4">
+				<h:panelGrid columns="5">
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Qtde" />
-						<p:inputNumber value="#{pedidoController.itemPedido.quantidade}" />  
+						<p:inputNumber value="#{pedidoController.itemPedido.quantidade}"/>  
 					</h:panelGrid>
 					
 					<h:panelGrid columns="1">
@@ -310,30 +338,67 @@
 							symbol=" %" decimalSeparator="," thousandSeparator="."
 							symbolPosition="s" minValue="0.00" />
 					</h:panelGrid>
-				</h:panelGrid>
-
-				<h:panelGrid columns="2">
+					
 					<h:panelGrid columns="1">
-						<p:outputLabel value="Situação" />
-						<p:selectOneMenu value="#{pedidoController.pedido.situacao}">
-							<f:selectItems var="s" value="#{pedidoController.situacoes}"
-								itemLabel="#{s.situacao}" itemValue="#{s}" />
-						</p:selectOneMenu>
+						<p:outputLabel value="." style="color: white;"/>
+						<p:commandButton icon="ui-icon-plusthick" value="Adicionar" 
+							update=":msgGlobal tableItemPedido" actionListener="#{pedidoController.adicionar}"/>
 					</h:panelGrid>
 				</h:panelGrid>
+				
+				<h:panelGrid columns="2">
+					<p:dataTable id="tableItemPedido" var="item" paginator="true"
+					paginatorPosition="bottom" value="#{pedidoController.itensPedidos}"
+					emptyMessage="Nenhum registro encontrado!" rows="8"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
+					{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
 
-				<h:panelGrid id="panelBotoesNovoPedido" columns="2">
+					<p:column headerText="Produto">
+						<p:outputLabel value="#{item.produto.descricaoProduto}" />
+					</p:column>
+					
+					<p:column headerText="Fabricante">
+						<p:outputLabel value="#{item.produto.fabricante.razaoSocial}" />
+					</p:column>
+					
+					<p:column headerText="Qtde" width="30" style="text-align:center;">
+						<p:outputLabel value="#{item.quantidade}" />
+					</p:column>
+					
+					<p:column headerText="Medida" width="50" style="text-align:center;">
+						<p:outputLabel value="#{item.unidadeMedida.unidadeMedida}" />
+					</p:column>
+					
+					<p:column headerText="Preço" width="75" style="text-align:center;">
+						<p:outputLabel value="#{item.preco}">
+							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+						</p:outputLabel>
+					</p:column>
+					
+					<p:column headerText="Desconto" width="75" style="text-align:center;">
+						<p:outputLabel value="#{item.desconto}">
+							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+						</p:outputLabel>
+					</p:column>
+					
+					<p:column width="30" style="text-align:center;">
+						<p:commandButton icon="ui-icon-trash" actionListener="#{pedidoController.removerItem(item)}" 
+										 update="tableItemPedido"/>
+					</p:column>
+					
+					</p:dataTable>
+				</h:panelGrid>
+
+				<h:panelGrid id="panelBotoesEditarPedido" columns="2">
 					<h:panelGrid columns="2">
-						<p:commandButton id="btnNovoPedido" value="Salvar"
-							icon="ui-icon-check" action="#{pedidoController.salvar}"
+						<p:commandButton id="btnEditarPedido" value="Salvar"
+							icon="ui-icon-check" actionListener="#{pedidoController.salvar}"
 							update=":msgGlobal :formGeralPedido:tablePerfilPedido" />
 						<p:commandButton value="Cancelar" icon="ui-icon-close"
-							oncomplete="PF('dialogEditarPedido').hide();"
-							actionListener="#{pedidoController.novo}"
-							update=":formGeralPedido:tablePerfilPedido" />
+							oncomplete="PF('dialogEditarPedido').hide();" />
 					</h:panelGrid>
 				</h:panelGrid>
-				<p:blockUI block="panelBotoesNovoPedido" trigger="btnNovoPedido" />
+				<p:blockUI block="panelBotoesEditarPedido" trigger="btnEditarPedido" />				
 			</h:form>
 		</p:dialog>
 

@@ -96,16 +96,7 @@ public class ProdutoController implements Serializable{
 	}
 	
 	public void removerComposicao(Composicao composicao){
-		if(composicao.getId() == null){
-			for(int i = 0; i < this.composicoes.size(); i++){
-				if(this.composicoes.get(i).getInsumo().getDescricaoProduto().trim().equals(composicao.getInsumo().getDescricaoProduto())){
-					this.composicoes.remove(i);
-				}
-			}
-		}else{
-			composicaoService.remove(composicao.getId());
-			this.composicoes = composicaoService.findByListProperty(composicao.getProduto().getId(), "produto.id");
-		}
+		this.composicoes = composicaoService.removerComposicao(composicao, composicoes);
 	}
 	
 	public void salvarComposicao(){

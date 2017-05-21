@@ -25,5 +25,19 @@ public class ComposicaoService extends GenericDaoImpl<Composicao, Long>{
 			return false;
 		}
 	}
+	
+	public List<Composicao> removerComposicao(Composicao composicao, List<Composicao> composicoes){
+		if(composicao.getId() == null){
+			for(int i = 0; i < composicoes.size(); i++){
+				if(composicoes.get(i).getInsumo().getDescricaoProduto().trim().equals(composicao.getInsumo().getDescricaoProduto())){
+					composicoes.remove(i);
+				}
+			}
+		}else{
+			super.remove(composicao.getId());
+			composicoes = super.findByListProperty(composicao.getProduto().getId(), "produto.id");
+		}
+		return composicoes;
+	}
 
 }

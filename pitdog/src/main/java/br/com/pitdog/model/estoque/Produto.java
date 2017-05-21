@@ -67,11 +67,6 @@ public class Produto extends GenericDomain{
 		this.valorVenda = valorVenda;
 	}
 
-
-	public void setQuantidadeEstoque(long quantidadeEstoque) {
-		this.quantidadeEstoque = quantidadeEstoque;
-	}
-
 	public Categoria getCategoria() {
 		if(categoria == null){
 			categoria = new Categoria();

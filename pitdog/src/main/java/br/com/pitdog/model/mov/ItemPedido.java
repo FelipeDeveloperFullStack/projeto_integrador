@@ -28,7 +28,7 @@ public class ItemPedido extends GenericDomain{
 	@JoinColumn(name = "pedido_id")
 	private Pedido pedido;
 	
-	private long quantidade;
+	private double quantidade;
 	
 	@Enumerated(EnumType.STRING)
 	private UnidadeMedida unidadeMedida;
@@ -53,14 +53,6 @@ public class ItemPedido extends GenericDomain{
 		this.pedido = pedido;
 	}
 
-	public long getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(long quantidade) {
-		this.quantidade = quantidade;
-	}
-
 	public BigDecimal getPreco() {
 		return preco;
 	}
@@ -83,6 +75,14 @@ public class ItemPedido extends GenericDomain{
 
 	public void setUnidadeMedida(UnidadeMedida unidadeMedida) {
 		this.unidadeMedida = unidadeMedida;
+	}
+
+	public double getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(double quantidade) {
+		this.quantidade = quantidade;
 	}
 	
 	

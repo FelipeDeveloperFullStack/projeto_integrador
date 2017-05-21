@@ -1,6 +1,5 @@
 package br.com.pitdog.model.mov;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -25,18 +24,16 @@ public class Pedido extends GenericDomain {
 
 	private static final long serialVersionUID = 2751426098729464001L;
 
-	private String descricaoPedido;
+	@Temporal(TemporalType.DATE)
+	private Date dataPedido;
 
 	@Temporal(TemporalType.DATE)
-	private Date dataPedido = Calendar.getInstance().getTime();
-
-	@OneToOne(fetch = FetchType.EAGER)
-	private Distribuidor distribuidor;
+	private Date dataEntrada;
 	
 	private String numeroNotaFiscal;
 	
-	@Temporal(TemporalType.DATE)
-	private Date dataEntrada;
+	@OneToOne(fetch = FetchType.EAGER)
+	private Distribuidor distribuidor;
 	
 	@OneToMany(mappedBy = "pedido", fetch = FetchType.EAGER, targetEntity = ItemPedido.class)
 	private List<ItemPedido> itensPedidos;
@@ -46,14 +43,6 @@ public class Pedido extends GenericDomain {
 	
 	@Enumerated(EnumType.STRING)
 	private Situacao situacao;
-	
-	public String getDescricaoPedido() {
-		return descricaoPedido;
-	}
-
-	public void setDescricaoPedido(String descricaoPedido) {
-		this.descricaoPedido = descricaoPedido;
-	}
 
 	public Date getDataPedido() {
 		return dataPedido;

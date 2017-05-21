@@ -2,6 +2,7 @@ package br.com.pitdog.controller.mov;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -13,6 +14,7 @@ import br.com.pitdog.model.estoque.Produto;
 import br.com.pitdog.model.global.Distribuidor;
 import br.com.pitdog.model.mov.ItemPedido;
 import br.com.pitdog.model.mov.Pedido;
+import br.com.pitdog.model.mov.type.TipoPE;
 import br.com.pitdog.model.mov.type.UnidadeMedida;
 import br.com.pitdog.model.type.Situacao;
 import br.com.pitdog.service.estoque.ProdutoService;
@@ -29,6 +31,8 @@ public class PedidoController implements Serializable{
 	private static final long serialVersionUID = 8644665195188273211L;
 	
 	private Pedido pedido;
+	
+	private Date data;
 	
 	private List<ItemPedido> itensPedidos;
 	
@@ -60,6 +64,10 @@ public class PedidoController implements Serializable{
 	public UnidadeMedida[] getUnidadeMedidas(){
 		return UnidadeMedida.values();
 	}
+	
+	public TipoPE[] getTipoPEs(){
+		return TipoPE.values();
+	}
 
 	public void novo() {
 		this.pedido = new Pedido();
@@ -70,7 +78,7 @@ public class PedidoController implements Serializable{
 
 	public void pesquisar() {
 		this.pedidos = new ArrayList<Pedido>();
-		this.pedidos = pedidoService.pesquisarPedido(pedido);
+		this.pedidos = pedidoService.pesquisarPedido(data, pedido);
 	}
 
 	public void fecharDialogs() {
@@ -80,16 +88,20 @@ public class PedidoController implements Serializable{
 	
 	public void adicionar(){
 		try {
-			this.itensPedidos.add(itemPedidoService.consistir(pedido, itemPedido));
+			this.itensPedidos.add(itemPedidoService.consistir(pedido, itemPedidoService.consistir(itemPedido, itensPedidos)));
 			this.itemPedido = new ItemPedido();
 		} catch (RuntimeException e) {
 			FacesUtil.mensagemWarn(e.getMessage());
 		}
 	}
+	
+	public void removerItem(ItemPedido itemPedido){
+		this.itensPedidos = itemPedidoService.removerItem(itensPedidos, itemPedido);
+	}
 
 	public void salvar() {
 		try {
-			pedido = pedidoService.salvar(pedido);
+			pedido = pedidoService.salvar(pedido, itensPedidos);
 			FacesUtil.mensagemInfo("Pedido salvo com sucesso!");
 			fecharDialogs();
 			novo();
@@ -100,6 +112,7 @@ public class PedidoController implements Serializable{
 
 	public void setarPedido(Pedido pedido) {
 		this.pedido = pedido;
+		this.itensPedidos = itemPedidoService.findByListProperty(pedido.getId(), "pedido.id");
 	}
 
 	public Pedido getPedido() {
@@ -141,7 +154,13 @@ public class PedidoController implements Serializable{
 	public void setItemPedido(ItemPedido itemPedido) {
 		this.itemPedido = itemPedido;
 	}
-	
-	
+
+	public Date getData() {
+		return data;
+	}
+
+	public void setData(Date data) {
+		this.data = data;
+	}
 
 }

@@ -1,5 +1,7 @@
 package br.com.pitdog.service.mov;
 
+import java.util.List;
+
 import br.com.pitdog.model.mov.ItemPedido;
 import br.com.pitdog.model.mov.Pedido;
 import br.com.sysge.infraestrutura.dao.GenericDaoImpl;
@@ -12,6 +14,15 @@ public class ItemPedidoService extends GenericDaoImpl<ItemPedido, Long>{
 		itemPedido.setPedido(verificarSeDistribuidorIgualNull(pedido));
 		return verificarQuantidadeIgualAZero(verificarSeProdutoNull(itemPedido));
 		
+	}
+	
+	public ItemPedido consistir(ItemPedido itemPedido, List<ItemPedido> itemPedidos){
+		for(ItemPedido i : itemPedidos){
+			if(itemPedido.getProduto().getDescricaoProduto().trim().equalsIgnoreCase(i.getProduto().getDescricaoProduto().trim())){
+				throw new RuntimeException("O produto já existe na lista, escolha outro produto!");
+			}
+		}
+		return itemPedido;
 	}
 	
 	private ItemPedido verificarQuantidadeIgualAZero(ItemPedido itemPedido){
@@ -37,6 +48,20 @@ public class ItemPedidoService extends GenericDaoImpl<ItemPedido, Long>{
 		}else{
 			return pedido;
 		}
+	}
+	
+	public List<ItemPedido> removerItem(List<ItemPedido> itensPedidos, ItemPedido itemPedido){
+		if(itemPedido.getId() == null){
+			for(int i = 0; i < itensPedidos.size(); i++){
+				if(itensPedidos.get(i).getProduto().getDescricaoProduto().trim().equals(itemPedido.getProduto().getDescricaoProduto())){
+					itensPedidos.remove(i);
+				}
+			}
+		}else{
+			super.remove(itemPedido.getId());
+			return super.findByListProperty(itemPedido.getProduto().getId(), "produto.id");
+		}
+		return itensPedidos;
 	}
 
 }

@@ -54,7 +54,7 @@ public interface GenericDao<E, I> extends Serializable {
 
 	List<E> findAllByIdWithNativeQuery(I id, boolean valueBoolean, String table, String columnID, String columnBoolean);
 
-	List<E> findByDate(Date dataInicial, Date dataFinal, String atributoData);
+	List<E> findByDate(Date dataInicial, Date dataFinal, String atributoData1, String atributoData2);
 	
 	List<E> findBySituationAndTipoPessoa(Situacao situacao, TipoPessoa tipoPessoa);
 	
