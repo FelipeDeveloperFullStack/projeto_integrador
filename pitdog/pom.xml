@@ -26,6 +26,18 @@
 			<artifactId>poi</artifactId>
 			<version>3.15</version>
 		</dependency>
+		
+		 <dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>6.4.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.5.11</version>
+		</dependency>
 
 
 		<dependency>
@@ -106,7 +118,7 @@
 			<version>2.2.14</version>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-impl</artifactId>

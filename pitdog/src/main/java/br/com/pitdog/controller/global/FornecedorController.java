@@ -2,9 +2,7 @@ package br.com.pitdog.controller.global;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -19,7 +17,6 @@ import br.com.pitdog.model.type.TipoContribuinte;
 import br.com.pitdog.model.type.TipoPessoa;
 import br.com.pitdog.model.type.UnidadeFederativa;
 import br.com.pitdog.service.global.FornecedorService;
-import br.com.pitdog.service.sys.WebServiceCEPService;
 import br.com.pitdog.util.FacesUtil;
 import br.com.pitdog.util.RequestContextUtil;
 
@@ -63,29 +60,6 @@ public class FornecedorController implements Serializable {
 		this.fornecedores = new ArrayList<Fornecedor>();
 	}
 	
-	public void consultarCnpj(){
-		try {
-			fornecedor = fornecedorService.consultarCnpj(fornecedor);
-			FacesUtil.mensagemInfo("Dados do fornecedor encontrados com sucesso!");
-			fecharDialodDeProcurarCnpj();
-		} catch (Exception e) {
-			FacesUtil.mensagemErro(e.getMessage());
-		}
-	}
-	
-	public void consultarCep(){
-		try {
-			Map<Object, Object> mapCep = new HashMap<Object, Object>();
-			mapCep.putAll(WebServiceCEPService.procurarCEP(fornecedor.getCep()));
-			this.fornecedor.setLogradouro(mapCep.get(5).toString() + " " + mapCep.get(1).toString());
-			this.fornecedor.setCidade(mapCep.get(2).toString());
-			this.fornecedor.setUnidadeFederativa(UnidadeFederativa.valueOf(mapCep.get(3).toString()));
-			this.fornecedor.setBairro(mapCep.get(4).toString());
-		} catch (Exception e) {
-			FacesUtil.mensagemErro(e.getMessage());
-		}
-	}
-	
 	public void pesquisar(){
 		fornecedores = fornecedorService.procurarFornecedor(fornecedor);
 	}
@@ -100,6 +74,7 @@ public class FornecedorController implements Serializable {
 		RequestContextUtil.execute("PF('dialogEditarFornecedor').hide();");
 	}
 	
+	@SuppressWarnings("unused")
 	private void fecharDialodDeProcurarCnpj(){
 		RequestContextUtil.execute("PF('dialog_procurar_cnpj').hide();");
 	}

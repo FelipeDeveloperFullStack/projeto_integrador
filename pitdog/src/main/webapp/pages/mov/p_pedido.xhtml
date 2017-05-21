@@ -10,7 +10,7 @@
 </h:head>
 <ui:composition template="/template/template.xhtml">
 	<ui:define name="conteudo">
-		<h:form id="formGeralPedido">
+		<h:form id="formGeralPedido" target="_blank">
 			<p:panel header="Listagem de Pedido/Entrada">
 
 				<h:panelGrid columns="5" id="panelPesquisa">
@@ -19,7 +19,7 @@
 						<h:panelGrid columns="1">
 							<p:outputLabel value="Data" />
 							<p:calendar value="#{pedidoController.data}"
-								pattern="dd/MM/yyyy" mask="true" locale="pt" showOn="button"/>
+								pattern="dd/MM/yyyy" mask="true" locale="pt" showOn="button" />
 						</h:panelGrid>
 					</h:panelGrid>
 					
@@ -50,7 +50,16 @@
 									icon="ui-icon-search" update="tablePerfilPedido"
 									actionListener="#{pedidoController.pesquisar}" />
 						</h:panelGrid>
-					</h:panelGrid>					
+					</h:panelGrid>				
+					
+					
+					<h:panelGrid columns="2">
+						<h:panelGrid columns="1">
+							<p:outputLabel value="." style="color: white;"/>
+							<p:commandButton value="Imprimir" actionListener="#{pedidoController.imprimirPedido}" 
+											 update=":msgGlobal" ajax="false"/>
+						</h:panelGrid>	
+					</h:panelGrid>			
 						
 					<p:focus context="panelPesquisa" />
 					<p:blockUI block="tablePerfilPedido" trigger="btnPesquisarFun">
@@ -88,16 +97,20 @@
 						<p:outputLabel value="#{p.tipoPe.tipoPE}" />
 					</p:column>
 
-					<p:column width="70">
+					<p:column width="115" style="text-align:center;">
 						<p:commandButton id="btnEditar" icon="ui-icon-pencil"
 							actionListener="#{pedidoController.setarPedido(p)}"
 							oncomplete="PF('dialogEditarPedido').show();"
 							update=":msgGlobal :formEditarPedido">
 						</p:commandButton>
 						<p:commandButton id="btnEnviarEmail" icon="ui-icon-mail-closed"/>
+						<p:commandButton id="btnGerarRelatorio" icon="ui-icon-print" actionListener="#{pedidoController.imprimirPedido}" 
+											 update=":msgGlobal" ajax="false"/>
 						<p:tooltip value="Cliquei aqui para editar!" for="btnEditar"
 							position="left" />
 						<p:tooltip value="Cliquei aqui enviar o pedido por email" for="btnEnviarEmail"
+							position="left" />
+						<p:tooltip value="Cliquei aqui gerar o relatório" for="btnGerarRelatorio"
 							position="left" />
 					</p:column>
 

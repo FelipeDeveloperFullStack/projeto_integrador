@@ -60,4 +60,6 @@ public interface GenericDao<E, I> extends Serializable {
 	
 	List<E> findBySituationAndCategoriaAndTipoPessoa(Situacao situacao, Categoria categoria, TipoPessoa tipoPessoa);
 
+	E findByData(Date data, String attributeClass, Situacao situacao);
+
 }

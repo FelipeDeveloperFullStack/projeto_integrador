@@ -4,9 +4,6 @@ import java.util.List;
 
 import br.com.pitdog.model.global.Fornecedor;
 import br.com.pitdog.model.type.Situacao;
-import br.com.pitdog.model.type.UnidadeFederativa;
-import br.com.sysge.infraestrutura.cnpj.CnpjResource;
-import br.com.sysge.infraestrutura.cnpj.ConsultaCNPJ;
 import br.com.sysge.infraestrutura.dao.GenericDaoImpl;
 
 public class FornecedorService extends GenericDaoImpl<Fornecedor, Long> {
@@ -37,33 +34,6 @@ public class FornecedorService extends GenericDaoImpl<Fornecedor, Long> {
 		}
 	}
 
-	public Fornecedor consultarCnpj(Fornecedor fornecedor) {
-		try {
-			if (fornecedor.getCnpj().replaceAll("\\D*", "").trim().isEmpty()) {
-				throw new RuntimeException("O Cnpj é obrigatório!");
-			}
-			CnpjResource cnpjResource = ConsultaCNPJ.consultarCnpj(fornecedor.getCnpj());
-			fornecedor.setBairro(cnpjResource.getBairro());
-			fornecedor.setCep(cnpjResource.getCep());
-			fornecedor.setCnpj(cnpjResource.getCnpj());
-			fornecedor.setComplemento(cnpjResource.getComplemento());
-			fornecedor.setEmail(cnpjResource.getEmail());
-			fornecedor.setNomeFantasia(cnpjResource.getFantasia());
-			fornecedor.setLogradouro(cnpjResource.getLogradouro());
-			fornecedor.setCidade(cnpjResource.getMunicipio());
-			fornecedor.setRazaoSocial(cnpjResource.getNome());
-			fornecedor.setNumero(cnpjResource.getNumero());
-			fornecedor.setTelefone(cnpjResource.getTelefone());
-			fornecedor.setUnidadeFederativa(UnidadeFederativa.valueOf(cnpjResource.getUf()));
-			fornecedor.setTipoEmpresa(cnpjResource.getTipo());
-			// cnpjResource.getNatureza_juridica();
-			// cnpjResource.getAbertura();
-			// cnpjResource.getData_situacao();
-			return fornecedor;
-		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage());
-		}
-	}
 
 	private Fornecedor consistirFornecedor(Fornecedor fornecedor) {
 		if (fornecedor.getId() == null) {
