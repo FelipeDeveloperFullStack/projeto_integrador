@@ -1,18 +1,14 @@
 package br.com.pitdog.controller.mov;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpSession;
 
 import br.com.pitdog.model.estoque.Produto;
 import br.com.pitdog.model.global.Distribuidor;
@@ -73,22 +69,11 @@ public class PedidoController implements Serializable{
 		return TipoPE.values();
 	}
 	
-	private void redirect(String page){
-		try {
-			FacesContext fc = FacesContext.getCurrentInstance();
-			ExternalContext ec = fc.getExternalContext();
-			ec.redirect(ec.getRequestContextPath() + page);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	
-	public void imprimirPedido(){
+	
+	public void imprimir(Pedido pedido){
 		try {
-			FacesContext facesContext = FacesContext.getCurrentInstance();
-			HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
-			session.setAttribute("teste", "Ola mundo");
-			redirect("/ReportServlet");
+			pedidoService.gerarRelatorio(pedido,itemPedidoService.findByListProperty(pedido.getId(), "pedido.id"));
 		} catch (Exception e) {
 			FacesUtil.mensagemErro(e.getMessage());
 		}

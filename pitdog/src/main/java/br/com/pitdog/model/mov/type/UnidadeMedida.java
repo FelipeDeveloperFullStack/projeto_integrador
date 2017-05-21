@@ -7,10 +7,9 @@ public enum UnidadeMedida {
 	LITRO("LT"),
 	CAIXA("CX"),
 	MILILITRO("ML"),
-	PEÇA("PC"),
+	PACOTE("PC"),
 	FARDO("FD"),
 	FRASCO("FR"),
-	PACOTE("PTE"),
 	GRAMA("G");
 
 	private String unidadeMedida;

@@ -1,7 +1,10 @@
 package br.com.pitdog.service.mov;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.persistence.Query;
@@ -11,8 +14,11 @@ import br.com.pitdog.model.mov.ItemPedido;
 import br.com.pitdog.model.mov.Pedido;
 import br.com.pitdog.model.mov.type.TipoPE;
 import br.com.pitdog.model.type.Situacao;
+import br.com.pitdog.relatorios.to.PedidoReportTO;
 import br.com.pitdog.service.estoque.ProdutoService;
 import br.com.sysge.infraestrutura.dao.GenericDaoImpl;
+import br.com.sysge.infraestrutura.reports.ReportFactory;
+import br.com.sysge.infraestrutura.reports.TiposRelatorio;
 
 public class PedidoService extends GenericDaoImpl<Pedido, Long>{
 
@@ -109,5 +115,33 @@ public class PedidoService extends GenericDaoImpl<Pedido, Long>{
 			
 	}
 	
+	public void gerarRelatorio(Pedido pedido, List<ItemPedido> itensPedidos){
+		
+		List<PedidoReportTO> pedidoReportTOs = new ArrayList<PedidoReportTO>();
+		for(ItemPedido item : itensPedidos){
+			PedidoReportTO pedidoReportTO = new PedidoReportTO();
+			pedidoReportTO.setDesconto(item.getDesconto());
+			pedidoReportTO.setFabricante(item.getProduto().getFabricante().getRazaoSocial());
+			pedidoReportTO.setPreco(item.getPreco());
+			pedidoReportTO.setProduto(item.getProduto().getDescricaoProduto());
+			pedidoReportTO.setQuantidade(item.getQuantidade());
+			pedidoReportTO.setUnidadeMedida(item.getUnidadeMedida().getUnidadeMedida());
+			pedidoReportTOs.add(pedidoReportTO);
+		}
+		
+		Map<String, Object> params = new HashMap<String, Object>();
+		if(pedido.getTipoPe() == TipoPE.ENTRADA){
+			params.put("pedido_entrada", pedido.getTipoPe().getTipoPE().toLowerCase());
+			params.put("data", pedido.getDataEntrada());
+		}else{
+			params.put("pedido_entrada", pedido.getTipoPe().getTipoPE().toLowerCase());
+			params.put("data", pedido.getDataPedido());
+		}
+		
+		
+		ReportFactory reportFactory = new ReportFactory("pedidoReport.jasper", 
+				params, TiposRelatorio.PDF, pedidoReportTOs);
+		reportFactory.getReportStream();
+	}
 
 }

@@ -104,7 +104,7 @@
 							update=":msgGlobal :formEditarPedido">
 						</p:commandButton>
 						<p:commandButton id="btnEnviarEmail" icon="ui-icon-mail-closed"/>
-						<p:commandButton id="btnGerarRelatorio" icon="ui-icon-print" actionListener="#{pedidoController.imprimirPedido}" 
+						<p:commandButton id="btnGerarRelatorio" icon="ui-icon-print" actionListener="#{pedidoController.imprimir(p)}" 
 											 update=":msgGlobal" ajax="false"/>
 						<p:tooltip value="Cliquei aqui para editar!" for="btnEditar"
 							position="left" />
