@@ -10,10 +10,9 @@
 </h:head>
 <ui:composition template="/template/template.xhtml">
 	<ui:define name="conteudo">
+		<p:panel header="Venda">
+			<h:form id="formVenda">
 
-		<h:form id="formVenda">
-
-			<h:panelGrid columns="2">
 
 				<h:panelGrid columns="2">
 					<p:outputLabel value="Número" />
@@ -24,124 +23,137 @@
 					<p:outputLabel value="Data" />
 					<p:outputLabel value="#{vendaController.data}" />
 				</h:panelGrid>
-			</h:panelGrid>
-
-			<h:panelGrid columns="3">
-				<p:outputLabel value="Produto" />
-				<p:outputLabel
-					style="width: 300px;"
-					value="#{vendaController.itemVenda.produto.descricaoProduto}" />
-				<p:commandButton onclick="PF('dialogItem').show()"
-								 rendered="#{!vendaController.exibirItem}"
-								 icon="ui-icon-plus"/>
-			</h:panelGrid>
-
-			<h:panelGrid id="infoItens" columns="2" rendered="#{vendaController.exibirItem}">
-			
-				<h:panelGrid columns="1">
-					<p:outputLabel value="Quantidade" />
-					<p:inputNumber id="quantidadeItem"
-						value="#{vendaController.itemVenda.quantidade}">
-           		 			<p:ajax event="blur" update="valorItem" process="@this,descontoItem" listener="#{vendaController.quantidadeChange}" />
-       				</p:inputNumber>
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Produto" />
+					<p:outputLabel
+						value="#{vendaController.itemVenda.produto.descricaoProduto}" />
+					<p:commandButton onclick="PF('dialogItem').show()"
+						rendered="#{!vendaController.exibirItem}" icon="ui-icon-search" />
 				</h:panelGrid>
-				<h:panelGrid columns="1">
-					<p:outputLabel value="Desconto" />
-					<p:inputNumber id="descontoItem"
-						value="#{vendaController.itemVenda.desconto}" >
-           		 			<p:ajax event="blur" update="valorItem" process="@this,descontoItem" listener="#{vendaController.descontoChange}" />
-       				</p:inputNumber>
-				</h:panelGrid>
+				<p:panel header="Itens">
+					<h:panelGrid id="infoItensPainel">
+						<h:panelGrid id="infoItens" columns="2"
+							rendered="#{vendaController.exibirItem}">
 
-				<h:panelGrid columns="1">
-					<p:outputLabel value="valor" />
-					<p:outputLabel id="valorItem"
-						value="#{vendaController.itemVenda.valorLiquido}" />
-				</h:panelGrid>
-				
-				<h:panelGrid columns="1">
-					<p:commandButton icon="ui-icon-plus"
-									 update="formVenda"
-									 actionListener="vendaController.adicionarItem"/>
-				</h:panelGrid>
-			</h:panelGrid>
-			
-			<p:dataTable id="tableProdutos" var="item" paginator="true"
-						paginatorPosition="bottom" value="#{vendaController.venda.itens}"
-						emptyMessage="Nenhum registro encontrado!" rows="8"
-						paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
-						{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+							<h:panelGrid columns="1">
+								<p:outputLabel value="Quantidade" />
+								<p:inputNumber id="quantidadeItem"
+									value="#{vendaController.itemVenda.quantidade}">
+									<p:ajax event="blur" update="valorItem"
+										process="@this,descontoItem"
+										listener="#{vendaController.quantidadeChange}" />
+								</p:inputNumber>
+							</h:panelGrid>
+							<h:panelGrid columns="1">
+								<p:outputLabel value="Desconto" />
+								<p:inputNumber id="descontoItem"
+									value="#{vendaController.itemVenda.desconto}">
+									<p:ajax event="blur" update="valorItem"
+										process="@this,descontoItem"
+										listener="#{vendaController.descontoChange}" />
+								</p:inputNumber>
+							</h:panelGrid>
 
-					<p:column headerText="Descrição" width="30" style="text-align:center;">
-						<p:outputLabel value="#{item.produto.descricaoProduto}" />
-					</p:column>
-					
-					<p:column headerText="Preço" width="75" style="text-align:center;">
-						<p:outputLabel value="#{item.valorLiquido}">
-							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
-						</p:outputLabel>
-					</p:column>
-						
-						
-			</p:dataTable>
+							<h:panelGrid columns="1">
+								<p:outputLabel value="valor" />
+								<p:outputLabel id="valorItem"
+									value="#{vendaController.itemVenda.valorLiquido}" />
+							</h:panelGrid>
 
+							<p:commandButton icon="ui-icon-plus"
+								update="formVenda:tableItens infoItensPainel valorVenda"
+								actionListener="#{vendaController.addItem}" />
 
-			<h:panelGrid columns="2">
-				<p:commandButton actionListener="#{vendaController.finalizar}"
-								 value="Finalizar"/>
-				<p:commandButton actionListener="#{vendaController.cancelar}"
-								 value="Cancelar"/>
-			</h:panelGrid>
-			
-		</h:form>
-		
-		<p:dialog widgetVar="dialogItem" header="vendaController.itemHeader"
-				modal="true" resizable="false" position="center"
-				appendTo="@(body)"
-				height="500"
-				width="700"
-				closable="true">
-				<h:form id="pesquisaItem">
-				
-
-					<h:panelGrid columns="3">
-						<p:outputLabel value="Pesquisa" />
-						<p:inputText value="#{vendaController.pesquisa}" id="inputPesquisa">
-           		 			<p:ajax event="keyup" update="tableProdutos" process="@this,inputPesquisa" listener="#{vendaController.pesquisar}" />
-       					</p:inputText>
-						<p:commandButton icon="ui-icon-trash"
-										 process="@this,inputPesquisa"
-										 update="tableProdutos"
-										 actionListener="#{vendaController.pesquisar}"/>
+						</h:panelGrid>
 					</h:panelGrid>
-	
-					
-					<p:dataTable id="tableProdutos" var="p" paginator="true"
-						paginatorPosition="bottom" value="#{vendaController.produtos}"
+
+
+
+					<p:dataTable id="tableItens" var="item" paginator="true"
+						paginatorPosition="bottom" value="#{vendaController.itens}"
 						emptyMessage="Nenhum registro encontrado!" rows="8"
 						paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
 						{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
 
-						<p:column headerText="Descrição" width="30" style="text-align:center;">
-							<p:outputLabel value="#{p.descricaoProduto}" />
+						<p:column headerText="Descrição" width="30"
+							style="text-align:center;">
+							<p:outputLabel value="#{item.produto.descricaoProduto}" />
 						</p:column>
-						
+
 						<p:column headerText="Preço" width="75" style="text-align:center;">
-							<p:outputLabel value="#{p.valorVenda}">
+							<p:outputLabel value="#{item.valorLiquido}">
 								<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
 							</p:outputLabel>
 						</p:column>
-						
-						<p:column width="30" style="text-align:center;">
-							<p:commandButton icon="ui-icon-trash"
-										     update="formVenda"
-										     actionListener="#{vendaController.selecionarProduto(p)}"
-										     oncomplete="PF('dialogItem').hide()"/>
-						</p:column>
-					
+
+
 					</p:dataTable>
-				</h:form>
-			</p:dialog>
+
+				</p:panel>
+				
+				<h:panelGrid columns="2">
+					<p:outputLabel value="#{vendaController.venda.valorLiquido}" id="valorVenda">
+							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+						</p:outputLabel>
+				</h:panelGrid>
+				
+
+				<h:panelGrid columns="2">
+					<p:commandButton actionListener="#{vendaController.finalizar}"
+						update="formVenda" value="Finalizar" />
+					<p:commandButton actionListener="#{vendaController.cancelar}"
+						update="formVenda" value="Cancelar" />
+				</h:panelGrid>
+
+			</h:form>
+		</p:panel>
+
+		<p:dialog widgetVar="dialogItem" header="Produto" modal="true"
+			resizable="false" position="center" appendTo="@(body)" height="500"
+			width="700" closable="true">
+			<h:form id="pesquisaItem">
+
+
+				<h:panelGrid columns="3">
+					<p:outputLabel value="Pesquisa" />
+					<p:inputText value="#{vendaController.pesquisa}" id="inputPesquisa">
+						<p:ajax event="keyup" update="tableProdutos"
+							process="@this,inputPesquisa"
+							listener="#{vendaController.pesquisar}" />
+					</p:inputText>
+					<p:commandButton icon="ui-icon-search"
+						process="@this,inputPesquisa" update="tableProdutos"
+						actionListener="#{vendaController.pesquisar}" />
+				</h:panelGrid>
+
+
+				<p:dataTable id="tableProdutos" var="p" paginator="true"
+					paginatorPosition="bottom" value="#{vendaController.produtos}"
+					emptyMessage="Nenhum registro encontrado!" rows="8"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
+						{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+					<p:column headerText="Descrição" width="30"
+						style="text-align:center;">
+						<p:outputLabel value="#{p.descricaoProduto}" />
+					</p:column>
+
+					<p:column headerText="Preço" width="75" style="text-align:center;">
+						<p:outputLabel value="#{p.valorVenda}">
+							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+						</p:outputLabel>
+					</p:column>
+
+					<p:column width="30" style="text-align:center;">
+						<p:commandButton icon="ui-icon-circle-plus"
+							update="formVenda:infoItensPainel"
+							actionListener="#{vendaController.selecionarProduto(p)}"
+							oncomplete="PF('dialogItem').hide()" />
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</p:dialog>
 
 	</ui:define>
 </ui:composition>

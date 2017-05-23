@@ -1,6 +1,7 @@
 package br.com.pitdog.model.mov;
 
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +36,7 @@ public class Venda extends GenericDomain{
 	@Temporal(TemporalType.DATE)
 	private Date data = new Date();
 	
-	private Double valorLiquido = 0.0;
+	private BigDecimal valorLiquido = BigDecimal.ZERO;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Usuario balconista;
@@ -70,11 +71,11 @@ public class Venda extends GenericDomain{
 		this.balconista = balconista;
 	}
 
-	public Double getValorLiquido() {
+	public BigDecimal getValorLiquido() {
 		return valorLiquido;
 	}
 
-	public void setValorLiquido(Double valorLiquido) {
+	public void setValorLiquido(BigDecimal valorLiquido) {
 		this.valorLiquido = valorLiquido;
 	}
 
@@ -100,6 +101,14 @@ public class Venda extends GenericDomain{
 
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
+	}
+
+	public void totalizar() {
+		valorLiquido = BigDecimal.ZERO;
+		
+		for (ItemVenda itemVenda : itens) {
+			valorLiquido = valorLiquido.add(itemVenda.getValorLiquido());
+		}
 	}
 	
 	

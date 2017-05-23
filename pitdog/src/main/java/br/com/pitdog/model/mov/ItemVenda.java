@@ -21,6 +21,8 @@ public class ItemVenda extends GenericDomain {
 	
 
 	private static final long serialVersionUID = -1504173395650419930L;
+	
+	private int numero;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "produto_id")
@@ -130,7 +132,17 @@ public class ItemVenda extends GenericDomain {
 	public void setValorUnitario(BigDecimal valorUnitario) {
 		this.valorUnitario = valorUnitario;
 	}
-	
-	
+
+	public int getNumero() {
+		return numero;
+	}
+
+	public void setNumero(int numero) {
+		this.numero = numero;
+	}
+
+	public void setValorTotal(BigDecimal valorTotal) {
+		this.valorTotal = valorTotal;
+	}
 	
 }

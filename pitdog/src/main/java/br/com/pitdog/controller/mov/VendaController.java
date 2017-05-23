@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.enterprise.context.SessionScoped;
+import javax.faces.event.ActionEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -20,7 +22,7 @@ import br.com.pitdog.service.estoque.ProdutoService;
 import br.com.pitdog.service.mov.VendaService;
 
 @Named
-@ViewScoped
+@SessionScoped
 public class VendaController implements Serializable{
 
 	private static final long serialVersionUID = 8644665195188273211L;
@@ -50,21 +52,24 @@ public class VendaController implements Serializable{
 		this.venda = vendaService.save(venda);
 	}
 	
-	public void adicionarItem(){
+	public void addItem() {
+		itemVenda.setVenda(venda);
+		itemVenda.setNumero(venda.getItens().size());
 		venda.getItens().add(itemVenda);
 		itemVenda = null;
 		exibirItem = false;
+		venda.totalizar();
 		venda = vendaService.save(venda);
 	}
 	
 	public void finalizar(){
 		venda.setStatus(StatusVenda.CONCLUIDA);
-		vendaService.save(venda);
+		venda = vendaService.save(venda);
 	}
 	
 	public void cancelar(){
 		venda.setStatus(StatusVenda.CANCELADA);
-		vendaService.save(venda);
+		venda = vendaService.save(venda);
 		venda = new Venda();
 	}
 	
@@ -135,6 +140,10 @@ public class VendaController implements Serializable{
 
 	public String getPesquisa() {
 		return pesquisa;
+	}
+	
+	public List<ItemVenda> getItens() {
+		return venda.getItens();
 	}
 
 	public void setPesquisa(String pesquisa) {
