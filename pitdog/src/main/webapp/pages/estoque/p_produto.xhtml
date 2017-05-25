@@ -233,6 +233,20 @@
 						</p:selectOneMenu>
 					</h:panelGrid>
 				</h:panelGrid>
+				
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Preço de custo" />
+						<p:inputNumber symbol="R$ " 
+                               decimalSeparator="," thousandSeparator="." value="#{produtoController.produto.valorCusto}"/>
+					</h:panelGrid>	
+					
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Preço de venda" />
+						<p:inputNumber symbol="R$ " 
+                               decimalSeparator="," thousandSeparator="." value="#{produtoController.produto.valorVenda}" />
+					</h:panelGrid>	
+				</h:panelGrid>	
 
 				<h:panelGrid columns="2" id="panel_editar_produto_1">
 					<h:panelGrid columns="1">
@@ -293,7 +307,7 @@
 					<p:inputText style="width: 535px;"
 						value="#{produtoController.produto.descricaoProduto}" />
 				</h:panelGrid>
-
+				
 				<h:panelGrid columns="2">
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Categoria" />
@@ -315,6 +329,20 @@
 						</p:selectOneMenu>
 					</h:panelGrid>
 				</h:panelGrid>
+				
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Preço de custo" />
+						<p:inputNumber symbol="R$ " 
+                               decimalSeparator="," thousandSeparator="." value="#{produtoController.produto.valorCusto}" />
+					</h:panelGrid>	
+					
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Preço de venda" />
+						<p:inputNumber symbol="R$ " 
+                               decimalSeparator="," thousandSeparator="." value="#{produtoController.produto.valorVenda}" />
+					</h:panelGrid>	
+				</h:panelGrid>	
 
 				<h:panelGrid id="panelBotoesNovoProduto" columns="2">
 					<h:panelGrid columns="2">

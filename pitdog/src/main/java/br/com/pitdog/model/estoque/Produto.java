@@ -23,9 +23,9 @@ public class Produto extends GenericDomain{
 
 	private String descricaoProduto;
 	
-	private BigDecimal valorCusto = BigDecimal.ZERO;
+	private BigDecimal valorCusto;
 	
-	private BigDecimal valorVenda = BigDecimal.ZERO;
+	private BigDecimal valorVenda;
 	
 	private double quantidadeEstoque;
 	
