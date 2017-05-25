@@ -101,12 +101,12 @@ public class PedidoService extends GenericDaoImpl<Pedido, Long>{
 	public List<Pedido> pesquisar(Date data, Pedido pedido, String atributo){
 		Query query = null;
 		if(data == null){
-			query = geEntityManager().createQuery("SELECT p FROM Pedido p "
+			query = getEntityManager().createQuery("SELECT p FROM Pedido p "
 					+ "WHERE p.situacao = :situacao AND p.tipoPe = :tipoPe");
 			query.setParameter("situacao", pedido.getSituacao());
 			query.setParameter("tipoPe", pedido.getTipoPe());
 		}else{
-			query = geEntityManager().createQuery("SELECT p FROM Pedido p "
+			query = getEntityManager().createQuery("SELECT p FROM Pedido p "
 					+ "WHERE p."+atributo+" = :data AND p.situacao = :situacao");
 			query.setParameter("data", data);
 			query.setParameter("situacao", pedido.getSituacao());

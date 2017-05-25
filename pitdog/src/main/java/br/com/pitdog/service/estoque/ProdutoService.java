@@ -2,8 +2,11 @@ package br.com.pitdog.service.estoque;
 
 import java.util.List;
 
+import javax.persistence.Query;
+
 import br.com.pitdog.model.estoque.Produto;
 import br.com.pitdog.model.type.Situacao;
+import br.com.pitdog.model.type.TipoProduto;
 import br.com.sysge.infraestrutura.dao.GenericDaoImpl;
 
 public class ProdutoService extends GenericDaoImpl<Produto, Long>{
@@ -56,6 +59,29 @@ public class ProdutoService extends GenericDaoImpl<Produto, Long>{
 			e.getStackTrace();
 			throw new RuntimeException(e.getMessage());
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Produto> pesquisarProdutoNaoInsumo(String pesquisa){
+		Query query = getEntityManager().createQuery("FROM " + getEntityClass().getSimpleName() + " p "
+				+ "WHERE p.descricaoProduto LIKE :descricaoProduto AND p.situacao = :situacao AND p.tipo = :tipo");
+		
+		query.setParameter("descricaoProduto", pesquisa + "%");
+		query.setParameter("situacao", Situacao.ATIVO);
+		query.setParameter("tipo", TipoProduto.PRODUTO);
+		
+		return query.getResultList();
+	}
+
+	public List<Produto> pesquisarInsumos(String pesquisaInsumo) {
+		Query query = getEntityManager().createQuery("FROM " + getEntityClass().getSimpleName() + " p "
+				+ "WHERE p.descricaoProduto LIKE :descricaoProduto AND p.situacao = :situacao AND p.tipo = :tipo");
+		
+		query.setParameter("descricaoProduto", pesquisaInsumo + "%");
+		query.setParameter("situacao", Situacao.ATIVO);
+		query.setParameter("tipo", TipoProduto.INSUMO);
+		
+		return query.getResultList();
 	}
 	
 }

@@ -10,103 +10,96 @@
 </h:head>
 <ui:composition template="/template/template.xhtml">
 	<ui:define name="conteudo">
-		<p:panel header="Venda">
-			<h:form id="formVenda">
+		<p:ajaxStatus onstart="PF('statusDialog').show()"
+			onsuccess="PF('statusDialog').hide()" />
+
+		<p:dialog widgetVar="statusDialog" modal="false" draggable="false"
+			closable="false" resizable="false" showHeader="false">
+			<p:graphicImage library="img" name="loading.gif" />
+		</p:dialog>
+		<h:form id="formVenda">
+			<p:panel header="#{vendaController.headerVenda}">
 
 
-				<h:panelGrid columns="2">
-					<p:outputLabel value="Número" />
-					<p:outputLabel value="#{vendaController.venda.numero}" />
-				</h:panelGrid>
-
-				<h:panelGrid columns="2">
+				<h:panelGrid columns="3" id="infoVenda">
 					<p:outputLabel value="Data" />
 					<p:outputLabel value="#{vendaController.data}" />
+					<p:outputLabel />
+					<p:outputLabel value="Cliente" />
+					<p:outputLabel id="infoCliente"
+						value="#{vendaController.venda.cliente.nomeDaPessoaFisica}" />
+					<p:commandButton onclick="PF('dialogCliente').show()"
+						icon="ui-icon-search" 
+						disabled="#{vendaController.naoPoderEditar}"/>
+
 				</h:panelGrid>
-				<h:panelGrid columns="2">
-					<p:outputLabel value="Produto" />
-					<p:outputLabel
-						value="#{vendaController.itemVenda.produto.descricaoProduto}" />
-					<p:commandButton onclick="PF('dialogItem').show()"
-						rendered="#{!vendaController.exibirItem}" icon="ui-icon-search" />
-				</h:panelGrid>
-				<p:panel header="Itens">
-					<h:panelGrid id="infoItensPainel">
-						<h:panelGrid id="infoItens" columns="2"
-							rendered="#{vendaController.exibirItem}">
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Quantidade" />
-								<p:inputNumber id="quantidadeItem"
-									value="#{vendaController.itemVenda.quantidade}">
-									<p:ajax event="blur" update="valorItem"
-										process="@this,descontoItem"
-										listener="#{vendaController.quantidadeChange}" />
-								</p:inputNumber>
-							</h:panelGrid>
-							<h:panelGrid columns="1">
-								<p:outputLabel value="Desconto" />
-								<p:inputNumber id="descontoItem"
-									value="#{vendaController.itemVenda.desconto}">
-									<p:ajax event="blur" update="valorItem"
-										process="@this,descontoItem"
-										listener="#{vendaController.descontoChange}" />
-								</p:inputNumber>
-							</h:panelGrid>
-
-							<h:panelGrid columns="1">
-								<p:outputLabel value="valor" />
-								<p:outputLabel id="valorItem"
-									value="#{vendaController.itemVenda.valorLiquido}" />
-							</h:panelGrid>
-
-							<p:commandButton icon="ui-icon-plus"
-								update="formVenda:tableItens infoItensPainel valorVenda"
-								actionListener="#{vendaController.addItem}" />
-
-						</h:panelGrid>
-					</h:panelGrid>
-
-
-
-					<p:dataTable id="tableItens" var="item" paginator="true"
-						paginatorPosition="bottom" value="#{vendaController.itens}"
-						emptyMessage="Nenhum registro encontrado!" rows="8"
-						paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
+				<p:dataTable id="tableItens" var="item" paginator="true"
+					paginatorPosition="bottom" value="#{vendaController.itens}"
+					emptyMessage="Nenhum registro encontrado!" rows="8"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
 						{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
 
-						<p:column headerText="Descrição" width="30"
-							style="text-align:center;">
-							<p:outputLabel value="#{item.produto.descricaoProduto}" />
-						</p:column>
+					<f:facet name="header">
+        					Itens
+    				</f:facet>
 
-						<p:column headerText="Preço" width="75" style="text-align:center;">
-							<p:outputLabel value="#{item.valorLiquido}">
-								<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
-							</p:outputLabel>
-						</p:column>
+					<p:column headerText="Número" width="20" style="text-align:center;">
+						<p:outputLabel value="#{item.numero + 1}" />
+					</p:column>
 
+					<p:column headerText="Descrição" width="75"
+						style="text-align:center;">
+						<p:outputLabel value="#{item.produto.descricaoProduto}" />
+					</p:column>
 
-					</p:dataTable>
-
-				</p:panel>
-				
-				<h:panelGrid columns="2">
-					<p:outputLabel value="#{vendaController.venda.valorLiquido}" id="valorVenda">
+					<p:column headerText="Preço" width="30" style="text-align:center;">
+						<p:outputLabel value="#{item.valorLiquido}">
 							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
 						</p:outputLabel>
+					</p:column>
+
+					<p:column width="30" style="text-align:center;">
+						<p:commandButton icon="ui-icon-trash"
+							disabled="#{vendaController.naoPoderEditar}"
+							actionListener="#{vendaController.removerItem(item.numero)}"
+							update="formVenda:tableItens formVenda:valorVenda" />
+
+						<p:commandButton icon="ui-icon-pencil"
+							oncomplete="PF('dialogEdicaoItem').show()"
+							disabled="#{vendaController.naoPoderEditar}"
+							actionListener="#{vendaController.editarItem(item.numero)}"
+							update="edicaoItem" />
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton onclick="PF('dialogItem').show()"
+							icon="ui-icon-plus" 
+							disabled="#{vendaController.naoPoderEditar}"/>
+					</f:facet>
+
+				</p:dataTable>
+
+
+
+				<h:panelGrid columns="2">
+					<p:outputLabel value="#{vendaController.venda.valorLiquido}"
+						id="valorVenda">
+						<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+					</p:outputLabel>
 				</h:panelGrid>
-				
+
 
 				<h:panelGrid columns="2">
 					<p:commandButton actionListener="#{vendaController.finalizar}"
-						update="formVenda" value="Finalizar" />
+						update="formVenda" value="Finalizar" 
+						disabled="#{vendaController.naoPoderEditar}"/>
 					<p:commandButton actionListener="#{vendaController.cancelar}"
-						update="formVenda" value="Cancelar" />
+						update="formVenda" value="Cancelar" 
+						disabled="#{vendaController.naoPoderEditar}"/>
 				</h:panelGrid>
 
-			</h:form>
-		</p:panel>
+			</p:panel>
+		</h:form>
 
 		<p:dialog widgetVar="dialogItem" header="Produto" modal="true"
 			resizable="false" position="center" appendTo="@(body)" height="500"
@@ -146,14 +139,200 @@
 
 					<p:column width="30" style="text-align:center;">
 						<p:commandButton icon="ui-icon-circle-plus"
-							update="formVenda:infoItensPainel"
+							update="formVenda:infoVenda edicaoItem"
 							actionListener="#{vendaController.selecionarProduto(p)}"
-							oncomplete="PF('dialogItem').hide()" />
+							oncomplete="PF('dialogItem').hide();PF('dialogEdicaoItem').show()" />
 					</p:column>
 
 				</p:dataTable>
 			</h:form>
 		</p:dialog>
+
+
+		<p:dialog widgetVar="dialogCliente" header="Cliente" modal="true"
+			resizable="false" position="center" appendTo="@(body)" height="500"
+			width="700" closable="true">
+			<h:form id="pesquisaCliente">
+
+
+				<h:panelGrid columns="3">
+					<p:outputLabel value="Pesquisa" />
+					<p:inputText value="#{vendaController.pesquisaCliente}"
+						id="inputPesquisaCliente">
+						<p:ajax event="keyup" update="tableClientes"
+							process="@this,inputPesquisaCliente"
+							listener="#{vendaController.pesquisarCliente}" />
+					</p:inputText>
+					<p:commandButton icon="ui-icon-search"
+						process="@this,inputPesquisaCliente" update="tableClientes"
+						actionListener="#{vendaController.pesquisarCliente}" />
+				</h:panelGrid>
+
+
+				<p:dataTable id="tableClientes" var="c" paginator="true"
+					paginatorPosition="bottom" value="#{vendaController.clientes}"
+					emptyMessage="Nenhum registro encontrado!" rows="8"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
+						{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+					<p:column headerText="Nome" width="30" style="text-align:center;">
+						<p:outputLabel value="#{c.nomeDaPessoaFisica}" />
+					</p:column>
+
+					<p:column headerText="Telefone" width="75"
+						style="text-align:center;">
+						<p:outputLabel value="#{c.telefone}" />
+					</p:column>
+
+					<p:column width="30" style="text-align:center;">
+						<p:commandButton icon="ui-icon-circle-plus"
+							update="formVenda:infoCliente"
+							actionListener="#{vendaController.selecionarCliente(c)}"
+							oncomplete="PF('dialogCliente').hide()" />
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dialogEdicaoItem" header="Cliente" modal="true"
+			resizable="false" position="center" appendTo="@(body)" height="500"
+			width="700" closable="true">
+			<h:form id="edicaoItem">
+
+
+				<p:dataTable id="tableInsumosItem" var="p" paginator="true"
+					paginatorPosition="bottom" value="#{vendaController.insumosItem}"
+					rows="8"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
+						{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+					<f:facet name="header">
+        					Insumos
+    				</f:facet>
+					<p:column headerText="Descrição" width="30"
+						style="text-align:center;">
+						<p:outputLabel value="#{p.descricaoProduto}" />
+					</p:column>
+
+					<p:column headerText="Preço" width="75" style="text-align:center;">
+						<p:outputLabel value="#{p.valorVenda}">
+							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+						</p:outputLabel>
+					</p:column>
+
+					<p:column width="30" style="text-align:center;">
+						<p:commandButton icon="ui-icon-trash"
+							update="tableInsumosItem edicaoItem:valorItem"
+							actionListener="#{vendaController.removerInsumo(p)}" />
+					</p:column>
+					
+					<f:facet name="footer">
+						<p:commandButton onclick="PF('dialoginsumo').show()"
+							icon="ui-icon-plus" />
+					</f:facet>
+
+				</p:dataTable>
+
+				<h:panelGrid id="infoItens" columns="3">
+
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Quantidade" />
+						<p:inputNumber id="quantidadeItem"
+							value="#{vendaController.itemVenda.quantidade}">
+							<p:ajax event="blur" update="valorItem"
+								process="@this,descontoItem"
+								listener="#{vendaController.quantidadeChange}" />
+						</p:inputNumber>
+					</h:panelGrid>
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Desconto" />
+						<p:inputNumber id="descontoItem"
+							value="#{vendaController.itemVenda.desconto}">
+							<p:ajax event="blur" update="valorItem"
+								process="@this,descontoItem"
+								listener="#{vendaController.descontoChange}" />
+						</p:inputNumber>
+					</h:panelGrid>
+
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Valor" />
+						<p:outputLabel id="valorItem"
+							value="#{vendaController.itemVenda.valorLiquido}">
+							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+						</p:outputLabel>
+					</h:panelGrid>
+
+				</h:panelGrid>
+
+
+				<h:panelGrid columns="2">
+
+					<p:commandButton icon="ui-icon-close" value="Cancelar"
+						oncomplete="PF('dialogEdicaoItem').hide()"
+						actionListener="#{vendaController.cancelarEdicaoItem}" />
+
+					<p:commandButton icon="ui-icon-check" value="Confirmar"
+						oncomplete="PF('dialogEdicaoItem').hide()"
+						update="formVenda"
+						actionListener="#{vendaController.addOrUpdateItem}" />
+
+				</h:panelGrid>
+
+
+
+			</h:form>
+		</p:dialog>
+		
+		
+		<p:dialog widgetVar="dialoginsumo" header="Produto" modal="true"
+			resizable="false" position="center" appendTo="@(body)" height="500"
+			width="700" closable="true">
+			<h:form id="pesquisaInsumo">
+
+
+				<h:panelGrid columns="3">
+					<p:outputLabel value="Pesquisa" />
+					<p:inputText value="#{vendaController.pesquisaInsumo}" id="inputPesquisaInsumos">
+						<p:ajax event="keyup" update="tableInsumos"
+							process="@this,inputPesquisaInsumos"
+							listener="#{vendaController.pesquisarInsumos}" />
+					</p:inputText>
+					<p:commandButton icon="ui-icon-search"
+						process="@this,inputPesquisaInsumos" update="tableInsumos"
+						actionListener="#{vendaController.pesquisarInsumos}" />
+				</h:panelGrid>
+
+
+				<p:dataTable id="tableInsumos" var="p" paginator="true"
+					paginatorPosition="bottom" value="#{vendaController.insumos}"
+					emptyMessage="Nenhum registro encontrado!" rows="8"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
+						{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+					<p:column headerText="Descrição" width="30"
+						style="text-align:center;">
+						<p:outputLabel value="#{p.descricaoProduto}" />
+					</p:column>
+
+					<p:column headerText="Preço" width="75" style="text-align:center;">
+						<p:outputLabel value="#{p.valorVenda}">
+							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+						</p:outputLabel>
+					</p:column>
+
+					<p:column width="30" style="text-align:center;">
+						<p:commandButton icon="ui-icon-circle-plus"
+							update="edicaoItem"
+							actionListener="#{vendaController.selecionarInsumo(p)}"
+							oncomplete="PF('dialoginsumo').hide();" />
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</p:dialog>
+		
 
 	</ui:define>
 </ui:composition>

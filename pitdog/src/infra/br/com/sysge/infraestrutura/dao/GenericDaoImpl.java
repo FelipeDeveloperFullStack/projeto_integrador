@@ -367,9 +367,15 @@ public class GenericDaoImpl<E, I> implements GenericDao<E, I> {
 		return (E) query.getSingleResult();
 	}
 	
-	protected EntityManager geEntityManager(){
+	protected EntityManager getEntityManager(){
 		return manager;
 	}
+
+	protected Class<E> getEntityClass() {
+		return entityClass;
+	}
+	
+	
 	
 	
 }

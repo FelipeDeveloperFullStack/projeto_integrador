@@ -17,9 +17,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.pitdog.model.conf.Usuario;
 import br.com.pitdog.model.global.Cliente;
 import br.com.pitdog.model.mov.type.StatusVenda;
+import br.com.pitdog.model.rh.Funcionario;
 import br.com.sysge.infraestrutura.dao.GenericDomain;
 
 @Entity
@@ -39,7 +39,7 @@ public class Venda extends GenericDomain{
 	private BigDecimal valorLiquido = BigDecimal.ZERO;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	private Usuario balconista;
+	private Funcionario balconista;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Cliente cliente;
@@ -63,11 +63,11 @@ public class Venda extends GenericDomain{
 		this.data = data;
 	}
 
-	public Usuario getBalconista() {
+	public Funcionario getBalconista() {
 		return balconista;
 	}
 
-	public void setBalconista(Usuario balconista) {
+	public void setBalconista(Funcionario balconista) {
 		this.balconista = balconista;
 	}
 

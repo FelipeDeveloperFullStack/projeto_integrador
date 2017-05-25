@@ -17,7 +17,7 @@ import br.com.sysge.infraestrutura.dao.GenericDomain;
 
 @Entity
 @Table(name = "tbl_item_venda")
-public class ItemVenda extends GenericDomain {
+public class ItemVenda extends GenericDomain implements Cloneable{
 	
 
 	private static final long serialVersionUID = -1504173395650419930L;
@@ -42,20 +42,28 @@ public class ItemVenda extends GenericDomain {
 	
 	private BigDecimal valorLiquido = BigDecimal.ZERO;
 	
-	@OneToMany
-	@JoinTable (name="tbl_item_venda_insumo_adicional",
-		    joinColumns={ @JoinColumn(name="item_venda_id", referencedColumnName="id") },
-		    inverseJoinColumns={ @JoinColumn(name="produto_id", referencedColumnName="id", unique=true) })	
-	private List<Produto> insumosAdicionais = new ArrayList<>();
+	@OneToMany(fetch=FetchType.EAGER, mappedBy="itemVenda")	
+	private List<ItemVendaInsumo> insumosAdicionais = new ArrayList<>();
 	
-	@OneToMany
-	@JoinTable (name="tbl_item_venda_insumo_removido",
-		    joinColumns={ @JoinColumn(name="item_venda_id", referencedColumnName="id") },
-		    inverseJoinColumns={ @JoinColumn(name="produto_id", referencedColumnName="id", unique=true) })	
-	private List<Produto> insumosRemovidos = new ArrayList<>();
+	@OneToMany(fetch=FetchType.EAGER, mappedBy="itemVenda")
+	private List<ItemVendaInsumo> insumosRemovidos = new ArrayList<>();
 
 	
 	public void calcularValores(){
+		BigDecimal valorTotalInsumosRemovidos = BigDecimal.ZERO;
+		BigDecimal valorTotalInsumosAdicionais = BigDecimal.ZERO;
+		
+		for (ItemVendaInsumo insumo : insumosRemovidos) {
+			valorTotalInsumosRemovidos = valorTotalInsumosRemovidos.add(insumo.getInsumo().getValorVenda());
+		}
+		
+		for (ItemVendaInsumo insumo : insumosAdicionais) {
+			valorTotalInsumosAdicionais = valorTotalInsumosAdicionais.add(insumo.getInsumo().getValorVenda());
+		}
+		
+		valorUnitario = valorUnitario.add(valorTotalInsumosAdicionais);
+		valorUnitario = valorUnitario.subtract(valorTotalInsumosRemovidos);
+		
 		valorTotal = getValorUnitario().multiply(getQuantidade());
 		if(BigDecimal.ZERO.equals(valorLiquido)){
 			valorLiquido = valorTotal;
@@ -105,19 +113,21 @@ public class ItemVenda extends GenericDomain {
 		this.valorLiquido = valorLiquido;
 	}
 
-	public List<Produto> getInsumosAdicionais() {
+	
+
+	public List<ItemVendaInsumo> getInsumosAdicionais() {
 		return insumosAdicionais;
 	}
 
-	public void setInsumosAdicionais(List<Produto> insumosAdicionais) {
+	public void setInsumosAdicionais(List<ItemVendaInsumo> insumosAdicionais) {
 		this.insumosAdicionais = insumosAdicionais;
 	}
 
-	public List<Produto> getInsumosRemovidos() {
+	public List<ItemVendaInsumo> getInsumosRemovidos() {
 		return insumosRemovidos;
 	}
 
-	public void setInsumosRemovidos(List<Produto> insumosRemovidos) {
+	public void setInsumosRemovidos(List<ItemVendaInsumo> insumosRemovidos) {
 		this.insumosRemovidos = insumosRemovidos;
 	}
 
@@ -143,6 +153,15 @@ public class ItemVenda extends GenericDomain {
 
 	public void setValorTotal(BigDecimal valorTotal) {
 		this.valorTotal = valorTotal;
+	}
+	
+	@Override
+	public ItemVenda clone(){
+		try {
+			return (ItemVenda) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 }

@@ -2,7 +2,10 @@ package br.com.pitdog.service.estoque;
 
 import java.util.List;
 
+import javax.persistence.Query;
+
 import br.com.pitdog.model.estoque.Composicao;
+import br.com.pitdog.model.estoque.Produto;
 import br.com.sysge.infraestrutura.dao.GenericDaoImpl;
 
 public class ComposicaoService extends GenericDaoImpl<Composicao, Long>{
@@ -39,5 +42,13 @@ public class ComposicaoService extends GenericDaoImpl<Composicao, Long>{
 		}
 		return composicoes;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Composicao> listarComposicaProduto(Produto produto){
+		Query query = getEntityManager().createQuery("FROM " + getEntityClass().getSimpleName() + " c WHERE c.produto = :produto");
+		query.setParameter("produto", produto);
+		return query.getResultList();
+	}
+	
 
 }
