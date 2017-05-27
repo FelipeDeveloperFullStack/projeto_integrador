@@ -51,7 +51,9 @@
 					</p:column>
 					
 					<p:column headerText="Preço" width="50" style="text-align:center;">
-						<p:outputLabel value="#{p.valorVenda}" />
+						<p:outputLabel value="#{p.valorCusto}">
+							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+						</p:outputLabel>
 					</p:column>
 					
 					<p:column headerText="Estoque" width="50" style="text-align:center;">
