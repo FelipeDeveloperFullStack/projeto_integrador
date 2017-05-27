@@ -21,7 +21,7 @@
 			<p:panel header="#{vendaController.headerVenda}">
 
 
-				<h:panelGrid columns="2" width="100%" id="infoVenda">
+				<h:panelGrid columns="3" width="100%" id="infoVenda">
 					<p:row>
 						<p:column style="font-weight: bold;">Data: </p:column>
 						<p:outputLabel value="#{vendaController.data}" />
@@ -32,8 +32,15 @@
 						value="#{vendaController.venda.cliente.nomeDaPessoaFisica}" />
 						<p:outputLabel />
 					</p:row>
+					<p:row>
+						<p:column style="font-weight: bold;">Valor Total da Venda: </p:column>
+						<p:outputLabel value="#{vendaController.venda.valorLiquido}" id="valorVenda">
+							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+						</p:outputLabel>
+					</p:row>
+					
 				</h:panelGrid>
-				
+								
 				<p:dataTable id="tableItens" var="item" paginator="true"
 					paginatorPosition="bottom" value="#{vendaController.itens}"
 					emptyMessage="Nenhum registro encontrado!" rows="8"
@@ -44,21 +51,31 @@
         					Itens
     				</f:facet>
 
-					<p:column headerText="Número" width="20" style="text-align:center;">
+					<p:column headerText="Item" width="20" style="text-align:center;">
 						<p:outputLabel value="#{item.numero + 1}" />
 					</p:column>
-
+					
+					<p:column headerText="Quantidade" width="20" style="text-align:center;">
+						<p:outputLabel value="#{item.quantidade}" />
+					</p:column>
+					
 					<p:column headerText="Descrição" width="75"
 						style="text-align:center;">
 						<p:outputLabel value="#{item.produto.descricaoProduto}" />
 					</p:column>
-
+					
 					<p:column headerText="Preço" width="30" style="text-align:center;">
-						<p:outputLabel value="#{item.valorLiquido}">
+						<p:outputLabel value="#{item.valorLiquido / item.quantidade}">
 							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
 						</p:outputLabel>
 					</p:column>
 
+					<p:column headerText="Total" width="30" style="text-align:center;">
+						<p:outputLabel value="#{item.valorLiquido}">
+							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+						</p:outputLabel>
+					</p:column>
+					
 					<p:column width="30" style="text-align:center;">
 						<p:commandButton icon="ui-icon-trash"
 							disabled="#{vendaController.naoPoderEditar}"
@@ -77,19 +94,10 @@
 							icon="ui-icon-plus" 
 							disabled="#{vendaController.naoPoderEditar}"/>
 					</f:facet>
-
 				</p:dataTable>
 
-
-
-				<h:panelGrid columns="2">
-					<p:outputLabel value="#{vendaController.venda.valorLiquido}"
-						id="valorVenda">
-						<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
-					</p:outputLabel>
-				</h:panelGrid>
-
-
+				
+				
 				<h:panelGrid columns="2">
 					<p:commandButton actionListener="#{vendaController.finalizar}"
 						update="formVenda" value="Finalizar" 
@@ -127,6 +135,11 @@
 					paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
 						{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
 
+					<p:column headerText="Código" width="30"
+						style="text-align:center;">
+						<p:outputLabel value="#{p.id}" />
+					</p:column>
+					
 					<p:column headerText="Descrição" width="30"
 						style="text-align:center;">
 						<p:outputLabel value="#{p.descricaoProduto}" />
@@ -179,6 +192,10 @@
 					paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
 						{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
 
+					<p:column headerText="Código" width="30" style="text-align:center;">
+						<p:outputLabel value="#{c.id}" />
+					</p:column>
+					
 					<p:column headerText="Nome" width="30" style="text-align:center;">
 						<p:outputLabel value="#{c.nomeDaPessoaFisica}" />
 					</p:column>
@@ -186,6 +203,13 @@
 					<p:column headerText="Telefone" width="75"
 						style="text-align:center;">
 						<p:outputLabel value="#{c.telefone}" />
+					</p:column>
+					
+					<p:column headerText="Endereço" width="75"
+						style="text-align:center;">
+						<p:outputLabel value="#{c.logradouro}"/>
+						<p:outputLabel value=", "/> 
+						<p:outputLabel value="#{c.bairro}"/>
 					</p:column>
 
 					<p:column width="30" style="text-align:center;">
@@ -215,6 +239,12 @@
 					<f:facet name="header">
         					Insumos
     				</f:facet>
+    				
+    				<p:column headerText="Código" width="30"
+						style="text-align:center;">
+						<p:outputLabel value="#{p.id}" />
+					</p:column>
+    				
 					<p:column headerText="Descrição" width="30"
 						style="text-align:center;">
 						<p:outputLabel value="#{p.descricaoProduto}" />
