@@ -46,7 +46,7 @@ public class PedidoService extends GenericDaoImpl<Pedido, Long>{
 	public Pedido verificarTipoPE(Pedido pedido, List<ItemPedido> itensPedidos){
 		if(pedido.getDataPedido() != null && pedido.getDataEntrada() != null){
 			throw new RuntimeException("Não é possível salvar o registro,"
-					+ " por favor informe a data do pedido ou a data de entrada!");
+					+ " por favor informe uma data de pedido ou uma data de entrada!!");
 		}
 			if(pedido.getDataPedido() != null){
 				pedido.setTipoPe(TipoPE.PEDIDO);
@@ -75,6 +75,7 @@ public class PedidoService extends GenericDaoImpl<Pedido, Long>{
 			for(ItemPedido item : itensPedidos){
 				if(p.getId() == item.getProduto().getId()){
 					p.setQuantidadeEstoque(p.getQuantidadeEstoque() + item.getQuantidade());
+					p.setValorCusto(item.getPreco());
 					produtoService.salvar(p);
 				}
 			}

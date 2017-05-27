@@ -101,6 +101,7 @@ public class PedidoController implements Serializable{
 			this.itensPedidos.add(itemPedidoService.consistir(pedido, itemPedidoService.consistir(itemPedido, itensPedidos)));
 			this.itemPedido = new ItemPedido();
 		} catch (RuntimeException e) {
+			e.getStackTrace();
 			FacesUtil.mensagemWarn(e.getMessage());
 		}
 	}
@@ -111,11 +112,13 @@ public class PedidoController implements Serializable{
 
 	public void salvar() {
 		try {
+			pedido.setItensPedidos(itensPedidos);
 			pedido = pedidoService.salvar(pedido, itensPedidos);
-			FacesUtil.mensagemInfo("Pedido salvo com sucesso!");
+			FacesUtil.mensagemInfo("Registro salvo com sucesso!");
 			fecharDialogs();
 			novo();
 		} catch (RuntimeException e) {
+			e.getStackTrace();
 			FacesUtil.mensagemErro(e.getMessage());
 		}
 	}
