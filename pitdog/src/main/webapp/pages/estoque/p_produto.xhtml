@@ -44,9 +44,14 @@
 					<p:column headerText="Descrição">
 						<p:outputLabel value="#{p.descricaoProduto}" />
 					</p:column>
-
+					
+					
 					<p:column headerText="Categoria" width="250">
 						<p:outputLabel value="#{p.categoria.categoria}" />
+					</p:column>
+					
+					<p:column headerText="Preço" width="50" style="text-align:center;">
+						<p:outputLabel value="#{p.valorVenda}" />
 					</p:column>
 					
 					<p:column headerText="Estoque" width="50" style="text-align:center;">

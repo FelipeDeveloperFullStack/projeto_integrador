@@ -21,18 +21,19 @@
 			<p:panel header="#{vendaController.headerVenda}">
 
 
-				<h:panelGrid columns="3" id="infoVenda">
-					<p:outputLabel value="Data" />
-					<p:outputLabel value="#{vendaController.data}" />
-					<p:outputLabel />
-					<p:outputLabel value="Cliente" />
-					<p:outputLabel id="infoCliente"
+				<h:panelGrid columns="2" width="100%" id="infoVenda">
+					<p:row>
+						<p:column style="font-weight: bold;">Data: </p:column>
+						<p:outputLabel value="#{vendaController.data}" />
+					</p:row>
+					<p:row>
+						<p:column style="font-weight: bold;">Cliente: </p:column>
+						<p:inputText size="60" onclick="PF('dialogCliente').show()" placeholder="Clique aqui para pesquisar" id="infoCliente"
 						value="#{vendaController.venda.cliente.nomeDaPessoaFisica}" />
-					<p:commandButton onclick="PF('dialogCliente').show()"
-						icon="ui-icon-search" 
-						disabled="#{vendaController.naoPoderEditar}"/>
-
+						<p:outputLabel />
+					</p:row>
 				</h:panelGrid>
+				
 				<p:dataTable id="tableItens" var="item" paginator="true"
 					paginatorPosition="bottom" value="#{vendaController.itens}"
 					emptyMessage="Nenhum registro encontrado!" rows="8"
@@ -136,6 +137,9 @@
 							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
 						</p:outputLabel>
 					</p:column>
+					<p:column headerText="Estoque" width="30" style="text-align:center;">
+						<p:outputLabel value="#{p.quantidadeEstoque}" />
+					</p:column>
 
 					<p:column width="30" style="text-align:center;">
 						<p:commandButton icon="ui-icon-circle-plus"
@@ -196,7 +200,7 @@
 		</p:dialog>
 
 
-		<p:dialog widgetVar="dialogEdicaoItem" header="Cliente" modal="true"
+		<p:dialog widgetVar="dialogEdicaoItem" header="Composição" modal="true"
 			resizable="false" position="center" appendTo="@(body)" height="500"
 			width="700" closable="true">
 			<h:form id="edicaoItem">
@@ -220,6 +224,11 @@
 						<p:outputLabel value="#{p.valorVenda}">
 							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
 						</p:outputLabel>
+					</p:column>
+					
+					<p:column headerText="Estoque" width="30"
+						style="text-align:center;">
+						<p:outputLabel value="#{p.quantidadeEstoque}" />
 					</p:column>
 
 					<p:column width="30" style="text-align:center;">
@@ -320,6 +329,10 @@
 						<p:outputLabel value="#{p.valorVenda}">
 							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
 						</p:outputLabel>
+					</p:column>
+					
+					<p:column headerText="Estoque" width="75" style="text-align:center;">
+						<p:outputLabel value="#{p.quantidadeEstoque}" />
 					</p:column>
 
 					<p:column width="30" style="text-align:center;">

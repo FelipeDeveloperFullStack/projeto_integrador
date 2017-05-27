@@ -64,7 +64,7 @@ public class VendaController implements Serializable{
 	@Inject
 	private ClienteService clienteService;
 	
-	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyyy");
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
 	@PostConstruct
 	public void init() {
