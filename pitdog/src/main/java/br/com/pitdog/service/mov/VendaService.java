@@ -28,6 +28,8 @@ public class VendaService extends GenericDaoImpl<Venda, Long>{
 	private ComposicaoService composicaoService;
 	
 	public Venda finalizarVenda(Venda venda){
+		venda.validarCLiente();
+		venda.validarItens();
 		venda.setStatus(StatusVenda.CONCLUIDA);
 		movimentarEstoque(venda);
 		return save(venda);

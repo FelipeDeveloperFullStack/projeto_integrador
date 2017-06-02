@@ -111,5 +111,17 @@ public class Venda extends GenericDomain{
 		}
 	}
 	
+	public void validarCLiente(){
+		if(cliente == null){
+			throw new RuntimeException("Selecione um cliente!");
+		}
+	}
+	
+	public void validarItens(){
+		if(itens == null || itens.isEmpty()){
+			throw new RuntimeException("Adicione ao menos um item para a venda!");
+		}
+	}
+	
 	
 }

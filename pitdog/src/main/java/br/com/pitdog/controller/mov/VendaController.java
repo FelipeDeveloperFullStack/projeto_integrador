@@ -25,6 +25,7 @@ import br.com.pitdog.service.estoque.ComposicaoService;
 import br.com.pitdog.service.estoque.ProdutoService;
 import br.com.pitdog.service.global.ClienteService;
 import br.com.pitdog.service.mov.VendaService;
+import br.com.pitdog.util.FacesUtil;
 
 @Named
 @SessionScoped
@@ -146,8 +147,12 @@ public class VendaController implements Serializable{
 	}
 	
 	public void finalizar(){
-		vendaService.finalizarVenda(venda);
-		novaVenda();
+		try {
+			vendaService.finalizarVenda(venda);
+			novaVenda();
+		} catch (Exception e) {
+			FacesUtil.mensagemErro(e.getMessage());
+		}
 	}
 	
 	public void cancelar(){
@@ -347,6 +352,16 @@ public class VendaController implements Serializable{
 
 	}
 	
+	public String getNomeCliente() {
+		if(venda.getCliente() == null)
+			return "";
+		
+		return venda.getCliente().getNomeDaPessoaFisica();
+	}
+	
+	public void setNomeCliente(String a) {
+		
+	}
 	
 	
 }
