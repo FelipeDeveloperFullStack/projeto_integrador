@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -42,22 +43,22 @@ public class ItemVenda extends GenericDomain implements Cloneable{
 	
 	private BigDecimal valorLiquido = BigDecimal.ZERO;
 	
-	@OneToMany(fetch=FetchType.EAGER, mappedBy="itemVenda")	
-	private List<ItemVendaInsumo> insumosAdicionais = new ArrayList<>();
+	@OneToMany(fetch=FetchType.EAGER, mappedBy="itemVenda", cascade=CascadeType.ALL)
+	private List<InsumoAdicional> insumosAdicionais = new ArrayList<>();
 	
-	@OneToMany(fetch=FetchType.EAGER, mappedBy="itemVenda")
-	private List<ItemVendaInsumo> insumosRemovidos = new ArrayList<>();
+	@OneToMany(fetch=FetchType.EAGER, mappedBy="itemVenda", cascade=CascadeType.ALL)
+	private List<InsumoRemovido> insumosRemovidos = new ArrayList<>();
 
 	
 	public void calcularValores(){
 		BigDecimal valorTotalInsumosRemovidos = BigDecimal.ZERO;
 		BigDecimal valorTotalInsumosAdicionais = BigDecimal.ZERO;
 		
-		for (ItemVendaInsumo insumo : insumosRemovidos) {
+		for (InsumoRemovido insumo : insumosRemovidos) {
 			valorTotalInsumosRemovidos = valorTotalInsumosRemovidos.add(insumo.getInsumo().getValorVenda());
 		}
 		
-		for (ItemVendaInsumo insumo : insumosAdicionais) {
+		for (InsumoAdicional insumo : insumosAdicionais) {
 			valorTotalInsumosAdicionais = valorTotalInsumosAdicionais.add(insumo.getInsumo().getValorVenda());
 		}
 		
@@ -115,19 +116,19 @@ public class ItemVenda extends GenericDomain implements Cloneable{
 
 	
 
-	public List<ItemVendaInsumo> getInsumosAdicionais() {
+	public List<InsumoAdicional> getInsumosAdicionais() {
 		return insumosAdicionais;
 	}
 
-	public void setInsumosAdicionais(List<ItemVendaInsumo> insumosAdicionais) {
+	public void setInsumosAdicionais(List<InsumoAdicional> insumosAdicionais) {
 		this.insumosAdicionais = insumosAdicionais;
 	}
 
-	public List<ItemVendaInsumo> getInsumosRemovidos() {
+	public List<InsumoRemovido> getInsumosRemovidos() {
 		return insumosRemovidos;
 	}
 
-	public void setInsumosRemovidos(List<ItemVendaInsumo> insumosRemovidos) {
+	public void setInsumosRemovidos(List<InsumoRemovido> insumosRemovidos) {
 		this.insumosRemovidos = insumosRemovidos;
 	}
 

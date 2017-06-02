@@ -7,9 +7,37 @@
 
 <h:head>
 	<meta http-equiv="Content-Type" content="charset=UTF-8" />
+	
 </h:head>
 <ui:composition template="/template/template.xhtml">
+	
 	<ui:define name="conteudo">
+	
+		<script>
+			function clienteKeyUp(){
+				PF('dialogCliente').show();
+				var clienteInput = document.getElementById("formVenda:infoCliente");
+				var clientePopUpInput = document.getElementById("pesquisaCliente:inputPesquisaCliente");
+				
+				clientePopUpInput.value = clienteInput.value;
+				clienteInput.value = "";
+				document.getElementById("pesquisaCliente:pesquisaClienteButton").click();
+			}
+			
+			function produtoKeyUp(){
+				PF('dialogItem').show();
+				var produtoInput = document.getElementById("formVenda:tableItens:inputPesquisaProduto");
+				var produtoPopUpInput = document.getElementById("pesquisaItem:inputPesquisa");
+				
+				produtoPopUpInput.value = produtoInput.value;
+				produtoInput.value = "";
+				document.getElementById("pesquisaItem:pesquisaPrdutosButton").click();
+			}
+			
+			
+			
+		</script>
+	
 		<p:ajaxStatus onstart="PF('statusDialog').show()"
 			onsuccess="PF('statusDialog').hide()" />
 
@@ -28,7 +56,7 @@
 					</p:row>
 					<p:row>
 						<p:column style="font-weight: bold;">Cliente: </p:column>
-						<p:inputText size="60" onclick="PF('dialogCliente').show()" placeholder="Clique aqui para pesquisar" id="infoCliente"
+						<p:inputText size="60" onkeyup="clienteKeyUp()" placeholder="Clique aqui para pesquisar" id="infoCliente"
 						value="#{vendaController.venda.cliente.nomeDaPessoaFisica}" />
 						<p:outputLabel />
 					</p:row>
@@ -90,9 +118,8 @@
 					</p:column>
 
 					<f:facet name="footer">
-						<p:commandButton onclick="PF('dialogItem').show()"
-							icon="ui-icon-plus" 
-							disabled="#{vendaController.naoPoderEditar}"/>
+						<p:outputLabel value="Produto: " />
+						<p:inputText id="inputPesquisaProduto" onkeyup="produtoKeyUp()"/>
 					</f:facet>
 				</p:dataTable>
 
@@ -118,12 +145,13 @@
 
 				<h:panelGrid columns="3">
 					<p:outputLabel value="Pesquisa" />
-					<p:inputText value="#{vendaController.pesquisa}" id="inputPesquisa">
+					<p:inputText value="#{vendaController.pesquisa}" id="inputPesquisa" >
 						<p:ajax event="keyup" update="tableProdutos"
 							process="@this,inputPesquisa"
 							listener="#{vendaController.pesquisar}" />
 					</p:inputText>
 					<p:commandButton icon="ui-icon-search"
+						id="pesquisaPrdutosButton"
 						process="@this,inputPesquisa" update="tableProdutos"
 						actionListener="#{vendaController.pesquisar}" />
 				</h:panelGrid>
@@ -156,9 +184,9 @@
 
 					<p:column width="30" style="text-align:center;">
 						<p:commandButton icon="ui-icon-circle-plus"
-							update="formVenda:infoVenda edicaoItem"
-							actionListener="#{vendaController.selecionarProduto(p)}"
-							oncomplete="PF('dialogItem').hide();PF('dialogEdicaoItem').show()" />
+							update="formVenda:infoVenda formVenda"
+							actionListener="#{vendaController.selecionarEAdicionarProduto(p)}"
+							oncomplete="PF('dialogItem').hide();" />
 					</p:column>
 
 				</p:dataTable>
@@ -168,7 +196,7 @@
 
 		<p:dialog widgetVar="dialogCliente" header="Cliente" modal="true"
 			resizable="false" position="center" appendTo="@(body)" height="500"
-			width="700" closable="true">
+			width="700" closable="false">
 			<h:form id="pesquisaCliente">
 
 
@@ -181,6 +209,7 @@
 							listener="#{vendaController.pesquisarCliente}" />
 					</p:inputText>
 					<p:commandButton icon="ui-icon-search"
+						id="pesquisaClienteButton"
 						process="@this,inputPesquisaCliente" update="tableClientes"
 						actionListener="#{vendaController.pesquisarCliente}" />
 				</h:panelGrid>
@@ -220,6 +249,15 @@
 					</p:column>
 
 				</p:dataTable>
+				
+				<h:panelGrid columns="2">
+
+					<p:commandButton icon="ui-icon-close" value="Cancelar"
+						oncomplete="PF('dialogCliente').hide()"
+						update="formVenda:infoCliente"/>
+
+				</h:panelGrid>
+				
 			</h:form>
 		</p:dialog>
 

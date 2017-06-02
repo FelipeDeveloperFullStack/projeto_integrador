@@ -9,8 +9,8 @@ import br.com.pitdog.model.estoque.Produto;
 import br.com.sysge.infraestrutura.dao.GenericDomain;
 
 @Entity
-@Table(name = "tbl_item_venda_insumo")
-public class ItemVendaInsumo extends GenericDomain{
+@Table(name = "tbl_insumo_removido")
+public class InsumoRemovido extends GenericDomain{
 
 	private static final long serialVersionUID = -654827184510643503L;
 
@@ -35,6 +35,8 @@ public class ItemVendaInsumo extends GenericDomain{
 	public void setItemVenda(ItemVenda itemVenda) {
 		this.itemVenda = itemVenda;
 	}
+	
+	
 	
 	
 }

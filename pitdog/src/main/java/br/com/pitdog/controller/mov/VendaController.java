@@ -16,7 +16,8 @@ import br.com.pitdog.model.estoque.Composicao;
 import br.com.pitdog.model.estoque.Produto;
 import br.com.pitdog.model.global.Cliente;
 import br.com.pitdog.model.mov.ItemVenda;
-import br.com.pitdog.model.mov.ItemVendaInsumo;
+import br.com.pitdog.model.mov.InsumoAdicional;
+import br.com.pitdog.model.mov.InsumoRemovido;
 import br.com.pitdog.model.mov.Venda;
 import br.com.pitdog.model.mov.type.StatusVenda;
 import br.com.pitdog.model.type.Situacao;
@@ -126,7 +127,7 @@ public class VendaController implements Serializable{
 						insumosItem.add(composicao.getInsumo());
 				}
 				
-				for (ItemVendaInsumo itemVendaInsumo : itemVenda.getInsumosAdicionais()) {
+				for (InsumoAdicional itemVendaInsumo : itemVenda.getInsumosAdicionais()) {
 					insumosItem.add(itemVendaInsumo.getInsumo());
 				}
 				
@@ -136,7 +137,7 @@ public class VendaController implements Serializable{
 	}
 	
 	private boolean contemProdutoNosRemovidos(Produto produto){
-		for (ItemVendaInsumo itemVendaInsumo : itemVenda.getInsumosRemovidos()) {
+		for (InsumoRemovido itemVendaInsumo : itemVenda.getInsumosRemovidos()) {
 			if(produto.getId().equals(itemVendaInsumo.getInsumo().getId())){
 				return true;
 			}
@@ -192,6 +193,11 @@ public class VendaController implements Serializable{
 		}
 	}
 	
+	public void selecionarEAdicionarProduto(Produto produto){
+		selecionarProduto(produto);
+		addOrUpdateItem();
+	}
+	
 	public void selecionarInsumo(Produto produto){
 		produto = produtoService.findById(produto.getId());
 		insumosItem.add(produto);
@@ -211,7 +217,7 @@ public class VendaController implements Serializable{
 		
 		
 		for (Produto produto : insumosItem) {
-			ItemVendaInsumo itemVendaInsumo = new ItemVendaInsumo();
+			InsumoAdicional itemVendaInsumo = new InsumoAdicional();
 			itemVendaInsumo.setInsumo(produto);
 			itemVendaInsumo.setItemVenda(itemVenda);
 			itemVenda.getInsumosAdicionais().add(itemVendaInsumo);
@@ -228,7 +234,7 @@ public class VendaController implements Serializable{
 		
 		for (Produto produto : produtosComposicao) {
 			if(!insumosItem.contains(produto)){
-				ItemVendaInsumo itemVendaInsumo = new ItemVendaInsumo();
+				InsumoRemovido itemVendaInsumo = new InsumoRemovido();
 				itemVendaInsumo.setInsumo(produto);
 				itemVendaInsumo.setItemVenda(itemVenda);
 				itemVenda.getInsumosRemovidos().add(itemVendaInsumo);

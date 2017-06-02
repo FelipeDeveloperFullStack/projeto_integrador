@@ -8,7 +8,8 @@ import javax.persistence.Query;
 
 import br.com.pitdog.model.estoque.Composicao;
 import br.com.pitdog.model.mov.ItemVenda;
-import br.com.pitdog.model.mov.ItemVendaInsumo;
+import br.com.pitdog.model.mov.InsumoAdicional;
+import br.com.pitdog.model.mov.InsumoRemovido;
 import br.com.pitdog.model.mov.Venda;
 import br.com.pitdog.model.mov.type.StatusVenda;
 import br.com.pitdog.model.rh.Funcionario;
@@ -44,7 +45,7 @@ public class VendaService extends GenericDaoImpl<Venda, Long>{
 				}
 			}
 			
-			for (ItemVendaInsumo itemVendaInsumo : itemVenda.getInsumosAdicionais()) {
+			for (InsumoAdicional itemVendaInsumo : itemVenda.getInsumosAdicionais()) {
 				itemVendaInsumo.getInsumo().setQuantidadeEstoque(
 							itemVendaInsumo.getInsumo().getQuantidadeEstoque() - 1);
 				produtoService.salvar(itemVendaInsumo.getInsumo()); 
