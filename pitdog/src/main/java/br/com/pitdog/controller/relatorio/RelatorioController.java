@@ -9,8 +9,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ibm.icu.text.SimpleDateFormat;
-
 import br.com.pitdog.model.global.Cliente;
 import br.com.pitdog.model.mov.Venda;
 import br.com.pitdog.model.mov.type.StatusVenda;
@@ -69,6 +67,14 @@ public class RelatorioController implements Serializable{
 		try {
 			vendaService.gerarRelatorioVendaPorPeriodo(funcionario.getNome(),
 					cliente.getNomeDaPessoaFisica(), venda.getStatus(), dataInicial, dataFinal);
+		} catch (RuntimeException e) {
+			FacesUtil.mensagemErro(e.getMessage());
+		}
+	}
+	
+	public void gerarRelatorioCliente(){
+		try {
+			clienteService.gerarRelatorioCliente();
 		} catch (RuntimeException e) {
 			FacesUtil.mensagemErro(e.getMessage());
 		}

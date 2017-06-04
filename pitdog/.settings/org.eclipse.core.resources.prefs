@@ -2,6 +2,7 @@ eclipse.preferences.version=1
 encoding//src/infra/br/com/pitdog/infraestrutura/cep/DadosWebService.java=UTF-8
 encoding//src/infra/br/com/pitdog/infraestrutura/cep/WebServiceCep.java=UTF-8
 encoding//src/main/java=UTF-8
+encoding//src/main/java/br/com/pitdog/relatorios/clienteReport.jrxml=UTF-8
 encoding//src/main/java/br/com/pitdog/relatorios/itensVendasPorPeriodo.jrxml=UTF-8
 encoding//src/main/java/br/com/pitdog/relatorios/pedidoReport.jrxml=UTF-8
 encoding//src/main/java/br/com/pitdog/relatorios/vendasPorPeriodoReport.jrxml=UTF-8

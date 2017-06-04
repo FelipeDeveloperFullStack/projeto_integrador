@@ -57,7 +57,7 @@
 			
 			<br/>
 			
-			<h:form>
+			<h:form target="_blank">
 				<p:panel header="Relatório de compras vs vendas">
 					<fieldset>
 						<legend>Período da consulta</legend>
@@ -73,13 +73,11 @@
 		
 			<br/>
 			
-			<h:form>
+			<h:form target="_blank">
 				<p:panel header="Relatório de clientes">
 					<fieldset>
 						<h:panelGrid columns="3">
-							<p:calendar showOn="button" pattern="dd/MM/yyyy" mask="true" value="#{relatorioController.dataInicial}"/>
-							<p:calendar showOn="button" pattern="dd/MM/yyyy" mask="true" value="#{relatorioController.dataFinal}"/>
-							<p:commandButton value="Gerar relatório" icon="ui-icon-print"/>
+							<p:commandButton value="Gerar relatório" icon="ui-icon-print" actionListener="#{relatorioController.gerarRelatorioCliente}" ajax="false" update=":msgGlobal" />
 						</h:panelGrid>
 					</fieldset>
 				</p:panel>

@@ -1,10 +1,13 @@
 package br.com.pitdog.service.global;
 
+import java.util.HashMap;
 import java.util.List;
 
 import br.com.pitdog.model.global.Cliente;
 import br.com.pitdog.model.type.Situacao;
 import br.com.sysge.infraestrutura.dao.GenericDaoImpl;
+import br.com.sysge.infraestrutura.reports.ReportFactory;
+import br.com.sysge.infraestrutura.reports.TiposRelatorio;
 
 public class ClienteService extends GenericDaoImpl<Cliente, Long> {
 
@@ -51,6 +54,12 @@ public class ClienteService extends GenericDaoImpl<Cliente, Long> {
 			cliente.setSituacao(Situacao.ATIVO);
 		}
 		return cliente;
+	}
+	
+	public void gerarRelatorioCliente(){
+		ReportFactory reportFactory = new ReportFactory("clienteReport.jasper",
+				new HashMap<String, Object>(), TiposRelatorio.PDF, super.findAll());
+		reportFactory.getReportStream();
 	}
 
 }
