@@ -18,6 +18,10 @@ public class ReportFactory {
 	private TiposRelatorio tipoRelatorio;
 	
 	private List<?> list;
+	
+	public ReportFactory(){
+		super();
+	}
 
 	public ReportFactory(String ReportName, Map<String, Object> params, TiposRelatorio tipoRelatorio, List<?> list) {
 		this.reportName = ReportName;
@@ -52,12 +56,16 @@ public class ReportFactory {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		
 		HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
-		session.setAttribute("params", params);
-		session.setAttribute("list", list);
-		session.setAttribute("reportName", reportName);
-		
-		redirect("/ReportServlet");
-
+		if(params == null && list == null && reportName == null){
+			throw new RuntimeException("Nenhum registro encontrado para geração do relatório, tente novamente!");
+		}else{
+			session.setAttribute("params", params);
+			session.setAttribute("list", list);
+			session.setAttribute("reportName", reportName);
+			
+			redirect("/ReportServlet");
 		}
+
+	}
 	
 }

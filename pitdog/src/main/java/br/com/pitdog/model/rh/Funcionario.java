@@ -49,5 +49,10 @@ public class Funcionario extends GenericDomain{
 		this.situacao = situacao;
 	}
 
+	@Override
+	public String toString() {
+		return "[nome=" + nome + ", funcao=" + funcao + ", situacao=" + situacao + "]";
+	}
+
 	
 }

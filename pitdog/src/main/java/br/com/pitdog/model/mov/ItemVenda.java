@@ -164,5 +164,15 @@ public class ItemVenda extends GenericDomain implements Cloneable{
 			throw new RuntimeException(e);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "[numero=" + numero + ", produto=" + produto + ", venda=" + venda + ", quantidade="
+				+ quantidade + ", desconto=" + desconto + ", valorUnitario=" + valorUnitario + ", valorTotal="
+				+ valorTotal + ", valorLiquido=" + valorLiquido + ", insumosAdicionais=" + insumosAdicionais
+				+ ", insumosRemovidos=" + insumosRemovidos + "]";
+	}
+	
+	
 	
 }

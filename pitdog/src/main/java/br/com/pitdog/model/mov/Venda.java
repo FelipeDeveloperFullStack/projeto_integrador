@@ -122,6 +122,16 @@ public class Venda extends GenericDomain{
 			throw new RuntimeException("Adicione ao menos um item para a venda!");
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "[numero=" + numero + ", status=" + status + ", data=" + data + ", valorLiquido=" + valorLiquido
+				+ ", balconista=" + balconista + ", cliente=" + cliente + ", itens=" + itens + "]";
+	}
+
+	
+	
+	
 	
 	
 }

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-06-04T17:22:03 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="vendasPorPeriodoReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c762067b-0139-4e17-9a84-ca1b9c28e5eb">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="dataInicial" class="java.util.Date"/>
+	<parameter name="dataFinal" class="java.util.Date"/>
+	<parameter name="balconista" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="balconista" class="br.com.pitdog.model.rh.Funcionario">
+		<fieldDescription><![CDATA[balconista]]></fieldDescription>
+	</field>
+	<field name="cliente" class="br.com.pitdog.model.global.Cliente">
+		<fieldDescription><![CDATA[cliente]]></fieldDescription>
+	</field>
+	<field name="valorLiquido" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[valorLiquido]]></fieldDescription>
+	</field>
+	<field name="data" class="java.util.Date">
+		<fieldDescription><![CDATA[data]]></fieldDescription>
+	</field>
+	<field name="numero" class="java.lang.Integer">
+		<fieldDescription><![CDATA[numero]]></fieldDescription>
+	</field>
+	<field name="status" class="br.com.pitdog.model.mov.type.StatusVenda">
+		<fieldDescription><![CDATA[status]]></fieldDescription>
+	</field>
+	<field name="itens" class="java.util.List">
+		<fieldDescription><![CDATA[itens]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="65" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="1" width="360" height="30" uuid="4a69d801-3696-46ea-9013-1991869c8ddb"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="Arial" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Relatório de vendas por período]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="363" y="1" width="50" height="20" uuid="dd1546c1-efc5-4562-b7e6-3786ec53cea4"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Período de]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="33" width="59" height="20" uuid="5eb15a9b-b848-4354-acbe-6dccce902b17"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Balconista:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="62" width="559" height="1" forecolor="#9E9E9E" uuid="8180c9ed-7a6b-4bdc-8527-0afbead7fd7a"/>
+			</line>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="415" y="1" width="55" height="20" uuid="e0f6e6f4-bc38-4cce-b4a5-7636a0ed2ef3">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$P{dataInicial}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="482" y="1" width="87" height="20" uuid="22d3fb20-43a6-4fd7-a542-ca73ce244ed1"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$P{dataFinal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="470" y="1" width="12" height="20" uuid="c74c5f84-c26b-4dd0-9922-b8ddac589df5"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[a]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="415" y="21" width="100" height="15" uuid="9e477fa7-66bd-48ec-903e-4b1f0a4709fb"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="363" y="21" width="50" height="15" uuid="62bb1009-2865-40f4-9b22-00c6f7a18d22"/>
+				<textElement textAlignment="Right" verticalAlignment="Top"/>
+				<text><![CDATA[Emitido em ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="56" y="33" width="300" height="20" uuid="2365c9bc-86b7-45d4-8c7e-b25d14f57e2f">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{balconista}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="50" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<rectangle>
+				<reportElement x="0" y="1" width="558" height="17" backcolor="#EDEDED" uuid="e39a275b-aa41-401f-97a6-2beab6791c02"/>
+				<graphicElement>
+					<pen lineWidth="0.0" lineColor="#FFFFFF"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="36" height="18" forecolor="#3200FA" uuid="425a1054-7387-403e-b751-7739cd5a5282"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Venda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="81" y="0" width="69" height="18" forecolor="#3200FA" uuid="00bff7d8-974e-4f23-8552-477d91a652a0"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="194" y="0" width="45" height="18" forecolor="#3200FA" uuid="b4f75e58-50ca-4bcd-94da-5e213b7998af"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="438" y="0" width="45" height="18" forecolor="#3200FA" uuid="2c8a9a89-9069-4d6c-be82-1d5455c3d1a1"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="0" y="34" width="559" height="16" uuid="22a4c635-b0d3-4781-b50c-44b601605a3a"/>
+				<parametersMapExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}]]></parametersMapExpression>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{itens})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["br/com/pitdog/relatorios/itensVendasPorPeriodo.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="483" y="0" width="45" height="18" forecolor="#3200FA" uuid="cc526277-3603-4f4d-8353-7889eef97023"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="19" width="81" height="15" uuid="32c52151-c2a5-41f8-9161-a85fbc980453">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["00"+$F{numero}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="81" y="19" width="113" height="15" uuid="6b6c5941-d9c1-49fd-93e8-1ae984f61e9f"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{data}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="194" y="19" width="45" height="15" uuid="c7f9f6f5-1557-4f44-8bbe-fb9301a2e7bf"/>
+				<textElement textAlignment="Left">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["00"+$F{cliente}.getId()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="240" y="19" width="198" height="15" uuid="20ab2ece-d94a-4409-b86b-210d9e09cc4a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cliente}.getNomeDaPessoaFisica()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="438" y="19" width="44" height="15" uuid="d846884d-eaf0-4ae4-8403-a85ad7a622a4"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorLiquido}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="483" y="19" width="79" height="15" uuid="9998d6f5-4880-43ec-a64a-3de8539e3356"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{status}.getDescicao()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="32">
+			<textField>
+				<reportElement x="357" y="2" width="100" height="30" uuid="aca15eda-34ee-4051-abb3-b84b7ef415c9"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="458" y="2" width="100" height="30" uuid="839b12d3-11e2-4308-8ad8-c8964aac8933"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[" de " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
