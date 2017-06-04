@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.persistence.Query;
 
 import br.com.pitdog.model.estoque.Composicao;
+import br.com.pitdog.model.global.Cliente;
 import br.com.pitdog.model.mov.ItemVenda;
 import br.com.pitdog.model.mov.InsumoAdicional;
 import br.com.pitdog.model.mov.Venda;
@@ -200,6 +201,26 @@ public class VendaService extends GenericDaoImpl<Venda, Long>{
 			}
 		}
 		return statusVenda;
+	}
+	
+	public Long quantidadeComprasPorCliente(Cliente cliente){
+		Query query =  getEntityManager().createQuery("SELECT count(v.cliente) FROM "+getEntityClass().getSimpleName() + " v "
+				+ "WHERE v.cliente = :cliente");
+		query.setParameter("cliente", cliente);
+		return (Long) query.getSingleResult();
+	}
+	
+	public Long quantidadeTotalComprasCliente(){
+		Query query =  getEntityManager().createQuery("SELECT count(v.cliente) FROM "+getEntityClass().getSimpleName() + " v ");
+		return (Long) query.getSingleResult();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Venda> buscarVendasPorCliente(Cliente cliente){
+		Query query =  getEntityManager().createQuery("SELECT v FROM "+getEntityClass().getSimpleName() + " v "
+				+ "WHERE v.cliente = :cliente");
+		query.setParameter("cliente", cliente);
+		return query.getResultList();
 	}
 	
 	

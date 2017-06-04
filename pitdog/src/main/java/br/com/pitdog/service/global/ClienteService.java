@@ -12,7 +12,7 @@ import br.com.sysge.infraestrutura.reports.TiposRelatorio;
 public class ClienteService extends GenericDaoImpl<Cliente, Long> {
 
 	private static final long serialVersionUID = -3438513129762783683L;
-
+	
 	public Cliente salvar(Cliente cliente) {
 		try {
 			if (cliente.getNomeDaPessoaFisica().isEmpty()) {
@@ -61,5 +61,7 @@ public class ClienteService extends GenericDaoImpl<Cliente, Long> {
 				new HashMap<String, Object>(), TiposRelatorio.PDF, super.findAll());
 		reportFactory.getReportStream();
 	}
+	
+	
 
 }
