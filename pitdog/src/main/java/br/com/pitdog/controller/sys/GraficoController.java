@@ -53,7 +53,7 @@ public class GraficoController implements Serializable {
 
 	private void createAnimatedModels() {
 		barChartModel = initBarModel();
-		barChartModel.setTitle("Gráfico mensal de quantidade compras realizados por clientes");
+		barChartModel.setTitle("Gráfico mensal de vendas");
 		barChartModel.setAnimate(true);
 		barChartModel.setLegendPosition("ne");
 		Axis yAxis = barChartModel.getAxis(AxisType.Y);

@@ -13,12 +13,20 @@
 		<h:form id="formGeralPedido" target="_blank">
 			<p:panel header="Listagem de Pedido/Entrada">
 
-				<h:panelGrid columns="5" id="panelPesquisa">
+				<h:panelGrid columns="6" id="panelPesquisa">
 					
 					<h:panelGrid columns="2">
 						<h:panelGrid columns="1">
-							<p:outputLabel value="Data" />
-							<p:calendar value="#{pedidoController.data}"
+							<p:outputLabel value="Data Inicial" />
+							<p:calendar value="#{pedidoController.dataInicial}"
+								pattern="dd/MM/yyyy" mask="true" locale="pt" showOn="button" />
+						</h:panelGrid>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:panelGrid columns="1">
+							<p:outputLabel value="Data Final" />
+							<p:calendar value="#{pedidoController.dataFinal}"
 								pattern="dd/MM/yyyy" mask="true" locale="pt" showOn="button" />
 						</h:panelGrid>
 					</h:panelGrid>
@@ -47,7 +55,7 @@
 						<h:panelGrid columns="1">
 							<p:outputLabel value="." style="color: white;"/>
 								<p:commandButton id="btnPesquisarFun" 
-									icon="ui-icon-search" update="tablePerfilPedido"
+									icon="ui-icon-search" update=":msgGlobal tablePerfilPedido"
 									actionListener="#{pedidoController.pesquisar}" />
 						</h:panelGrid>
 					</h:panelGrid>				

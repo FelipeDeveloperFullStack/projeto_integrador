@@ -32,7 +32,8 @@ public class PedidoController implements Serializable{
 	
 	private Pedido pedido;
 	
-	private Date data;
+	private Date dataInicial;
+	private Date dataFinal;
 	
 	private List<ItemPedido> itensPedidos;
 	
@@ -88,7 +89,11 @@ public class PedidoController implements Serializable{
 
 	public void pesquisar() {
 		this.pedidos = new ArrayList<Pedido>();
-		this.pedidos = pedidoService.pesquisarPedido(data, pedido);
+		try {
+			this.pedidos = pedidoService.pesquisarPedido(dataInicial, dataFinal, pedido);
+		} catch (RuntimeException e) {
+			FacesUtil.mensagemWarn(e.getMessage());
+		}
 	}
 
 	public void fecharDialogs() {
@@ -145,7 +150,7 @@ public class PedidoController implements Serializable{
 	}
 
 	public List<Produto> getProdutos() {
-		return produtoService.findBySituation(Situacao.ATIVO);
+		return produtoService.procurarProdutoSemComposicao();
 	}
 
 	public List<Distribuidor> getDistribuidores() {
@@ -168,12 +173,22 @@ public class PedidoController implements Serializable{
 		this.itemPedido = itemPedido;
 	}
 
-	public Date getData() {
-		return data;
+	public Date getDataInicial() {
+		return dataInicial;
 	}
 
-	public void setData(Date data) {
-		this.data = data;
+	public void setDataInicial(Date dataInicial) {
+		this.dataInicial = dataInicial;
 	}
+
+	public Date getDataFinal() {
+		return dataFinal;
+	}
+
+	public void setDataFinal(Date dataFinal) {
+		this.dataFinal = dataFinal;
+	}
+
+	
 
 }

@@ -1,7 +1,9 @@
 package br.com.pitdog.service.estoque;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.persistence.Query;
 
 import br.com.pitdog.model.estoque.Produto;
@@ -12,6 +14,9 @@ import br.com.sysge.infraestrutura.dao.GenericDaoImpl;
 public class ProdutoService extends GenericDaoImpl<Produto, Long>{
 
 	private static final long serialVersionUID = 1704211895445872913L;
+	
+	@Inject
+	private ComposicaoService composicaoService;
 
 	public Produto salvar(Produto produto){
 		try {
@@ -73,6 +78,7 @@ public class ProdutoService extends GenericDaoImpl<Produto, Long>{
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Produto> pesquisarInsumos(String pesquisaInsumo) {
 		Query query = getEntityManager().createQuery("FROM " + getEntityClass().getSimpleName() + " p "
 				+ "WHERE p.descricaoProduto LIKE :descricaoProduto AND p.situacao = :situacao AND p.tipo = :tipo");
@@ -82,6 +88,16 @@ public class ProdutoService extends GenericDaoImpl<Produto, Long>{
 		query.setParameter("tipo", TipoProduto.INSUMO);
 		
 		return query.getResultList();
+	}
+	
+	public List<Produto> procurarProdutoSemComposicao(){
+		List<Produto> produtos = new ArrayList<Produto>();
+		for(Produto p : super.findBySituation(Situacao.ATIVO)){
+			if(composicaoService.procurarComposicoesPorProduto(p).isEmpty()){
+				produtos.add(p);
+			}
+		}
+		return produtos;
 	}
 	
 }

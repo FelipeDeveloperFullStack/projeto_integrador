@@ -50,5 +50,13 @@ public class ComposicaoService extends GenericDaoImpl<Composicao, Long>{
 		return query.getResultList();
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<Composicao> procurarComposicoesPorProduto(Produto produto){
+		Query query = getEntityManager().createQuery("SELECT c FROM "+getEntityClass().getSimpleName() + " c "
+				+ "WHERE c.produto = :produto");
+		query.setParameter("produto", produto);
+		return query.getResultList();
+	}
+	
 
 }

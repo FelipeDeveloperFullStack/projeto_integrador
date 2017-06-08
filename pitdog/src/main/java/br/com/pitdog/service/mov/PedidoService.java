@@ -90,27 +90,30 @@ public class PedidoService extends GenericDaoImpl<Pedido, Long>{
 		return pedido;
 	}
 	
-	public List<Pedido> pesquisarPedido(Date data, Pedido pedido){
+	public List<Pedido> pesquisarPedido(Date dataInicial, Date dataFinal, Pedido pedido){
 		if(pedido.getTipoPe() == TipoPE.ENTRADA){
-			return pesquisar(data, pedido, "dataEntrada");
+			return pesquisar(dataInicial,dataFinal, pedido, "dataEntrada");
 		}else{
-			return pesquisar(data, pedido, "dataPedido");
+			return pesquisar(dataInicial,dataFinal, pedido, "dataPedido");
 		}
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Pedido> pesquisar(Date data, Pedido pedido, String atributo){
+	public List<Pedido> pesquisar(Date dataInicial, Date dataFinal, Pedido pedido, String atributo){
 		Query query = null;
-		if(data == null){
+		if(dataInicial == null && dataFinal == null){
 			query = getEntityManager().createQuery("SELECT p FROM Pedido p "
 					+ "WHERE p.situacao = :situacao AND p.tipoPe = :tipoPe");
 			query.setParameter("situacao", pedido.getSituacao());
 			query.setParameter("tipoPe", pedido.getTipoPe());
-		}else{
+		}else if(dataInicial != null && dataFinal != null){
 			query = getEntityManager().createQuery("SELECT p FROM Pedido p "
-					+ "WHERE p."+atributo+" = :data AND p.situacao = :situacao");
-			query.setParameter("data", data);
+					+ "WHERE p."+atributo+" >= :dataInicial AND p."+atributo+" <= :dataFinal AND p.situacao = :situacao");
+			query.setParameter("dataInicial", dataInicial);
+			query.setParameter("dataFinal", dataFinal);
 			query.setParameter("situacao", pedido.getSituacao());
+		}else{
+			throw new RuntimeException("É necessário informar as duas data para realizar a pesquisa!");
 		}
 		return query.getResultList();
 			
