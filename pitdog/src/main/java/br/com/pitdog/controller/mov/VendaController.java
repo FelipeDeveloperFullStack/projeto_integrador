@@ -116,6 +116,10 @@ public class VendaController implements Serializable{
 				return;
 			}
 		}
+		for (int i = 0; i < venda.getItens().size(); i++) {
+			venda.getItens().get(i).setNumero(i);
+		}
+		venda = vendaService.save(venda);
 	}
 	
 	public void editarItem(int numero){

@@ -61,7 +61,8 @@
 					<p:row>
 						<p:column style="font-weight: bold;">Cliente: </p:column>
 						<p:inputText size="60" onkeyup="clienteKeyUp()" placeholder="Digite o nome de um cliente" id="infoCliente"
-						value="#{vendaController.nomeCliente}" />
+							value="#{vendaController.nomeCliente}" 
+							disabled="#{vendaController.naoPoderEditar}"/>
 						<p:outputLabel />
 					</p:row>
 					<p:row>
@@ -121,18 +122,25 @@
 							update="edicaoItem" />
 					</p:column>
 
-					<f:facet name="footer">
-						<p:outputLabel value="Produto: " />
-						<p:inputText id="inputPesquisaProduto" size="26" placeholder="Digite a descrição de um produto" onkeyup="produtoKeyUp()"/>
+					<f:facet name="footer" >
+						<p:outputLabel value="Produto: " rendered="#{!vendaController.naoPoderEditar}"/>
+						<p:inputText id="inputPesquisaProduto" size="26" 
+							placeholder="Digite a descrição de um produto" 
+							onkeyup="produtoKeyUp()"
+							rendered="#{!vendaController.naoPoderEditar}"/>
 					</f:facet>
 				</p:dataTable>
 
 				
 				
-				<h:panelGrid columns="2">
+				<h:panelGrid columns="3">
+					<p:button value="Imprimir" 
+							  onclick="window.open('compomNaoFiscalVenda?venda=#{vendaController.venda.id}', '_blank');"
+							  rendered="#{vendaController.naoPoderEditar}"></p:button>
 					<p:commandButton actionListener="#{vendaController.finalizar}"
 						update=":msgGlobal formVenda" value="Finalizar" 
-						disabled="#{vendaController.naoPoderEditar}"/>
+						disabled="#{vendaController.naoPoderEditar}"
+						oncomplete="window.open('compomNaoFiscalVenda?venda=#{vendaController.venda.id}', '_blank');"/>
 					<p:commandButton actionListener="#{vendaController.cancelar}"
 						update="formVenda" value="Cancelar" 
 						disabled="#{vendaController.naoPoderEditar}"/>
