@@ -35,7 +35,10 @@ public class EstoqueMinimoIdealController implements Serializable{
 	
 	private List<EstoqueMinimoIdeal> listaEstoqueMinimo;
 	
+	@SuppressWarnings("unused")
 	private List<EstoqueIdeal> listaEstoqueMinimoIdealPrincipal;
+	
+	private EstoqueIdeal estoqueIdeal;
 	
 	private EstoqueMinimoIdeal estoqueMinimoIdeal;
 	
@@ -62,6 +65,7 @@ public class EstoqueMinimoIdealController implements Serializable{
 		this.estoqueMinimoIdeal.setEstoqueIdeal(new EstoqueIdeal());
 		this.listaEstoqueMinimo = new ArrayList<EstoqueMinimoIdeal>();
 		this.listaEstoqueMinimoIdealPrincipal = new ArrayList<EstoqueIdeal>();
+		this.estoqueIdeal = new EstoqueIdeal();
 	}
 
 	public List<EstoqueMinimoIdeal> getListaEstoqueMinimo() {
@@ -69,10 +73,16 @@ public class EstoqueMinimoIdealController implements Serializable{
 	}
 
 	public List<EstoqueIdeal> getListaEstoqueMinimoIdealPrincipal() {
-		if(listaEstoqueMinimoIdealPrincipal.isEmpty()){
+		if(listarEstoqueMinimoIdealAtivos().isEmpty()){
+			for(String diaSemana : getDiasSemana()){
+				this.estoqueMinimoIdeal.getEstoqueIdeal().setDiaSemana(diaSemana);
+				converterDiaSemanaEmData(this.estoqueMinimoIdeal.getEstoqueIdeal().getDiaSemana());
+				estoqueIdealService.salvar(estoqueMinimoIdeal.getEstoqueIdeal());
+			}
+			return listarEstoqueMinimoIdealAtivos();
+		}else{
 			return listarEstoqueMinimoIdealAtivos();
 		}
-		return listaEstoqueMinimoIdealPrincipal;
 	}
 
 	public List<Produto> getProdutos() {
@@ -112,8 +122,9 @@ public class EstoqueMinimoIdealController implements Serializable{
 			FacesUtil.mensagemWarn("A quantidade não pode ser igual a ZERO");
 		}else{
 			this.listaEstoqueMinimo.add(estoqueMinimoIdeal);
+			this.estoqueIdeal = estoqueMinimoIdeal.getEstoqueIdeal();
 			this.estoqueMinimoIdeal = new EstoqueMinimoIdeal();
-			this.estoqueMinimoIdeal.setEstoqueIdeal(new EstoqueIdeal());
+			this.estoqueMinimoIdeal.setEstoqueIdeal(this.estoqueIdeal);
 		}
 	}
 	
@@ -126,7 +137,8 @@ public class EstoqueMinimoIdealController implements Serializable{
 			}
 		}else{
 			estoqueMinimoService.remove(estoqueMinimoIdeal.getId());
-			this.listaEstoqueMinimo = estoqueMinimoService.findByListProperty(estoqueMinimoIdeal.getProduto().getId(), "produto.id");
+			this.listaEstoqueMinimo = estoqueMinimoService.findByListProperty(estoqueMinimoIdeal.getEstoqueIdeal().getId(), "estoqueIdeal.id");
+			this.estoqueIdeal = estoqueMinimoIdeal.getEstoqueIdeal();
 		}
 	}
 	
@@ -201,21 +213,24 @@ public class EstoqueMinimoIdealController implements Serializable{
 	
 	public void setarEstoqueIdeal(EstoqueIdeal estoqueIdeal){
 		this.listaEstoqueMinimo = estoqueMinimoService.findByListProperty(estoqueIdeal.getId(), "estoqueIdeal.id");
-		for(EstoqueMinimoIdeal emi : listaEstoqueMinimo){
-			this.estoqueMinimoIdeal.setEstoqueIdeal(emi.getEstoqueIdeal());
-		}
+		this.estoqueMinimoIdeal.setEstoqueIdeal(estoqueIdeal);
+		/*for(EstoqueMinimoIdeal emi : listaEstoqueMinimo){
+		}*/
+		/*if(listaEstoqueMinimo.isEmpty()){
+			this.estoqueMinimoIdeal.setEstoqueIdeal(estoqueIdeal);
+		}*/
 	}
 	
 	public void salvar(){
 		try {
-			converterDiaSemanaEmData(this.estoqueMinimoIdeal.getEstoqueIdeal().getDiaSemana());
-			estoqueMinimoIdeal.setEstoqueIdeal(estoqueIdealService.salvar(estoqueMinimoIdeal.getEstoqueIdeal()));
-			for(EstoqueMinimoIdeal es : listaEstoqueMinimo){
-				es.setEstoqueIdeal(estoqueMinimoIdeal.getEstoqueIdeal());
-				estoqueMinimoService.save(es);
-			}
-			fecharDialogs();
-			listaEstoqueMinimoIdealPrincipal = estoqueIdealService.findBySituation(estoqueMinimoIdeal.getEstoqueIdeal().getSituacao());
+				converterDiaSemanaEmData(this.estoqueIdeal.getDiaSemana());
+				estoqueMinimoIdeal.setEstoqueIdeal(estoqueIdealService.salvar(this.estoqueIdeal));
+				for(EstoqueMinimoIdeal es : listaEstoqueMinimo){
+					es.setEstoqueIdeal(this.estoqueIdeal);
+					estoqueMinimoService.save(es);
+				}
+				fecharDialogs();
+				listaEstoqueMinimoIdealPrincipal = estoqueIdealService.findBySituation(this.estoqueIdeal.getSituacao());
 		} catch (RuntimeException e) {
 			FacesUtil.mensagemErro(e.getMessage());
 		}

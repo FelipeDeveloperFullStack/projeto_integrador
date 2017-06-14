@@ -1,5 +1,6 @@
 package br.com.pitdog.service.mov;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -223,5 +224,10 @@ public class VendaService extends GenericDaoImpl<Venda, Long>{
 		return query.getResultList();
 	}
 	
+	public Long quantidadeVendaPorMes(LocalDate dataVenda){
+		Query query = getEntityManager().createNativeQuery("SELECT count(v.status) "
+				+ "FROM tbl_venda as v where month(v.data) = "+dataVenda.getMonthValue());
+		return (Long) query.getSingleResult();
+	}
 	
 }

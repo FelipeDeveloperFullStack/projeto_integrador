@@ -19,7 +19,6 @@ import org.primefaces.model.chart.ChartSeries;
 
 import br.com.pitdog.model.global.Cliente;
 import br.com.pitdog.model.mov.Venda;
-import br.com.pitdog.model.type.Situacao;
 import br.com.pitdog.service.global.ClienteService;
 import br.com.pitdog.service.mov.VendaService;
 import br.com.pitdog.util.DateUtil;

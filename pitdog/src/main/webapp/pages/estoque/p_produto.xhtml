@@ -57,7 +57,9 @@
 					</p:column>
 					
 					<p:column headerText="Estoque" width="50" style="text-align:center;">
-						<p:outputLabel value="#{p.quantidadeEstoque}" />
+						<p:outputLabel value="#{p.quantidadeEstoque}">
+							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+						</p:outputLabel>
 					</p:column>
 
 					<p:column headerText="Situação" width="50"
@@ -115,7 +117,7 @@
 					</h:panelGrid>
 				</h:panelGrid>
 
-				<h:panelGrid columns="3">
+				<h:panelGrid columns="4">
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Insumos" />
 						<p:selectOneMenu id="tipo_produto"
@@ -128,7 +130,19 @@
 
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Quantidade" />
-						<p:inputNumber value="#{produtoController.composicao.quantidade}" minValue="1.0"/>
+						<p:inputText value="#{produtoController.composicao.quantidade}">
+							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+						</p:inputText>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Unid. Medida" />
+						<p:selectOneMenu
+							value="#{produtoController.composicao.unidadeMedida}"
+							converter="omnifaces.SelectItemsConverter">
+							<f:selectItems var="p" value="#{produtoController.unidadeMedidas}"
+								itemLabel="#{p.unidadeMedida}" itemValue="#{p}" />
+						</p:selectOneMenu>
 					</h:panelGrid>
 
 					<h:panelGrid columns="1">
@@ -153,7 +167,13 @@
 						</p:column>
 
 						<p:column headerText="Qtde" width="50" style="text-align:center;">
-							<p:outputLabel value="#{c.quantidade}" />
+							<p:outputLabel value="#{c.quantidade}">
+								<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+							</p:outputLabel>
+						</p:column>
+						
+						<p:column headerText="Unid. Medida" width="50" style="text-align:center;">
+							<p:outputLabel value="#{c.unidadeMedida.unidadeMedida}"/>
 						</p:column>
 
 						<p:column headerText="Fabricante">
@@ -185,7 +205,7 @@
 							actionListener="#{produtoController.salvarComposicao}"
 							update=":msgGlobal :formGeralProduto:tableProduto" />
 						<p:commandButton value="Cancelar" icon="ui-icon-disk"
-							oncomplete="PF('dialogComposicao').hide();"
+							actionListener="#{produtoController.cancelar}"
 							update=":formGeralProduto:tableProduto" />
 					</h:panelGrid>
 				</h:panelGrid>
@@ -264,9 +284,11 @@
 						</p:selectOneMenu>
 					</h:panelGrid>
 					
-					<h:panelGrid columns="1">
+					<h:panelGrid columns="1" rendered="#{produtoController.verificarSeExisteComposicaoProduto}">
 						<p:outputLabel value="Quantidade estoque" />
-						<p:inputText value="#{produtoController.produto.quantidadeEstoque}" readonly="true"/>
+						<p:inputText value="#{produtoController.produto.quantidadeEstoque}">
+							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+						</p:inputText>
 					</h:panelGrid>
 
 				</h:panelGrid>
@@ -278,7 +300,7 @@
 							update=":msgGlobal :formEditarProduto :formGeralProduto:tableProduto" />
 						<p:commandButton id="btnEditarProdutoCancelar" value="Cancelar"
 							icon="ui-icon-close"
-							oncomplete="PF('dialogEditarProduto').hide();"
+							actionListener="#{produtoController.cancelar}"
 							update=":formGeralProduto:tableProduto" />
 					</h:panelGrid>
 				</h:panelGrid>

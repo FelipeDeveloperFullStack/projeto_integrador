@@ -79,6 +79,15 @@ public class RelatorioController implements Serializable{
 			FacesUtil.mensagemErro(e.getMessage());
 		}
 	}
+	
+	public void gerarRelatorioCompraVSVenda(){
+		try {
+			
+		}catch (RuntimeException e) {
+			FacesUtil.mensagemErro(e.getMessage());
+		}
+	}
+	
 
 	public Cliente getCliente() {
 		return cliente;

@@ -46,10 +46,6 @@
 						<p:outputLabel value="#{c.categoria}" />
 					</p:column>
 
-					<p:column headerText="Sigla" width="160" style="text-align:center;">
-						<p:outputLabel value="#{c.sigla}" style="color: blue;" />
-					</p:column>
-
 					<p:column headerText="Situação" width="50"
 						style="text-align:center;">
 						<p:outputLabel value="#{c.situacao.situacao}" />
@@ -94,11 +90,6 @@
 						<p:outputLabel value="Categoria" />
 						<p:inputText style="width: 385px;"
 							value="#{categoriaController.categoria.categoria}" />
-					</h:panelGrid>
-
-					<h:panelGrid columns="1">
-						<p:outputLabel value="Sigla" />
-						<p:inputText value="#{categoriaController.categoria.sigla}" />
 					</h:panelGrid>
 				</h:panelGrid>
 
@@ -146,10 +137,6 @@
 							value="#{categoriaController.categoria.categoria}" />
 					</h:panelGrid>
 
-					<h:panelGrid columns="1">
-						<p:outputLabel value="Sigla" />
-						<p:inputText value="#{categoriaController.categoria.sigla}" />
-					</h:panelGrid>
 				</h:panelGrid>
 
 				<h:panelGrid id="panelBotoesNovaCategoria" columns="2">

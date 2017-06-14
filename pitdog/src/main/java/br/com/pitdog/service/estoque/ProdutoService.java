@@ -100,4 +100,21 @@ public class ProdutoService extends GenericDaoImpl<Produto, Long>{
 		return produtos;
 	}
 	
+	public List<Produto> procurarProdutoSemComposicao(Produto produto){
+		List<Produto> produtos = new ArrayList<Produto>();
+			if(composicaoService.procurarComposicoesPorProduto(produto).isEmpty()){
+				produtos.add(produto);
+			}
+		return produtos;
+	}
+	
+	public boolean isVerificarSeExisteComposicaoProduto(Produto produto){
+		if(produto.getId() != null){
+			if(composicaoService.procurarComposicoesPorProduto(produto).isEmpty()){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }

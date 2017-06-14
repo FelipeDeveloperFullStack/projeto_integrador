@@ -2,10 +2,13 @@ package br.com.pitdog.model.estoque;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import br.com.pitdog.model.mov.type.UnidadeMedida;
 import br.com.sysge.infraestrutura.dao.GenericDomain;
 
 @Entity
@@ -22,6 +25,9 @@ public class Composicao extends GenericDomain {
 
 	@Column(name = "comp_qtde")
 	private double quantidade;
+	
+	@Enumerated(EnumType.STRING)
+	private UnidadeMedida unidadeMedida;
 
 	public double getQuantidade() {
 		return quantidade;
@@ -47,4 +53,13 @@ public class Composicao extends GenericDomain {
 		this.insumo = insumo;
 	}
 
+	public UnidadeMedida getUnidadeMedida() {
+		return unidadeMedida;
+	}
+
+	public void setUnidadeMedida(UnidadeMedida unidadeMedida) {
+		this.unidadeMedida = unidadeMedida;
+	}
+
+	
 }

@@ -45,17 +45,11 @@
 						<p:outputLabel value="#{f.funcao}" />
 					</p:column>
 
-					<p:column headerText="Comissão %" width="75" style="text-align:center;">
-						<p:outputLabel value="#{f.comissao}">
-							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
-						</p:outputLabel>
-					</p:column>
-					
 					<p:column headerText="Situação" width="50" style="text-align:center;">
 						<p:outputLabel value="#{f.situacao.situacao}" />
 					</p:column>
 
-					<p:column width="15">
+					<p:column width="15" style="text-align:center;">
 						<p:commandButton id="btnEditar" icon="ui-icon-pencil"
 							oncomplete="PF('dialogEditarFuncao').show()"
 							actionListener="#{funcaoController.setarFuncao(f)}"
@@ -95,13 +89,6 @@
 					</h:panelGrid>
 					
 					<h:panelGrid columns="1">
-						<p:outputLabel value="Comissão"/>
-						<p:inputNumber value="#{funcaoController.funcao.comissao}" 
-									   symbolPosition="s" symbol=" %" maxValue="100.0" minValue="0.0"
-									    decimalSeparator="," thousandSeparator="."/>
-					</h:panelGrid>
-				
-					<h:panelGrid columns="1">
 						<p:outputLabel value="Situação" />
 						<p:selectOneMenu value="#{funcaoController.funcao.situacao}">
 							<f:selectItems var="s" value="#{funcaoController.situacoes}"
@@ -137,13 +124,6 @@
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Função"/>
 						<p:inputText value="#{funcaoController.funcao.funcao}" style="width: 350px;"/>
-					</h:panelGrid>
-					
-					<h:panelGrid columns="1">
-						<p:outputLabel value="Comissão"/>
-						<p:inputNumber value="#{funcaoController.funcao.comissao}" 
-									   symbolPosition="s" symbol=" %" maxValue="100.0" minValue="0.0"
-									    decimalSeparator="," thousandSeparator="."/>
 					</h:panelGrid>
 					
 					<h:panelGrid columns="2" id="panelBotoesNovoFuncao">

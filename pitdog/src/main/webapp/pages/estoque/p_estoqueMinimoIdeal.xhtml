@@ -16,14 +16,7 @@
 		<h:form id="formGeralEstoqueIdeal">
 			<p:panel header="Listagem de Estoque Mínimo Ideal">
 
-				<h:panelGrid columns="6" id="panelPesquisa">
-					<p:calendar id="txtEstoqueIdealPesquisa" style="width: 300px;"
-						value="#{estoqueMinimoIdealController.diaSemana}" showOn="button"
-						locale="pt" pattern="dd/MM/yyyy" mask="true"/>
-					<p:selectOneMenu value="#{estoqueMinimoIdealController.estoqueMinimoIdeal.estoqueIdeal.situacao}">
-						<f:selectItems var="s" value="#{estoqueMinimoIdealController.situacoes}"
-							itemLabel="#{s.situacao}" itemValue="#{s}" />
-					</p:selectOneMenu>
+				<!-- <h:panelGrid columns="6" id="panelPesquisa">
 					<p:commandButton id="btnPesquisarEstoqueIdeal" value="Pesquisar"
 						icon="ui-icon-search" update=":msgGlobal formGeralEstoqueIdeal"
 						actionListener="#{estoqueMinimoIdealController.pesquisar}" />
@@ -32,7 +25,7 @@
 						        Carregando! Aguarde...<br />
 						<p:graphicImage library="img" name="loading.gif" />
 					</p:blockUI>
-				</h:panelGrid>
+				</h:panelGrid> -->
 
 				<p:dataTable id="tableEstoqueIdeal" var="e" paginator="true"
 					paginatorPosition="bottom" value="#{estoqueMinimoIdealController.listaEstoqueMinimoIdealPrincipal}"
@@ -47,18 +40,6 @@
 					<p:column headerText="Dia da semana">
 						<p:outputLabel value="#{e.diaSemana}" />
 					</p:column>
-					
-					<p:column headerText="Data" style="text-align:center;">
-						<p:outputLabel value="#{e.dataSemana}">
-							<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"
-								timeZone="GMT-2" type="both" />
-						</p:outputLabel>
-					</p:column>
-
-					<p:column headerText="Situação" width="50"
-						style="text-align:center;">
-						<p:outputLabel value="#{e.situacao.situacao}" />
-					</p:column>
 
 					<p:column width="40">
 						<p:commandButton id="btnEditar" icon="ui-icon-pencil"
@@ -69,15 +50,6 @@
 						<p:tooltip value="Cliquei aqui para editar!" for="btnEditar"
 							position="left" />
 					</p:column>
-
-					<f:facet name="footer">
-						<p:commandButton value="Novo Estoque Mínimo"
-							actionListener="#{estoqueMinimoIdealController.novo}"
-							icon="ui-icon-circle-plus"
-							oncomplete="PF('dialogNovoEstoqueIdeal').show();"
-							update=":msgGlobal :formNovoEstoqueIdeal" />
-					</f:facet>
-
 				</p:dataTable>
 			</p:panel>
 
@@ -98,9 +70,7 @@
 				<h:panelGrid columns="2">
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Dia da semana" />
-						<p:selectOneMenu value="#{estoqueMinimoIdealController.estoqueMinimoIdeal.estoqueIdeal.diaSemana}">
-							<f:selectItems var="ds" value="#{estoqueMinimoIdealController.diasSemana}" itemLabel="#{ds}" itemValue="#{ds}"/>
-						</p:selectOneMenu>
+						<p:outputLabel value="#{estoqueMinimoIdealController.estoqueMinimoIdeal.estoqueIdeal.diaSemana}"/>
 					</h:panelGrid>
 					
 				</h:panelGrid>

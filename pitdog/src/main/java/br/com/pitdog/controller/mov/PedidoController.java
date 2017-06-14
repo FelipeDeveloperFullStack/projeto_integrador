@@ -95,7 +95,7 @@ public class PedidoController implements Serializable{
 			FacesUtil.mensagemWarn(e.getMessage());
 		}
 	}
-
+	
 	public void fecharDialogs() {
 		RequestContextUtil.execute("PF('dialogNovoPedido').hide();");
 		RequestContextUtil.execute("PF('dialogEditarPedido').hide();");
@@ -105,6 +105,15 @@ public class PedidoController implements Serializable{
 		try {
 			this.itensPedidos.add(itemPedidoService.consistir(pedido, itemPedidoService.consistir(itemPedido, itensPedidos)));
 			this.itemPedido = new ItemPedido();
+		} catch (RuntimeException e) {
+			e.getStackTrace();
+			FacesUtil.mensagemWarn(e.getMessage());
+		}
+	}
+	
+	public void gerarPedidoProdutos(){
+		try {
+			this.itensPedidos = itemPedidoService.gerarPedidoProdutos(pedido);
 		} catch (RuntimeException e) {
 			e.getStackTrace();
 			FacesUtil.mensagemWarn(e.getMessage());
@@ -127,10 +136,29 @@ public class PedidoController implements Serializable{
 			FacesUtil.mensagemErro(e.getMessage());
 		}
 	}
+	
+	public String getSomarValorTotal(){
+		this.itensPedidos = itemPedidoService.findByListProperty(pedido.getId(), "pedido.id");
+		return itemPedidoService.somarValorTotal(itensPedidos);
+	}
+	
+	public String somarTotal(Pedido pedido){
+		setarItensPedido(pedido);
+		return itemPedidoService.somarValorTotal(itensPedidos);
+	}
+	
+	public String getSomarValorDesconto(){
+		this.itensPedidos = itemPedidoService.findByListProperty(pedido.getId(), "pedido.id");
+		return itemPedidoService.somarValorDesconto(itensPedidos);
+	}
+	
+	private void setarItensPedido(Pedido pedido){
+		this.itensPedidos = itemPedidoService.findByListProperty(pedido.getId(), "pedido.id");
+	}
 
 	public void setarPedido(Pedido pedido) {
 		this.pedido = pedido;
-		this.itensPedidos = itemPedidoService.findByListProperty(pedido.getId(), "pedido.id");
+		setarItensPedido(this.pedido);
 	}
 
 	public Pedido getPedido() {

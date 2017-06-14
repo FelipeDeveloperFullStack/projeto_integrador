@@ -59,15 +59,6 @@
 									actionListener="#{pedidoController.pesquisar}" />
 						</h:panelGrid>
 					</h:panelGrid>				
-					
-					
-					<!-- <h:panelGrid columns="2">
-						<h:panelGrid columns="1">
-							<p:outputLabel value="." style="color: white;"/>
-							<p:commandButton value="Imprimir" actionListener="#{pedidoController.imprimirPedido}" 
-											 update=":msgGlobal" ajax="false"/>
-						</h:panelGrid>	
-					</h:panelGrid>	 -->		
 						
 					<p:focus context="panelPesquisa" />
 					<p:blockUI block="tablePerfilPedido" trigger="btnPesquisarFun">
@@ -104,6 +95,10 @@
 					<p:column headerText="Tipo" width="60" style="text-align:center;">
 						<p:outputLabel value="#{p.tipoPe.tipoPE}" />
 					</p:column>
+					
+					<p:column headerText="Total" width="60" style="text-align:center;">
+						<p:outputLabel value="#{pedidoController.somarTotal(p)}" />
+					</p:column>
 
 					<p:column width="115" style="text-align:center;">
 						<p:commandButton id="btnEditar" icon="ui-icon-pencil"
@@ -111,12 +106,9 @@
 							oncomplete="PF('dialogEditarPedido').show();"
 							update=":msgGlobal :formEditarPedido">
 						</p:commandButton>
-						<p:commandButton id="btnEnviarEmail" icon="ui-icon-mail-closed"/>
 						<p:commandButton id="btnGerarRelatorio" icon="ui-icon-print" actionListener="#{pedidoController.imprimir(p)}" 
 											 update=":msgGlobal" ajax="false"/>
 						<p:tooltip value="Cliquei aqui para editar!" for="btnEditar"
-							position="left" />
-						<p:tooltip value="Cliquei aqui enviar o pedido por email" for="btnEnviarEmail"
 							position="left" />
 						<p:tooltip value="Cliquei aqui gerar o relatório" for="btnGerarRelatorio"
 							position="left" />
@@ -161,12 +153,9 @@
 					
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Número nota fiscal" />
-						<p:inputText value="#{pedidoController.pedido.numeroNotaFiscal}" style="width: 470px;"/>
+						<p:inputText value="#{pedidoController.pedido.numeroNotaFiscal}" style="width: 300px;"/>
 					</h:panelGrid>
 
-				</h:panelGrid>
-
-				<h:panelGrid columns="2">
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Distribuidor" />
 						<p:selectOneMenu value="#{pedidoController.pedido.distribuidor}"
@@ -176,7 +165,9 @@
 								itemLabel="#{d.razaoSocial}" itemValue="#{d}" />
 						</p:selectOneMenu>
 					</h:panelGrid>
-					
+				</h:panelGrid>
+
+				<h:panelGrid columns="6">
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Produto / Insumo" />
 						<p:selectOneMenu value="#{pedidoController.itemPedido.produto}"
@@ -187,12 +178,12 @@
 								itemValue="#{p}" />
 						</p:selectOneMenu>
 					</h:panelGrid>
-				</h:panelGrid>
-
-				<h:panelGrid columns="5">
+				
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Qtde" />
-						<p:inputNumber value="#{pedidoController.itemPedido.quantidade}"/>  
+						<p:inputText value="#{pedidoController.itemPedido.quantidade}">
+							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+						</p:inputText>  
 					</h:panelGrid>
 					
 					<h:panelGrid columns="1">
@@ -218,6 +209,7 @@
 							symbolPosition="s" minValue="0.00" />
 					</h:panelGrid>
 					
+					
 					<h:panelGrid columns="1">
 						<p:outputLabel value="." style="color: white;"/>
 						<p:commandButton icon="ui-icon-plusthick" value="Adicionar" 
@@ -226,7 +218,7 @@
 				</h:panelGrid>
 				
 				<h:panelGrid columns="2">
-					<p:dataTable id="tableItemPedido" var="item" paginator="true"
+					<p:dataTable id="tableItemPedido" var="item" paginator="true" editable="true" editMode="cell"
 					paginatorPosition="bottom" value="#{pedidoController.itensPedidos}"
 					emptyMessage="Nenhum registro encontrado!" rows="8"
 					paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
@@ -240,8 +232,17 @@
 						<p:outputLabel value="#{item.produto.fabricante.razaoSocial}" />
 					</p:column>
 					
-					<p:column headerText="Qtde" width="30" style="text-align:center;">
-						<p:outputLabel value="#{item.quantidade}" />
+					<p:column headerText="Qtde" width="80" style="text-align:center;">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{item.quantidade}"/>
+							</f:facet>
+              				<f:facet name="input">
+              					<p:inputText value="#{item.quantidade}">
+              						<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+              					</p:inputText>
+              				</f:facet>
+						</p:cellEditor>
 					</p:column>
 					
 					<p:column headerText="Medida" width="50" style="text-align:center;">
@@ -249,15 +250,33 @@
 					</p:column>
 					
 					<p:column headerText="Preço" width="75" style="text-align:center;">
-						<p:outputLabel value="#{item.preco}">
-							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
-						</p:outputLabel>
+						<p:cellEditor>
+							<f:facet name="output">
+								<p:outputLabel value="#{item.preco}">
+									<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+								</p:outputLabel>
+							</f:facet>
+              				<f:facet name="input">
+              					<p:inputText value="#{item.preco}">
+									<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+								</p:inputText>
+              				</f:facet>
+						</p:cellEditor>
 					</p:column>
 					
 					<p:column headerText="Desconto" width="75" style="text-align:center;">
-						<p:outputLabel value="#{item.desconto}">
-							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
-						</p:outputLabel>
+						<p:cellEditor>
+							<f:facet name="output">
+								<p:outputLabel value="#{item.desconto}">
+									<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+								</p:outputLabel>
+							</f:facet>
+              				<f:facet name="input">
+              					<p:inputText value="#{item.desconto}">
+									<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+								</p:inputText>
+              				</f:facet>
+						</p:cellEditor>
 					</p:column>
 					
 					<p:column width="30" style="text-align:center;">
@@ -268,16 +287,23 @@
 					</p:dataTable>
 				</h:panelGrid>
 
-				<h:panelGrid id="panelBotoesEditarPedido" columns="2">
-					<h:panelGrid columns="2">
-						<p:commandButton id="btnEditarPedido" value="Salvar"
+				<h:panelGrid id="panelBotoesNovoPedido" columns="2">
+					<h:panelGrid columns="3">
+						<p:commandButton id="btnNovoPedido" value="Salvar"
 							icon="ui-icon-check" actionListener="#{pedidoController.salvar}"
 							update=":msgGlobal :formGeralPedido:tablePerfilPedido" />
+							
 						<p:commandButton value="Cancelar" icon="ui-icon-close"
+							actionListener="#{pedidoController.pesquisar}"
+							update=":msgGlobal :formGeralPedido:tablePerfilPedido"
 							oncomplete="PF('dialogNovoPedido').hide();" />
+							
+						<!-- <p:commandButton value="Gerar pedido produtos" icon="ui-icon-close"
+							actionListener="#{pedidoController.gerarPedidoProdutos}"
+							update=":msgGlobal tableItemPedido"/> -->
 					</h:panelGrid>
 				</h:panelGrid>
-				<p:blockUI block="panelBotoesEditarPedido" trigger="btnEditarPedido" />
+				<p:blockUI block="panelBotoesNovoPedido" trigger="btnNovoPedido" />
 			</h:form>
 		</p:dialog>
 
@@ -303,12 +329,9 @@
 					
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Número nota fiscal" />
-						<p:inputText value="#{pedidoController.pedido.numeroNotaFiscal}" style="width: 470px;"/>
+						<p:inputText value="#{pedidoController.pedido.numeroNotaFiscal}" style="width: 300px;"/>
 					</h:panelGrid>
-
-				</h:panelGrid>
-
-				<h:panelGrid columns="2">
+					
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Distribuidor" />
 						<p:selectOneMenu value="#{pedidoController.pedido.distribuidor}"
@@ -318,6 +341,10 @@
 								itemLabel="#{d.razaoSocial}" itemValue="#{d}" />
 						</p:selectOneMenu>
 					</h:panelGrid>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="6">
 					
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Produto / Insumo" />
@@ -329,12 +356,12 @@
 								itemValue="#{p}" />
 						</p:selectOneMenu>
 					</h:panelGrid>
-				</h:panelGrid>
-
-				<h:panelGrid columns="5">
+				
 					<h:panelGrid columns="1">
 						<p:outputLabel value="Qtde" />
-						<p:inputNumber value="#{pedidoController.itemPedido.quantidade}"/>  
+						<p:inputText value="#{pedidoController.itemPedido.quantidade}">
+							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+						</p:inputText>  
 					</h:panelGrid>
 					
 					<h:panelGrid columns="1">
@@ -368,7 +395,7 @@
 				</h:panelGrid>
 				
 				<h:panelGrid columns="2">
-					<p:dataTable id="tableItemPedido" var="item" paginator="true"
+					<p:dataTable id="tableItemPedido" var="item" paginator="true" editable="true" editMode="cell"
 					paginatorPosition="bottom" value="#{pedidoController.itensPedidos}"
 					emptyMessage="Nenhum registro encontrado!" rows="8"
 					paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
@@ -382,8 +409,17 @@
 						<p:outputLabel value="#{item.produto.fabricante.razaoSocial}" />
 					</p:column>
 					
-					<p:column headerText="Qtde" width="30" style="text-align:center;">
-						<p:outputLabel value="#{item.quantidade}" />
+					<p:column headerText="Qtde" width="80" style="text-align:center;">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{item.quantidade}"/>
+							</f:facet>
+              				<f:facet name="input">
+              					<p:inputText value="#{item.quantidade}">
+              						<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+              					</p:inputText>
+              				</f:facet>
+						</p:cellEditor>
 					</p:column>
 					
 					<p:column headerText="Medida" width="50" style="text-align:center;">
@@ -391,16 +427,42 @@
 					</p:column>
 					
 					<p:column headerText="Preço" width="75" style="text-align:center;">
-						<p:outputLabel value="#{item.preco}">
-							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
-						</p:outputLabel>
+						<p:cellEditor>
+							<f:facet name="output">
+								<p:outputLabel value="#{item.preco}">
+									<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+								</p:outputLabel>
+							</f:facet>
+              				<f:facet name="input">
+              					<p:inputText value="#{item.preco}">
+									<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+								</p:inputText>
+              				</f:facet>
+						</p:cellEditor>
 					</p:column>
 					
 					<p:column headerText="Desconto" width="75" style="text-align:center;">
-						<p:outputLabel value="#{item.desconto}">
-							<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
-						</p:outputLabel>
+						<p:cellEditor>
+							<f:facet name="output">
+								<p:outputLabel value="#{item.desconto}">
+									<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+								</p:outputLabel>
+							</f:facet>
+              				<f:facet name="input">
+              					<p:inputText value="#{item.desconto}">
+									<f:convertNumber pattern="###,###0.00" locale="pt_BR" />
+								</p:inputText>
+              				</f:facet>
+						</p:cellEditor>
 					</p:column>
+					
+					<p:columnGroup type="footer">
+		                <p:row>
+		                    <p:column colspan="4" footerText="Total: " style="text-align:right"/>
+		                    <p:column footerText="#{pedidoController.somarValorTotal}" />
+		                    <p:column footerText="#{pedidoController.somarValorDesconto}" />
+		                </p:row>
+		            </p:columnGroup>
 					
 					<p:column width="30" style="text-align:center;">
 						<p:commandButton icon="ui-icon-trash" actionListener="#{pedidoController.removerItem(item)}" 

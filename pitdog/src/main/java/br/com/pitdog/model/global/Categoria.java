@@ -16,8 +16,6 @@ public class Categoria extends GenericDomain{
 	
 	private String categoria;
 	
-	private String sigla;
-	
 	@Enumerated(EnumType.STRING)
 	private Situacao situacao;
 
@@ -27,14 +25,6 @@ public class Categoria extends GenericDomain{
 
 	public void setCategoria(String categoria) {
 		this.categoria = categoria;
-	}
-
-	public String getSigla() {
-		return sigla;
-	}
-
-	public void setSigla(String sigla) {
-		this.sigla = sigla;
 	}
 
 	public Situacao getSituacao() {

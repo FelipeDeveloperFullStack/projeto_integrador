@@ -17,13 +17,13 @@ public class EstoqueIdealService extends GenericDaoImpl<EstoqueIdeal, Long>{
 	
 	public EstoqueIdeal salvar(EstoqueIdeal estoqueMinimoIdeal){
 		try {
-			List<EstoqueIdeal> listaEstoqueMinimoIdeal = super.findByData(estoqueMinimoIdeal.getDataSemana(),"dataSemana");
+			/*List<EstoqueIdeal> listaEstoqueMinimoIdeal = super.findByData(estoqueMinimoIdeal.getDataSemana(),"dataSemana");
 			for(EstoqueIdeal e : listaEstoqueMinimoIdeal){
 				if(e.getDataSemana().equals(estoqueMinimoIdeal.getDataSemana())){
 					throw new RuntimeException("Já existe um estoque mínimo ideal cadastrado com a data da semana "
 							+ "informada, por favor escolha outro dia da semana!");
 				}
-			}
+			}*/
 			return super.save(consistirEstoqueIdeal(estoqueMinimoIdeal));
 		} catch (RuntimeException e) {
 			throw new RuntimeException(e.getMessage());

@@ -13,6 +13,7 @@ import br.com.pitdog.model.estoque.Composicao;
 import br.com.pitdog.model.estoque.Fabricante;
 import br.com.pitdog.model.estoque.Produto;
 import br.com.pitdog.model.global.Categoria;
+import br.com.pitdog.model.mov.type.UnidadeMedida;
 import br.com.pitdog.model.type.Situacao;
 import br.com.pitdog.model.type.TipoProduto;
 import br.com.pitdog.service.estoque.ComposicaoService;
@@ -69,9 +70,22 @@ public class ProdutoController implements Serializable{
 		return TipoProduto.values();
 	}
 	
+	public UnidadeMedida[] getUnidadeMedidas(){
+		return UnidadeMedida.values();
+	}
+	
+	public boolean getVerificarSeExisteComposicaoProduto(){
+		return produtoService.isVerificarSeExisteComposicaoProduto(produto);
+	}
+	
 	public void pesquisar(){
 		this.produtos = new ArrayList<Produto>();
 		this.produtos = produtoService.pesquisarProduto(produto);
+	}
+	
+	public void cancelar(){
+		novo();
+		fecharDialogs();
 	}
 	
 	public void novo(){

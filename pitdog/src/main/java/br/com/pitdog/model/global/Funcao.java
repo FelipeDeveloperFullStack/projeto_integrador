@@ -1,6 +1,5 @@
 package br.com.pitdog.model.global;
 
-import java.math.BigDecimal;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -18,8 +17,6 @@ public class Funcao extends GenericDomain{
 	
 	private String funcao;
 	
-	private BigDecimal comissao = BigDecimal.ZERO;
-	
 	@Enumerated(EnumType.STRING)
 	private Situacao situacao;
 
@@ -29,14 +26,6 @@ public class Funcao extends GenericDomain{
 
 	public void setFuncao(String funcao) {
 		this.funcao = funcao;
-	}
-
-	public BigDecimal getComissao() {
-		return comissao;
-	}
-
-	public void setComissao(BigDecimal comissao) {
-		this.comissao = comissao;
 	}
 
 	public Situacao getSituacao() {
